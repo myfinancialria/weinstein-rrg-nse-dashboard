@@ -1,0 +1,1398 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NSE Weinstein + RRG Dashboard</title>
+    <style>
+      :root {
+        --bg: #f6f7f9;
+        --panel: #ffffff;
+        --ink: #17202a;
+        --muted: #617084;
+        --line: #d9dee7;
+        --blue: #1f6feb;
+        --green: #0f8a5f;
+        --amber: #b7791f;
+        --red: #c2410c;
+        --teal: #087f8c;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        letter-spacing: 0;
+      }
+      header {
+        background: #ffffff;
+        border-bottom: 1px solid var(--line);
+        padding: 18px 24px 14px;
+        position: sticky;
+        top: 0;
+        z-index: 5;
+      }
+      .title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      h1 {
+        font-size: 22px;
+        line-height: 1.2;
+        margin: 0;
+      }
+      .subtle {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 4px;
+      }
+      .layout {
+        padding: 18px 24px 28px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(160px, 1fr));
+        gap: 12px;
+      }
+      .kpi, .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .kpi {
+        padding: 14px 16px;
+        min-height: 86px;
+      }
+      .kpi .label {
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+      }
+      .kpi .value {
+        margin-top: 8px;
+        font-weight: 750;
+        font-size: 26px;
+      }
+      .toolbar {
+        display: grid;
+        grid-template-columns: 1.4fr repeat(4, minmax(130px, .6fr));
+        gap: 10px;
+        padding: 14px;
+      }
+      .advanced-toolbar {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(120px, 1fr));
+        gap: 10px;
+        padding: 0 14px 14px;
+      }
+      .tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .tab-button {
+        width: auto;
+        min-height: 36px;
+        padding: 8px 14px;
+        background: #ffffff;
+        color: var(--ink);
+        border-color: var(--line);
+      }
+      .tab-button.active {
+        background: #17202a;
+        color: #ffffff;
+        border-color: #17202a;
+      }
+      .tab-view { display: none; }
+      .tab-view.active { display: block; }
+      .mini-chart {
+        height: 260px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        margin: 14px;
+        background: #ffffff;
+      }
+      .blog-layout {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr;
+        gap: 16px;
+      }
+      .blog-body {
+        padding: 16px;
+      }
+      .blog-section {
+        border-top: 1px solid var(--line);
+        padding: 14px 0;
+      }
+      .blog-section:first-child { border-top: 0; padding-top: 0; }
+      .blog-section h2 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+      .probability-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(100px, 1fr));
+        gap: 10px;
+        margin-top: 12px;
+      }
+      input, select, button {
+        width: 100%;
+        min-height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #ffffff;
+        color: var(--ink);
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+      button {
+        cursor: pointer;
+        background: #17202a;
+        color: #ffffff;
+        border-color: #17202a;
+      }
+      .split {
+        display: grid;
+        grid-template-columns: 0.9fr 1.3fr;
+        gap: 16px;
+      }
+      .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid var(--line);
+        padding: 12px 14px;
+      }
+      .panel-title {
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .table-wrap {
+        max-height: 560px;
+        overflow: auto;
+      }
+      .subsection {
+        border-top: 1px solid var(--line);
+        margin-top: 2px;
+      }
+      .subsection .table-wrap {
+        max-height: 360px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 13px;
+      }
+      th, td {
+        border-bottom: 1px solid var(--line);
+        padding: 9px 10px;
+        text-align: left;
+        vertical-align: top;
+        white-space: nowrap;
+      }
+      th {
+        background: #f0f3f7;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        font-size: 12px;
+        color: #2d3a4a;
+      }
+      .sort-button {
+        width: auto;
+        min-height: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        font-weight: 750;
+        text-align: left;
+        white-space: nowrap;
+      }
+      .sort-button::after {
+        content: " ↕";
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .sort-button.active.asc::after { content: " ↑"; color: var(--blue); }
+      .sort-button.active.desc::after { content: " ↓"; color: var(--blue); }
+      tr:hover td { background: #f8fafc; }
+      .truncate {
+        max-width: 260px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .product-cell {
+        min-width: 280px;
+        max-width: 420px;
+        white-space: normal;
+        line-height: 1.35;
+      }
+      .clickable-row { cursor: pointer; }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 24px;
+        border-radius: 999px;
+        padding: 3px 9px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid transparent;
+      }
+      .leading { background: #e8f7ef; color: var(--green); border-color: #bfe6d2; }
+      .improving { background: #e7f6f8; color: var(--teal); border-color: #b8e1e6; }
+      .weakening { background: #fff4dc; color: var(--amber); border-color: #f0d59b; }
+      .lagging { background: #fff0e8; color: var(--red); border-color: #f5c5ad; }
+      .stage2 { background: #eaf1ff; color: var(--blue); border-color: #c7d7ff; }
+      .note {
+        padding: 12px 14px;
+        color: var(--muted);
+        font-size: 13px;
+        border-top: 1px solid var(--line);
+      }
+      .drawer-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(23, 32, 42, .36);
+        z-index: 20;
+      }
+      .drawer {
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: min(780px, 100vw);
+        background: #ffffff;
+        border-left: 1px solid var(--line);
+        box-shadow: -12px 0 28px rgba(23,32,42,.18);
+        overflow: auto;
+        transform: translateX(100%);
+        transition: transform .18s ease;
+        z-index: 21;
+      }
+      .drawer.open { transform: translateX(0); }
+      .drawer-backdrop.open { display: block; }
+      .drawer-head {
+        position: sticky;
+        top: 0;
+        background: #ffffff;
+        border-bottom: 1px solid var(--line);
+        padding: 16px 18px;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .drawer-body { padding: 16px 18px 28px; }
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(120px, 1fr));
+        gap: 10px;
+      }
+      .detail-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px;
+        background: #fbfcfe;
+      }
+      .detail-card .label {
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+      .detail-card .value {
+        margin-top: 5px;
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .section-title {
+        margin: 18px 0 8px;
+        font-weight: 750;
+        font-size: 15px;
+      }
+      .chart-box {
+        height: 360px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+        background: #ffffff;
+        position: relative;
+      }
+      .chart-box canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .chart-message {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        padding: 18px;
+        text-align: center;
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .swot-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+        gap: 10px;
+      }
+      .swot-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 11px 12px;
+        background: #fbfcfe;
+      }
+      .swot-card h3 {
+        margin: 0 0 8px;
+        font-size: 14px;
+      }
+      .swot-card ul {
+        margin: 0;
+        padding-left: 18px;
+        color: #2d3a4a;
+        line-height: 1.45;
+        font-size: 13px;
+      }
+      .chip {
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        background: #f0f3f7;
+        border: 1px solid var(--line);
+      }
+      .chip.good { background: #e8f7ef; border-color: #bfe6d2; color: var(--green); }
+      .chip.bad { background: #fff0e8; border-color: #f5c5ad; color: var(--red); }
+      .prose {
+        color: #2d3a4a;
+        line-height: 1.55;
+        font-size: 14px;
+        white-space: normal;
+      }
+      .empty {
+        padding: 24px;
+        color: var(--muted);
+      }
+      @media (max-width: 1050px) {
+        .kpis { grid-template-columns: repeat(2, minmax(150px, 1fr)); }
+        .toolbar, .advanced-toolbar { grid-template-columns: 1fr 1fr; }
+        .split, .blog-layout { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 640px) {
+        header, .layout { padding-left: 14px; padding-right: 14px; }
+        .kpis, .toolbar, .advanced-toolbar { grid-template-columns: 1fr; }
+        h1 { font-size: 19px; }
+        .detail-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+        .swot-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="title-row">
+        <div>
+          <h1>NSE Weinstein Stage 2 + RRG Dashboard</h1>
+          <div class="subtle" id="generatedAt">Loading dashboard data...</div>
+        </div>
+        <button id="resetButton" style="max-width: 120px;">Reset</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="kpis">
+        <div class="kpi"><div class="label">Industries Analyzed</div><div class="value" id="kpiIndustries">-</div></div>
+        <div class="kpi"><div class="label">Stage 2 + Leading Industries</div><div class="value" id="kpiLeadingIndustries">-</div></div>
+        <div class="kpi"><div class="label">Stocks Analyzed</div><div class="value" id="kpiStocks">-</div></div>
+        <div class="kpi"><div class="label">Stage 2 + Leading Stocks</div><div class="value" id="kpiLeadingStocks">-</div></div>
+      </section>
+
+      <section class="panel">
+        <div class="toolbar">
+          <input id="searchInput" type="search" placeholder="Search industry, stock, symbol, product">
+          <select id="industryFilter"><option value="">All industries</option></select>
+          <select id="stageFilter">
+            <option value="">All stages</option>
+            <option value="stage_2">Stage 2</option>
+            <option value="not_stage_2">Not Stage 2</option>
+          </select>
+          <select id="rrgFilter">
+            <option value="">All RRG quadrants</option>
+            <option value="leading">Leading</option>
+            <option value="improving">Improving</option>
+            <option value="weakening">Weakening</option>
+            <option value="lagging">Lagging</option>
+          </select>
+          <select id="stockLimit">
+            <option value="5">Top 5 stocks</option>
+            <option value="10">Top 10 stocks</option>
+            <option value="9999">All stocks</option>
+          </select>
+        </div>
+        <div class="advanced-toolbar">
+          <input id="minStockScore" type="number" step="1" placeholder="Min technical score">
+          <input id="minFundScore" type="number" step="1" placeholder="Min fundamental score">
+          <input id="minROCE" type="number" step="1" placeholder="Min ROCE %">
+          <input id="maxPE" type="number" step="1" placeholder="Max P/E">
+          <input id="minCMP" type="number" step="1" placeholder="Min CMP">
+          <input id="maxCMP" type="number" step="1" placeholder="Max CMP">
+        </div>
+      </section>
+
+      <section class="tabs">
+        <button class="tab-button active" data-tab="screener">Screener</button>
+        <button class="tab-button" data-tab="market-blog">Market Blog</button>
+        <button class="tab-button" data-tab="backtest-daily">Daily Backtest</button>
+        <button class="tab-button" data-tab="backtest-weekly">Weekly Backtest</button>
+      </section>
+
+      <section class="split tab-view active" id="tab-screener">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Industries</div>
+            <div class="subtle" id="industryCount"></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="name">Industry</button></th>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="stage">Stage</button></th>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="rrg_quadrant">RRG</button></th>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="rs_ratio">RS Ratio</button></th>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="rs_momentum">RS Momentum</button></th>
+                </tr>
+              </thead>
+              <tbody id="industryBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Best Stocks</div>
+            <div class="subtle" id="stockCount"></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="parent">Industry</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="name">Stock</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="display_symbol">Symbol</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="common_product_business">Known Product / Business</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="cmp">CMP</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="entry_price">Entry</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="sl">SL</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="target">Target</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="stage">Stage</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="rrg_quadrant">RRG</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="stock_score">Score</button></th>
+                </tr>
+              </thead>
+              <tbody id="stockBody"></tbody>
+            </table>
+          </div>
+          <div class="note"><span id="coverageNote"></span><br><span id="tradeLevelNote"></span></div>
+          <div class="subsection">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Fundamental Picks From Best Stocks</div>
+                <div class="subtle">Ranked using Screener financials plus available margin, cash flow, leverage and liquidity data.</div>
+              </div>
+              <div class="subtle" id="fundamentalCount"></div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="parent">Industry</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="name">Stock</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="display_symbol">Symbol</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="fundamental_score">Fund Score</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="pe_value">P/E</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="roce">ROCE</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="roe_pct">ROE</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="net_margin_pct">Net Margin</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="debt_to_equity">D/E</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="qtr_sales_var_pct">Qtr Sales %</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="qtr_profit_var_pct">Qtr Profit %</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="fundamental_reasons">Why Picked</button></th>
+                  </tr>
+                </thead>
+                <tbody id="fundamentalBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-view" id="tab-market-blog">
+        <div class="blog-layout">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title" id="blogTitle">Market Blog</div>
+                <div class="subtle" id="blogGenerated">Loading market blog...</div>
+              </div>
+            </div>
+            <div class="blog-body" id="blogBody"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">CPR & Market Levels</div>
+              <div class="subtle" id="blogBias"></div>
+            </div>
+            <div class="blog-body">
+              <div class="detail-grid" id="blogLevels"></div>
+              <div class="section-title">Global Markets</div>
+              <div class="table-wrap" style="max-height:320px;">
+                <table>
+                  <thead><tr><th>Market</th><th>Level</th><th>Change</th></tr></thead>
+                  <tbody id="blogGlobalBody"></tbody>
+                </table>
+              </div>
+              <div class="section-title">Dashboard Leadership</div>
+              <div class="table-wrap" style="max-height:260px;">
+                <table>
+                  <thead><tr><th>Name</th><th>RS / Score</th><th>Type</th></tr></thead>
+                  <tbody id="blogLeadershipBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel tab-view" id="tab-backtest-daily">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Daily Backtested Strategy Results</div>
+            <div class="subtle" id="dailyBacktestRules"></div>
+          </div>
+          <div class="subtle" id="dailyBacktestGenerated"></div>
+        </div>
+        <div class="kpis" style="padding:14px;">
+          <div class="kpi"><div class="label">Trades</div><div class="value" id="dailyBtTrades">-</div></div>
+          <div class="kpi"><div class="label">Win Rate</div><div class="value" id="dailyBtWinRate">-</div></div>
+          <div class="kpi"><div class="label">Total P&L</div><div class="value" id="dailyBtPnl">-</div></div>
+          <div class="kpi"><div class="label">Max Drawdown</div><div class="value" id="dailyBtDrawdown">-</div></div>
+        </div>
+        <div class="mini-chart" id="dailyEquityChart"></div>
+        <div class="split" style="padding: 0 14px 14px;">
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Month-wise P&L</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Trades</th><th>P&L</th><th>Win %</th></tr></thead><tbody id="dailyMonthlyPnlBody"></tbody></table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Capital Deployed Per Month</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Entries</th><th>Capital</th><th>Avg/Trade</th><th>Max Trade</th></tr></thead><tbody id="dailyMonthlyCapitalBody"></tbody></table></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="symbol">Symbol</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="name">Name</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="industry">Industry</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="entry_date">Entry Date</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="entry_price">Entry</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="initial_sl_swing_low">Initial SL<br>Swing Low</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="entry_filter_50dma">50 MA<br>Entry</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="entry_filter_200dma">200 MA<br>Entry</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="exit_filter_50dma">50 MA<br>Exit</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="quantity">Qty</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="target_30_hit">30% Hit</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="exit_date">Exit Date</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="exit_price">Exit</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="pnl">P&L</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="r_multiple">R</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="exit_reason">Reason</button></th>
+              </tr>
+            </thead>
+            <tbody id="dailyBacktestBody"></tbody>
+          </table>
+        </div>
+        <div class="note">Backtest is rule-based and excludes brokerage, taxes, slippage and liquidity constraints.</div>
+      </section>
+
+      <section class="panel tab-view" id="tab-backtest-weekly">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Weekly Backtested Strategy Results</div>
+            <div class="subtle" id="weeklyBacktestRules"></div>
+          </div>
+          <div class="subtle" id="weeklyBacktestGenerated"></div>
+        </div>
+        <div class="kpis" style="padding:14px;">
+          <div class="kpi"><div class="label">Trades</div><div class="value" id="weeklyBtTrades">-</div></div>
+          <div class="kpi"><div class="label">Win Rate</div><div class="value" id="weeklyBtWinRate">-</div></div>
+          <div class="kpi"><div class="label">Total P&L</div><div class="value" id="weeklyBtPnl">-</div></div>
+          <div class="kpi"><div class="label">Max Drawdown</div><div class="value" id="weeklyBtDrawdown">-</div></div>
+        </div>
+        <div class="mini-chart" id="weeklyEquityChart"></div>
+        <div class="split" style="padding: 0 14px 14px;">
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Month-wise P&L</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Trades</th><th>P&L</th><th>Win %</th></tr></thead><tbody id="weeklyMonthlyPnlBody"></tbody></table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Capital Deployed Per Month</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Entries</th><th>Capital</th><th>Avg/Trade</th><th>Max Trade</th></tr></thead><tbody id="weeklyMonthlyCapitalBody"></tbody></table></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="symbol">Symbol</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="name">Name</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="industry">Industry</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="entry_date">Entry Date</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="entry_price">Entry</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="initial_sl_swing_low">Initial SL<br>Swing Low</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="entry_filter_50dma">50 DMA<br>Entry</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="entry_filter_200dma">200 DMA<br>Entry</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="exit_filter_50dma">50 DMA<br>Exit</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="quantity">Qty</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="target_30_hit">30% Hit</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="exit_date">Exit Date</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="exit_price">Exit</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="pnl">P&L</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="r_multiple">R</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="exit_reason">Reason</button></th>
+              </tr>
+            </thead>
+            <tbody id="weeklyBacktestBody"></tbody>
+          </table>
+        </div>
+        <div class="note">Backtest is rule-based and excludes brokerage, taxes, slippage and liquidity constraints.</div>
+      </section>
+    </main>
+
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="drawer" id="stockDrawer" aria-hidden="true">
+      <div class="drawer-head">
+        <div>
+          <h2 id="drawerTitle" style="font-size:20px;margin:0;"></h2>
+          <div class="subtle" id="drawerSubtitle"></div>
+        </div>
+        <button id="drawerClose" style="max-width:96px;">Close</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+    </aside>
+
+    <script>
+      const state = {
+        data: null,
+        selectedIndustry: "",
+        sorts: {
+          industries: { key: "rs_momentum", dir: "desc" },
+          stocks: { key: "stock_score", dir: "desc" },
+          fundamentals: { key: "fundamental_score", dir: "desc" },
+          dailyTrades: { key: "entry_date", dir: "desc" },
+          weeklyTrades: { key: "entry_date", dir: "desc" },
+        },
+      };
+      const el = (id) => document.getElementById(id);
+      const fmt = (value) => value === null || value === undefined || Number.isNaN(value) ? "-" : Number(value).toFixed(2);
+      const pill = (value, extra = "") => `<span class="pill ${String(value || "").replaceAll("_", "")} ${extra}">${value || "-"}</span>`;
+      const asText = (value) => value === null || value === undefined || value === "" ? "-" : value;
+      const listChips = (items, kind) => (items && items.length ? items.map((item) => `<span class="chip ${kind}">${item}</span>`).join("") : `<span class="chip">None flagged</span>`);
+      const listItems = (items) => (items && items.length ? items.map((item) => `<li>${item}</li>`).join("") : "<li>No major item flagged.</li>");
+      const numberFilter = (id) => {
+        const raw = el(id).value;
+        if (raw === "") return null;
+        const parsed = Number(raw);
+        return Number.isFinite(parsed) ? parsed : null;
+      };
+
+      function rowMatchesSearch(record, search) {
+        if (!search) return true;
+        const haystack = Object.values(record).join(" ").toLowerCase();
+        return haystack.includes(search.toLowerCase());
+      }
+
+      function valueFor(row, key) {
+        if (key === "pe_value") return row.pe_ratio ?? row.pe;
+        if (key === "fundamental_reasons") return (row.fundamental_reasons || []).join(", ");
+        const value = row[key];
+        if (value === null || value === undefined || value === "") return null;
+        if (typeof value === "boolean") return value ? 1 : 0;
+        return value;
+      }
+
+      function sortRows(rows, tableName) {
+        const sort = state.sorts[tableName];
+        if (!sort || !sort.key) return rows;
+        const direction = sort.dir === "asc" ? 1 : -1;
+        return [...rows].sort((a, b) => {
+          const av = valueFor(a, sort.key);
+          const bv = valueFor(b, sort.key);
+          if (av === null && bv === null) return 0;
+          if (av === null) return 1;
+          if (bv === null) return -1;
+          const an = Number(av);
+          const bn = Number(bv);
+          if (Number.isFinite(an) && Number.isFinite(bn)) return (an - bn) * direction;
+          return String(av).localeCompare(String(bv), undefined, { numeric: true, sensitivity: "base" }) * direction;
+        });
+      }
+
+      function applyMetricFilters(rows, filters) {
+        return rows.filter((row) => {
+          const pe = row.pe_ratio ?? row.pe;
+          if (filters.minStockScore !== null && Number(row.stock_score || 0) < filters.minStockScore) return false;
+          if (filters.minFundScore !== null && Number(row.fundamental_score || 0) < filters.minFundScore) return false;
+          if (filters.minROCE !== null && Number(row.roce || 0) < filters.minROCE) return false;
+          if (filters.maxPE !== null && (pe === null || pe === undefined || Number(pe) > filters.maxPE)) return false;
+          if (filters.minCMP !== null && Number(row.cmp || 0) < filters.minCMP) return false;
+          if (filters.maxCMP !== null && (row.cmp === null || row.cmp === undefined || Number(row.cmp) > filters.maxCMP)) return false;
+          return true;
+        });
+      }
+
+      function refreshSortIndicators() {
+        document.querySelectorAll(".sort-button").forEach((button) => {
+          const sort = state.sorts[button.dataset.table];
+          const active = sort && sort.key === button.dataset.sortKey;
+          button.classList.toggle("active", active);
+          button.classList.toggle("asc", active && sort.dir === "asc");
+          button.classList.toggle("desc", active && sort.dir === "desc");
+        });
+      }
+
+      function getFilters() {
+        return {
+          search: el("searchInput").value.trim(),
+          industry: el("industryFilter").value || state.selectedIndustry,
+          stage: el("stageFilter").value,
+          rrg: el("rrgFilter").value,
+          limit: Number(el("stockLimit").value),
+          minStockScore: numberFilter("minStockScore"),
+          minFundScore: numberFilter("minFundScore"),
+          minROCE: numberFilter("minROCE"),
+          maxPE: numberFilter("maxPE"),
+          minCMP: numberFilter("minCMP"),
+          maxCMP: numberFilter("maxCMP"),
+        };
+      }
+
+      function renderKpis() {
+        const m = state.data.metrics;
+        el("generatedAt").textContent = `Generated ${m.generated_at}`;
+        el("kpiIndustries").textContent = m.industries_analyzed;
+        el("kpiLeadingIndustries").textContent = m.stage2_leading_industries;
+        el("kpiStocks").textContent = m.stocks_analyzed;
+        el("kpiLeadingStocks").textContent = m.stage2_leading_stocks;
+        el("coverageNote").textContent = m.coverage_note;
+        el("tradeLevelNote").textContent = m.trade_level_note || "";
+        renderBacktest();
+      }
+
+      function renderMarketBlog(blog) {
+        if (!blog) {
+          el("blogGenerated").textContent = "No market blog has been generated yet.";
+          el("blogBody").innerHTML = `<div class="empty">Run update_morning_market_blog.sh to generate the first post.</div>`;
+          return;
+        }
+        el("blogTitle").textContent = blog.title || "Market Blog";
+        el("blogGenerated").textContent = blog.generated_at ? `Generated ${blog.generated_at}` : "";
+        const probabilities = blog.probabilities || {};
+        const gift = blog.gift_nifty || {};
+        const nifty = blog.nifty || {};
+        el("blogBody").innerHTML = `
+          <div class="blog-section">
+            <h2>${asText(blog.headline)}</h2>
+            <div class="prose">${asText((blog.blog_sections && blog.blog_sections[0] && blog.blog_sections[0].body) || "")}</div>
+            <div class="probability-grid">
+              ${detail("Up Chance", pct(probabilities.up))}
+              ${detail("Down Chance", pct(-Math.abs(probabilities.down || 0)).replace("-", ""))}
+              ${detail("Sideways", pct(probabilities.sideways))}
+            </div>
+          </div>
+          ${(blog.blog_sections || []).slice(1).map((section) => `
+            <div class="blog-section">
+              <h2>${section.heading}</h2>
+              <div class="prose">${section.body}</div>
+            </div>
+          `).join("")}
+          <div class="blog-section">
+            <h2>Past Pattern Notes</h2>
+            <ul>${listItems(blog.pattern_notes)}</ul>
+          </div>
+          <div class="blog-section">
+            <h2>GIFT Nifty Opening Read</h2>
+            <div class="prose">Level: <strong>${fmt(gift.level)}</strong> | Implied gap: <strong>${pct(gift.change_pct)}</strong><br>${asText(gift.note)} Source: ${asText(gift.source)}</div>
+          </div>
+          <div class="blog-section">
+            <h2>Nifty Trend Snapshot</h2>
+            <div class="detail-grid">
+              ${detail("Close", fmt(nifty.close))}
+              ${detail("5D Return", pct(nifty.change_5d_pct))}
+              ${detail("20D Return", pct(nifty.change_20d_pct))}
+              ${detail("RSI 14", fmt(nifty.rsi14))}
+              ${detail("20 DMA", fmt(nifty.ma20))}
+              ${detail("50 DMA", fmt(nifty.ma50))}
+              ${detail("200 DMA", fmt(nifty.ma200))}
+            </div>
+          </div>
+          <div class="note">${asText(blog.disclaimer)}</div>
+        `;
+        const cpr = blog.cpr || {};
+        el("blogBias").textContent = `Up ${probabilities.up || "-"}% | Down ${probabilities.down || "-"}% | Sideways ${probabilities.sideways || "-"}%`;
+        el("blogLevels").innerHTML = `
+          ${detail("Pivot", fmt(cpr.pivot))}
+          ${detail("BC", fmt(cpr.bc))}
+          ${detail("TC", fmt(cpr.tc))}
+          ${detail("CPR Width", pct(cpr.width_pct))}
+          ${detail("R1", fmt(cpr.r1))}
+          ${detail("R2", fmt(cpr.r2))}
+          ${detail("S1", fmt(cpr.s1))}
+          ${detail("S2", fmt(cpr.s2))}
+        `;
+        el("blogGlobalBody").innerHTML = (blog.global_markets || []).length ? blog.global_markets.map((row) => `
+          <tr>
+            <td>${row.name}</td>
+            <td>${fmt(row.level)}</td>
+            <td>${pct(row.change_pct)}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="3" class="empty">No global-market data available.</td></tr>`;
+        const leadership = [
+          ...(blog.leading_industries || []).map((row) => ({ name: row.name, score: row.rs_momentum, type: "Industry" })),
+          ...(blog.fundamental_picks || []).map((row) => ({ name: `${row.symbol || ""} ${row.name || ""}`, score: row.score, type: "Stock" })),
+        ];
+        el("blogLeadershipBody").innerHTML = leadership.length ? leadership.map((row) => `
+          <tr><td class="truncate">${row.name}</td><td>${fmt(row.score)}</td><td>${row.type}</td></tr>
+        `).join("") : `<tr><td colspan="3" class="empty">No leadership data available.</td></tr>`;
+      }
+
+      function renderIndustryOptions() {
+        const select = el("industryFilter");
+        const names = [...new Set(state.data.leadingIndustries.map((row) => row.name))].sort();
+        names.forEach((name) => {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        });
+      }
+
+      function filteredIndustries(filters) {
+        return sortRows(state.data.leadingIndustries.filter((row) => {
+          if (filters.industry && row.name !== filters.industry) return false;
+          if (filters.stage && row.stage !== filters.stage) return false;
+          if (filters.rrg && row.rrg_quadrant !== filters.rrg) return false;
+          return rowMatchesSearch(row, filters.search);
+        }), "industries");
+      }
+
+      function filteredStocks(filters, industryNames) {
+        const allowed = new Set(industryNames);
+        const counts = new Map();
+        return sortRows(applyMetricFilters(state.data.leadingStocks
+          .filter((row) => allowed.has(row.parent))
+          .filter((row) => {
+            if (filters.stage && row.stage !== filters.stage) return false;
+            if (filters.rrg && row.rrg_quadrant !== filters.rrg) return false;
+            return rowMatchesSearch(row, filters.search);
+          }), filters), "stocks")
+          .filter((row) => {
+            const count = counts.get(row.parent) || 0;
+            if (count >= filters.limit) return false;
+            counts.set(row.parent, count + 1);
+            return true;
+          });
+      }
+
+      function filteredFundamentalPicks(filters, industryNames) {
+        const allowed = new Set(industryNames);
+        return sortRows(applyMetricFilters((state.data.fundamentalPicks || [])
+          .filter((row) => allowed.has(row.parent))
+          .filter((row) => {
+            if (filters.stage && row.stage !== filters.stage) return false;
+            if (filters.rrg && row.rrg_quadrant !== filters.rrg) return false;
+            return rowMatchesSearch(row, filters.search);
+          }), filters), "fundamentals");
+      }
+
+      function render() {
+        const filters = getFilters();
+        const industries = filteredIndustries(filters);
+        const stocks = filteredStocks(filters, industries.map((row) => row.name));
+        const fundamentalPicks = filteredFundamentalPicks(filters, industries.map((row) => row.name));
+        el("industryCount").textContent = `${industries.length} shown`;
+        el("stockCount").textContent = `${stocks.length} shown`;
+        el("fundamentalCount").textContent = `${fundamentalPicks.length} shown`;
+        refreshSortIndicators();
+        el("industryBody").innerHTML = industries.length ? industries.map((row) => `
+          <tr data-industry="${row.name}">
+            <td class="truncate"><strong>${row.name}</strong><div class="subtle">${row.parent || ""}</div></td>
+            <td>${pill(row.stage, row.stage === "stage_2" ? "stage2" : "")}</td>
+            <td>${pill(row.rrg_quadrant)}</td>
+            <td>${fmt(row.rs_ratio)}</td>
+            <td>${fmt(row.rs_momentum)}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="5" class="empty">No industries match the filters.</td></tr>`;
+        el("stockBody").innerHTML = stocks.length ? stocks.map((row) => `
+          <tr>
+            <td class="truncate">${row.parent || ""}</td>
+            <td><strong>${row.name || ""}</strong></td>
+            <td>${row.display_symbol || row.symbol || ""}</td>
+            <td class="product-cell">${row.common_product_business || "-"}</td>
+            <td>${fmt(row.cmp)}</td>
+            <td>${fmt(row.entry_price)}</td>
+            <td>${fmt(row.sl)}</td>
+            <td>${fmt(row.target)}</td>
+            <td>${pill(row.stage, row.stage === "stage_2" ? "stage2" : "")}</td>
+            <td>${pill(row.rrg_quadrant)}</td>
+            <td>${fmt(row.stock_score)}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="11" class="empty">No stocks match the filters.</td></tr>`;
+        el("fundamentalBody").innerHTML = fundamentalPicks.length ? fundamentalPicks.map((row) => `
+          <tr>
+            <td class="truncate">${row.parent || ""}</td>
+            <td><strong>${row.name || ""}</strong></td>
+            <td>${row.display_symbol || row.symbol || ""}</td>
+            <td><strong>${fmt(row.fundamental_score)}</strong></td>
+            <td>${fmt(row.pe_ratio || row.pe)}</td>
+            <td>${fmt(row.roce)}</td>
+            <td>${pct(row.roe_pct)}</td>
+            <td>${pct(row.net_margin_pct)}</td>
+            <td>${fmt(row.debt_to_equity)}</td>
+            <td>${pct(row.qtr_sales_var_pct)}</td>
+            <td>${pct(row.qtr_profit_var_pct)}</td>
+            <td class="product-cell">${(row.fundamental_reasons || []).join(", ") || "-"}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="12" class="empty">No fundamental picks match the filters.</td></tr>`;
+        const stockRows = [...document.querySelectorAll("#stockBody tr")];
+        stockRows.forEach((tr, index) => {
+          if (!stocks[index]) return;
+          tr.classList.add("clickable-row");
+          tr.addEventListener("click", () => openStockDrawer(stocks[index]));
+        });
+        const fundamentalRows = [...document.querySelectorAll("#fundamentalBody tr")];
+        fundamentalRows.forEach((tr, index) => {
+          if (!fundamentalPicks[index]) return;
+          tr.classList.add("clickable-row");
+          tr.addEventListener("click", () => openStockDrawer(fundamentalPicks[index]));
+        });
+        document.querySelectorAll("#industryBody tr[data-industry]").forEach((tr) => {
+          tr.addEventListener("click", () => {
+            state.selectedIndustry = tr.dataset.industry;
+            el("industryFilter").value = state.selectedIndustry;
+            render();
+          });
+        });
+      }
+
+      function renderBacktest() {
+        renderBacktestTimeframe("daily");
+        renderBacktestTimeframe("weekly");
+      }
+
+      function renderBacktestTimeframe(timeframe) {
+        const backtest = (state.data.backtest || {})[timeframe] || { summary: {}, trades: [], monthlyPnl: [], monthlyCapital: [], equityCurve: [] };
+        const s = backtest.summary || {};
+        const prefix = timeframe === "daily" ? "daily" : "weekly";
+        el(`${prefix}BacktestRules`).textContent = s.rules || "";
+        el(`${prefix}BacktestGenerated`).textContent = s.generated_at ? `Generated ${s.generated_at}` : "";
+        el(`${prefix}BtTrades`).textContent = s.trade_count ?? "-";
+        el(`${prefix}BtWinRate`).textContent = s.win_rate_pct === null || s.win_rate_pct === undefined ? "-" : `${Number(s.win_rate_pct).toFixed(1)}%`;
+        el(`${prefix}BtPnl`).textContent = s.total_pnl === undefined ? "-" : Number(s.total_pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        el(`${prefix}BtDrawdown`).textContent = s.max_drawdown === undefined ? "-" : Number(s.max_drawdown).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        renderMiniEquityChart(el(`${prefix}EquityChart`), backtest.equityCurve || []);
+        renderMonthlyPnl(`${prefix}MonthlyPnlBody`, backtest.monthlyPnl || []);
+        renderMonthlyCapital(`${prefix}MonthlyCapitalBody`, backtest.monthlyCapital || []);
+        const filters = getFilters();
+        const trades = sortRows((backtest.trades || []).filter((trade) => {
+          if (filters.industry && trade.industry !== filters.industry) return false;
+          return rowMatchesSearch(trade, filters.search);
+        }), `${timeframe}Trades`);
+        el(`${prefix}BacktestBody`).innerHTML = trades.length ? trades.map((trade) => `
+          <tr>
+            <td>${trade.symbol}</td>
+            <td class="truncate">${trade.name}</td>
+            <td class="truncate">${trade.industry}</td>
+            <td>${trade.entry_date}</td>
+            <td>${fmt(trade.entry_price)}</td>
+            <td>${fmt(trade.initial_sl_swing_low)}</td>
+            <td>${fmt(trade.entry_filter_50dma)}</td>
+            <td>${fmt(trade.entry_filter_200dma)}</td>
+            <td>${fmt(trade.exit_filter_50dma)}</td>
+            <td>${trade.quantity}</td>
+            <td>${trade.target_30_hit ? "Yes" : "No"}</td>
+            <td>${trade.exit_date || "Open"}</td>
+            <td>${fmt(trade.exit_price)}</td>
+            <td style="color:${Number(trade.pnl) >= 0 ? "var(--green)" : "var(--red)"}">${Number(trade.pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td>
+            <td>${fmt(trade.r_multiple)}</td>
+            <td>${trade.exit_reason}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="16" class="empty">No trades found for this rule set.</td></tr>`;
+      }
+
+      function renderMonthlyPnl(id, rows) {
+        el(id).innerHTML = rows.length ? rows.map((row) => `
+          <tr><td>${row.month}</td><td>${row.trades}</td><td style="color:${Number(row.pnl) >= 0 ? "var(--green)" : "var(--red)"}">${Number(row.pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td><td>${fmt(row.win_rate_pct)}%</td></tr>
+        `).join("") : `<tr><td colspan="4" class="empty">No monthly P&L data.</td></tr>`;
+      }
+
+      function renderMonthlyCapital(id, rows) {
+        el(id).innerHTML = rows.length ? rows.map((row) => `
+          <tr><td>${row.month}</td><td>${row.entries}</td><td>${Number(row.capital_deployed).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td><td>${Number(row.avg_capital_per_trade).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td><td>${Number(row.max_single_trade_capital).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td></tr>
+        `).join("") : `<tr><td colspan="5" class="empty">No capital deployment data.</td></tr>`;
+      }
+
+      function renderMiniEquityChart(container, rows) {
+        container.innerHTML = "";
+        if (!rows.length) {
+          container.innerHTML = `<div class="chart-message">No equity curve data.</div>`;
+          return;
+        }
+        const canvas = document.createElement("canvas");
+        container.appendChild(canvas);
+        const rect = container.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const width = Math.max(360, Math.floor(rect.width || 900));
+        const height = Math.max(220, Math.floor(rect.height || 260));
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+
+        const pad = { left: 64, right: 18, top: 22, bottom: 28 };
+        const chartW = width - pad.left - pad.right;
+        const chartH = height - pad.top - pad.bottom;
+        const values = rows.flatMap((row) => [Number(row.equity), Number(row.drawdown)]);
+        const minValue = Math.min(...values, 0);
+        const maxValue = Math.max(...values, 0);
+        const range = Math.max(1, maxValue - minValue);
+        const xStep = rows.length > 1 ? chartW / (rows.length - 1) : chartW;
+        const y = (value) => pad.top + ((maxValue - value) / range) * chartH;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+        ctx.strokeStyle = "#eef2f7";
+        ctx.fillStyle = "#617084";
+        ctx.font = "12px Inter, system-ui, sans-serif";
+        for (let i = 0; i <= 4; i += 1) {
+          const yy = pad.top + (chartH / 4) * i;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, yy);
+          ctx.lineTo(width - pad.right, yy);
+          ctx.stroke();
+          const value = maxValue - (range / 4) * i;
+          ctx.fillText(value.toLocaleString("en-IN", { maximumFractionDigits: 0 }), 8, yy + 4);
+        }
+
+        function drawLine(field, color) {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          rows.forEach((row, index) => {
+            const x = pad.left + index * xStep;
+            const yy = y(Number(row[field]));
+            if (index === 0) ctx.moveTo(x, yy);
+            else ctx.lineTo(x, yy);
+          });
+          ctx.stroke();
+        }
+        drawLine("equity", "#1f6feb");
+        drawLine("drawdown", "#c2410c");
+
+        const last = rows[rows.length - 1];
+        ctx.fillStyle = "#17202a";
+        ctx.font = "600 13px Inter, system-ui, sans-serif";
+        ctx.fillText(`Equity ${Number(last.equity).toLocaleString("en-IN", { maximumFractionDigits: 0 })}  •  Drawdown ${Number(last.drawdown).toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, pad.left, 16);
+        ctx.fillStyle = "#1f6feb";
+        ctx.fillRect(width - 178, 10, 10, 10);
+        ctx.fillStyle = "#617084";
+        ctx.fillText("Equity", width - 162, 19);
+        ctx.fillStyle = "#c2410c";
+        ctx.fillRect(width - 96, 10, 10, 10);
+        ctx.fillStyle = "#617084";
+        ctx.fillText("Drawdown", width - 80, 19);
+      }
+
+      function openStockDrawer(stock) {
+        const thesis = (state.data.industryTheses || {})[stock.parent] || {};
+        el("drawerTitle").textContent = stock.name || stock.symbol || "Stock";
+        el("drawerSubtitle").textContent = `${stock.display_symbol || stock.symbol || ""} • ${stock.parent || ""}`;
+        el("drawerBody").innerHTML = `
+          <div class="detail-grid">
+            ${detail("CMP", fmt(stock.cmp))}
+            ${detail("Entry", fmt(stock.entry_price))}
+            ${detail("SL", fmt(stock.sl))}
+            ${detail("Target", fmt(stock.target))}
+            ${detail("Market Cap Cr", fmt(stock.market_cap_cr))}
+            ${detail("P/E", fmt(stock.pe_ratio || stock.pe))}
+            ${detail("ROCE %", fmt(stock.roce))}
+            ${detail("Promoter/Insider %", fmt(stock.promoter_or_insider_holding_pct))}
+            ${detail("Fund Score", fmt(stock.fundamental_score))}
+          </div>
+
+          <div class="section-title">Fundamentals</div>
+          <div class="detail-grid">
+            ${detail("EPS", fmt(stock.eps))}
+            ${detail("Gross Margin", pct(stock.gross_margin_pct))}
+            ${detail("Operating Margin", pct(stock.operating_margin_pct))}
+            ${detail("Net Margin", pct(stock.net_margin_pct))}
+            ${detail("ROE", pct(stock.roe_pct))}
+            ${detail("Debt / Equity", fmt(stock.debt_to_equity))}
+            ${detail("Current Ratio", fmt(stock.current_ratio))}
+            ${detail("Quick Ratio", fmt(stock.quick_ratio))}
+            ${detail("FCF Cr", fmt(stock.free_cash_flow_cr))}
+            ${detail("P/E", fmt(stock.pe_ratio || stock.pe))}
+            ${detail("P/B", fmt(stock.pb_ratio))}
+            ${detail("PEG", fmt(stock.peg_ratio))}
+            ${detail("Dividend Yield", pct(stock.dividend_yield_pct))}
+            ${detail("Sales Qtr Cr", fmt(stock.sales_qtr_cr))}
+            ${detail("NP Qtr Cr", fmt(stock.np_qtr_cr))}
+            ${detail("Qtr Sales Growth", pct(stock.qtr_sales_var_pct))}
+            ${detail("Qtr Profit Growth", pct(stock.qtr_profit_var_pct))}
+          </div>
+
+          <div class="section-title">Why It Is A Fundamental Pick</div>
+          <div class="chips">${listChips(stock.fundamental_reasons, "good")}</div>
+
+          <div class="section-title">TradingView Lightweight Chart</div>
+          <div class="chart-box" id="stockChart">
+            <div class="chart-message">Loading chart...</div>
+          </div>
+
+          <div class="section-title">Returns</div>
+          <div class="detail-grid">
+            ${detail("1W", pct(stock.return_1w))}
+            ${detail("1M", pct(stock.return_1m))}
+            ${detail("3M", pct(stock.return_3m))}
+            ${detail("6M", pct(stock.return_6m))}
+            ${detail("1Y", pct(stock.return_1y))}
+            ${detail("3Y", pct(stock.return_3y))}
+            ${detail("5Y", pct(stock.return_5y))}
+            ${detail("Score", fmt(stock.stock_score))}
+          </div>
+
+          <div class="section-title">Product / Business</div>
+          <div class="prose">${asText(stock.common_product_business)}</div>
+
+          <div class="section-title">Company Description</div>
+          <div class="prose">${asText(stock.company_description)}</div>
+
+          <div class="section-title">Pros</div>
+          <div class="chips">${listChips(stock.pros, "good")}</div>
+
+          <div class="section-title">Red Flags</div>
+          <div class="chips">${listChips(stock.red_flags, "bad")}</div>
+
+          <div class="section-title">Simple SWOT From Fundamentals & Price Action</div>
+          <div class="swot-grid">
+            ${swotCard("Strengths", stock.swot && stock.swot.strengths)}
+            ${swotCard("Weaknesses", stock.swot && stock.swot.weaknesses)}
+            ${swotCard("Opportunities", stock.swot && stock.swot.opportunities)}
+            ${swotCard("Threats", stock.swot && stock.swot.threats)}
+          </div>
+
+          <div class="section-title">Why This Industry Is Relevant Now</div>
+          <div class="prose">${asText(thesis.relevance_now)}</div>
+
+          <div class="section-title">Future Possibilities</div>
+          <div class="prose">${asText(thesis.future_possibilities)}</div>
+
+          <div class="section-title">Government / Policy Support</div>
+          <div class="prose">${asText(thesis.policy_support)}</div>
+
+          <div class="section-title">Links</div>
+          <div class="prose">${stock.website ? `<a href="${stock.website}" target="_blank">${stock.website}</a>` : "-"}<br>${asText(thesis.policy_sources)}</div>
+        `;
+        el("drawerBackdrop").classList.add("open");
+        el("stockDrawer").classList.add("open");
+        el("stockDrawer").setAttribute("aria-hidden", "false");
+        setTimeout(() => renderStockChart(stock), 0);
+      }
+
+      function renderStockChart(stock) {
+        const container = el("stockChart");
+        if (!container) return;
+        const bars = (state.data.chartData || {})[stock.symbol] || [];
+        if (!bars.length) {
+          container.innerHTML = `<div class="chart-message">No chart data available for ${stock.display_symbol || stock.symbol}.</div>`;
+          return;
+        }
+        renderLineChart(container, bars, stock.display_symbol || stock.symbol);
+      }
+
+      function renderLineChart(container, bars, label) {
+        container.innerHTML = "";
+        const canvas = document.createElement("canvas");
+        container.appendChild(canvas);
+        const rect = container.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const width = Math.max(320, Math.floor(rect.width || 720));
+        const height = Math.max(260, Math.floor(rect.height || 360));
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+
+        const data = bars.slice(-220).filter((bar) => Number.isFinite(Number(bar.close)));
+        const pad = { left: 52, right: 16, top: 28, bottom: 30 };
+        const chartW = width - pad.left - pad.right;
+        const chartH = height - pad.top - pad.bottom;
+        const minPrice = Math.min(...data.map((bar) => bar.close));
+        const maxPrice = Math.max(...data.map((bar) => bar.close));
+        const range = Math.max(1, maxPrice - minPrice);
+        const xStep = data.length > 1 ? chartW / (data.length - 1) : chartW;
+        const y = (price) => pad.top + ((maxPrice - price) / range) * chartH;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+        ctx.strokeStyle = "#eef2f7";
+        ctx.lineWidth = 1;
+        ctx.font = "12px Inter, system-ui, sans-serif";
+        ctx.fillStyle = "#617084";
+        for (let i = 0; i <= 4; i += 1) {
+          const yy = pad.top + (chartH / 4) * i;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, yy);
+          ctx.lineTo(width - pad.right, yy);
+          ctx.stroke();
+          const price = maxPrice - (range / 4) * i;
+          ctx.fillText(price.toFixed(0), 8, yy + 4);
+        }
+
+        ctx.strokeStyle = "#1f6feb";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        data.forEach((bar, index) => {
+          const x = pad.left + index * xStep;
+          const yy = y(bar.close);
+          if (index === 0) ctx.moveTo(x, yy);
+          else ctx.lineTo(x, yy);
+        });
+        ctx.stroke();
+
+        const first = data[0];
+        const latest = data[data.length - 1];
+        const positive = latest.close >= first.close;
+        ctx.fillStyle = positive ? "rgba(15, 138, 95, 0.10)" : "rgba(194, 65, 12, 0.10)";
+        ctx.lineTo(pad.left + (data.length - 1) * xStep, pad.top + chartH);
+        ctx.lineTo(pad.left, pad.top + chartH);
+        ctx.closePath();
+        ctx.fill();
+
+        data.forEach((bar, index) => {
+          if (index % Math.ceil(data.length / 8) !== 0 && index !== data.length - 1) return;
+          const x = pad.left + index * xStep;
+          const yy = y(bar.close);
+          ctx.fillStyle = "#1f6feb";
+          ctx.beginPath();
+          ctx.arc(x, yy, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.fillStyle = "#17202a";
+        ctx.font = "600 13px Inter, system-ui, sans-serif";
+        ctx.fillText(`${label}  •  ${latest.time}  •  Close ${latest.close.toFixed(2)}`, pad.left, 18);
+        ctx.fillStyle = "#617084";
+        ctx.font = "12px Inter, system-ui, sans-serif";
+        ctx.fillText(data[0].time, pad.left, height - 10);
+        ctx.fillText(latest.time, width - pad.right - 86, height - 10);
+      }
+
+      function detail(label, value) {
+        return `<div class="detail-card"><div class="label">${label}</div><div class="value">${value}</div></div>`;
+      }
+
+      function swotCard(title, items) {
+        return `<div class="swot-card"><h3>${title}</h3><ul>${listItems(items)}</ul></div>`;
+      }
+
+      function pct(value) {
+        if (value === null || value === undefined || Number.isNaN(value)) return "-";
+        const n = Number(value);
+        const color = n >= 0 ? "var(--green)" : "var(--red)";
+        return `<span style="color:${color}">${n.toFixed(2)}%</span>`;
+      }
+
+      function closeDrawer() {
+        el("drawerBackdrop").classList.remove("open");
+        el("stockDrawer").classList.remove("open");
+        el("stockDrawer").setAttribute("aria-hidden", "true");
+      }
+
+      ["searchInput", "industryFilter", "stageFilter", "rrgFilter", "stockLimit", "minStockScore", "minFundScore", "minROCE", "maxPE", "minCMP", "maxCMP"].forEach((id) => {
+        el(id).addEventListener("input", () => {
+          if (id === "industryFilter") state.selectedIndustry = el(id).value;
+          render();
+          renderBacktest();
+        });
+      });
+      document.querySelectorAll(".sort-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const table = button.dataset.table;
+          const key = button.dataset.sortKey;
+          const current = state.sorts[table] || {};
+          state.sorts[table] = {
+            key,
+            dir: current.key === key && current.dir === "desc" ? "asc" : "desc",
+          };
+          render();
+          renderBacktest();
+        });
+      });
+      document.querySelectorAll(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".tab-button").forEach((item) => item.classList.remove("active"));
+          document.querySelectorAll(".tab-view").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          el(`tab-${button.dataset.tab}`).classList.add("active");
+        });
+      });
+      el("resetButton").addEventListener("click", () => {
+        state.selectedIndustry = "";
+        ["searchInput", "industryFilter", "stageFilter", "rrgFilter", "minStockScore", "minFundScore", "minROCE", "maxPE", "minCMP", "maxCMP"].forEach((id) => el(id).value = "");
+        el("stockLimit").value = "5";
+        render();
+        renderBacktest();
+      });
+      el("drawerClose").addEventListener("click", closeDrawer);
+      el("drawerBackdrop").addEventListener("click", closeDrawer);
+
+      fetch("./dashboard_data.json")
+        .then((response) => response.json())
+        .then((data) => {
+          state.data = data;
+          renderKpis();
+          renderIndustryOptions();
+          render();
+        })
+        .catch((error) => {
+          el("generatedAt").textContent = `Could not load dashboard_data.json: ${error.message}`;
+        });
+      fetch("./market_blog.json")
+        .then((response) => response.ok ? response.json() : null)
+        .then((blog) => renderMarketBlog(blog))
+        .catch(() => renderMarketBlog(null));
+    </script>
+  </body>
+</html>
