@@ -3,8 +3,10 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
+: "${SCREENER_INDUSTRIES_WORKBOOK:?Set SCREENER_INDUSTRIES_WORKBOOK to the Screener industries workbook path.}"
+
 .venv/bin/python analyze_screener_industries.py \
-  --workbook /Users/nithin/Documents/Codex/2026-06-28/dow/outputs/screener_industries/screener_industries_nse_details.xlsx \
+  --workbook "$SCREENER_INDUSTRIES_WORKBOOK" \
   --config config.yaml \
   --output-dir reports \
   --sleep 1.5 \
