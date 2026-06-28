@@ -1,0 +1,16 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+*.log
+
+# Local-only generated scratch files.
+.pytest_cache/
+.mypy_cache/
+
+# Keep dashboard JSON committed for GitHub Pages, but do not commit ad-hoc local archives.
+*.tmp
+*.bak

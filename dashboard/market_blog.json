@@ -1,0 +1,258 @@
+{
+  "generated_at": "2026-06-28 20:48:27 IST",
+  "title": "Pre-market Technical Blog - 28 Jun 2026",
+  "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
+  "probabilities": {
+    "up": 37,
+    "down": 54,
+    "sideways": 9
+  },
+  "nifty": {
+    "close": 24056.0,
+    "change_5d_pct": -0.46,
+    "change_20d_pct": 0.62,
+    "ma20": 23654.09,
+    "ma50": 23851.96,
+    "ma200": 24885.18,
+    "rsi14": 65.63
+  },
+  "cpr": {
+    "pivot": 24118.87,
+    "bc": 24087.43,
+    "tc": 24150.3,
+    "r1": 24198.73,
+    "r2": 24341.47,
+    "s1": 23976.13,
+    "s2": 23896.27,
+    "width_pct": 0.261
+  },
+  "gift_nifty": {
+    "level": null,
+    "change_pct": null,
+    "source": "Not configured",
+    "note": "Add GIFT_NIFTY_LEVEL or GIFT_NIFTY_SYMBOL in .env for a live pre-open gap estimate."
+  },
+  "global_markets": [
+    {
+      "name": "S&P 500",
+      "symbol": "^GSPC",
+      "level": 7354.02,
+      "change_pct": -0.05
+    },
+    {
+      "name": "Dow Jones",
+      "symbol": "^DJI",
+      "level": 51876.11,
+      "change_pct": -0.09
+    },
+    {
+      "name": "Nasdaq",
+      "symbol": "^IXIC",
+      "level": 25297.62,
+      "change_pct": -0.24
+    },
+    {
+      "name": "FTSE 100",
+      "symbol": "^FTSE",
+      "level": 10508.0,
+      "change_pct": -0.21
+    },
+    {
+      "name": "Nikkei 225",
+      "symbol": "^N225",
+      "level": 69360.88,
+      "change_pct": -4.15
+    },
+    {
+      "name": "Hang Seng",
+      "symbol": "^HSI",
+      "level": 22671.86,
+      "change_pct": -1.76
+    },
+    {
+      "name": "Shanghai",
+      "symbol": "000001.SS",
+      "level": 4027.26,
+      "change_pct": -2.26
+    },
+    {
+      "name": "USD/INR",
+      "symbol": "INR=X",
+      "level": 94.39,
+      "change_pct": -0.02
+    },
+    {
+      "name": "Brent Crude",
+      "symbol": "BZ=F",
+      "level": 72.6,
+      "change_pct": -3.53
+    },
+    {
+      "name": "Gold",
+      "symbol": "GC=F",
+      "level": 4096.3,
+      "change_pct": 1.63
+    }
+  ],
+  "pattern_notes": [
+    "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
+    "Last 5-session return is -0.46%, while last 20-session return is 0.62%.",
+    "CPR width is 0.261%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24150.3 and R1 24198.73; weakness increases below BC 24087.43 and S1 23976.13."
+  ],
+  "blog_sections": [
+    {
+      "heading": "Market Opening View",
+      "body": "Based on the available GIFT Nifty input, global-market tone and Nifty trend structure, the market can open flat to mildly positive. Treat the first 15-30 minutes as confirmation because large gaps can reverse if price fails near CPR or previous-day extremes."
+    },
+    {
+      "heading": "Technical View For The Day",
+      "body": "Above CPR top 24150.3, buyers have better control and the first upside zones are 24198.73 and 24341.47. Below CPR bottom 24087.43, sellers gain control and downside zones are 23976.13 and 23896.27. A sustained move around pivot 24118.87 can mean a range day."
+    },
+    {
+      "heading": "What Can Make The Market Go Up",
+      "body": "Positive global cues, GIFT Nifty premium, Nifty holding above CPR, and leadership from Stage 2/RRG leading industries can support upside follow-through."
+    },
+    {
+      "heading": "What Can Make The Market Go Down",
+      "body": "Weak Asian markets, rising USD/INR or crude pressure, GIFT Nifty discount, and Nifty failing below CPR/S1 can increase downside risk."
+    }
+  ],
+  "leading_industries": [
+    {
+      "name": "Abrasives & Bearings",
+      "rs_ratio": 101.14,
+      "rs_momentum": 101.33
+    },
+    {
+      "name": "Aerospace & Defense",
+      "rs_ratio": 101.76,
+      "rs_momentum": 100.71
+    },
+    {
+      "name": "Aluminium, Copper & Zinc Products",
+      "rs_ratio": 100.29,
+      "rs_momentum": 100.43
+    },
+    {
+      "name": "Asset Management Company",
+      "rs_ratio": 100.97,
+      "rs_momentum": 100.66
+    },
+    {
+      "name": "Auto Components & Equipments",
+      "rs_ratio": 101.52,
+      "rs_momentum": 101.38
+    },
+    {
+      "name": "Cables - Electricals",
+      "rs_ratio": 101.36,
+      "rs_momentum": 100.74
+    },
+    {
+      "name": "Meat Products including Poultry",
+      "rs_ratio": 102.0,
+      "rs_momentum": 101.96
+    },
+    {
+      "name": "Microfinance Institutions",
+      "rs_ratio": 101.31,
+      "rs_momentum": 104.17
+    }
+  ],
+  "fundamental_picks": [
+    {
+      "name": "Grindwell Norton",
+      "symbol": "GRINDWELL",
+      "industry": "Abrasives & Bearings",
+      "score": 67.46
+    },
+    {
+      "name": "SKF India Indus.",
+      "symbol": "SKFINDUS",
+      "industry": "Abrasives & Bearings",
+      "score": 64.73
+    },
+    {
+      "name": "Timken India",
+      "symbol": "TIMKEN",
+      "industry": "Abrasives & Bearings",
+      "score": 61.62
+    },
+    {
+      "name": "SKF India",
+      "symbol": "SKFINDIA",
+      "industry": "Abrasives & Bearings",
+      "score": 59.59
+    },
+    {
+      "name": "Wendt India",
+      "symbol": "WENDT",
+      "industry": "Abrasives & Bearings",
+      "score": 41.69
+    },
+    {
+      "name": "Hind.Aeronautics",
+      "symbol": "HAL",
+      "industry": "Aerospace & Defense",
+      "score": 77.43
+    },
+    {
+      "name": "Bharat Electron",
+      "symbol": "BEL",
+      "industry": "Aerospace & Defense",
+      "score": 73.0
+    },
+    {
+      "name": "Garden Reach Sh.",
+      "symbol": "GRSE",
+      "industry": "Aerospace & Defense",
+      "score": 67.41
+    }
+  ],
+  "recent_nifty": [
+    {
+      "date": "2026-06-18",
+      "open": 24073.8,
+      "high": 24189.25,
+      "low": 24036.95,
+      "close": 24168.0
+    },
+    {
+      "date": "2026-06-19",
+      "open": 23991.2,
+      "high": 24047.2,
+      "low": 23901.9,
+      "close": 24013.1
+    },
+    {
+      "date": "2026-06-22",
+      "open": 24106.6,
+      "high": 24168.05,
+      "low": 24073.15,
+      "close": 24102.9
+    },
+    {
+      "date": "2026-06-23",
+      "open": 24071.3,
+      "high": 24135.5,
+      "low": 23784.95,
+      "close": 23824.1
+    },
+    {
+      "date": "2026-06-24",
+      "open": 23795.8,
+      "high": 24090.05,
+      "low": 23789.25,
+      "close": 24021.65
+    },
+    {
+      "date": "2026-06-25",
+      "open": 24125.85,
+      "high": 24261.6,
+      "low": 24039.0,
+      "close": 24056.0
+    }
+  ],
+  "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
+}

@@ -1,0 +1,10 @@
+level,name,symbol,parent
+sector,Nifty Auto,^CNXAUTO,
+sector,Nifty Bank,^NSEBANK,
+sector,Nifty IT,^CNXIT,
+subsector,Private Banks,HDFCBANK.NS,Nifty Bank
+subsector,PSU Banks,SBIN.NS,Nifty PSU Bank
+stock,State Bank of India,SBIN.NS,PSU Banks
+stock,HDFC Bank,HDFCBANK.NS,Private Banks
+stock,Infosys,INFY.NS,Nifty IT
+stock,Tata Motors,TATAMOTORS.NS,Nifty Auto

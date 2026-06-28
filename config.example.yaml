@@ -1,0 +1,28 @@
+data_provider: yfinance
+
+benchmark:
+  symbol: ^NSEI
+  name: Nifty 50
+
+history:
+  lookback_days: 420
+  resolution: 1d
+
+weinstein:
+  weekly_ma_weeks: 30
+  fast_ma_weeks: 10
+  relative_strength_ma_weeks: 10
+  min_ma_slope_pct: 0.0
+  high_52w_proximity: 0.75
+  require_volume_above_ma: false
+  volume_ma_weeks: 10
+
+rrg:
+  lookback_days: 5
+  ratio_window_days: 50
+  momentum_window_days: 10
+  ratio_center: 100
+  momentum_center: 100
+
+universe_file: universe.example.csv
+output_dir: reports

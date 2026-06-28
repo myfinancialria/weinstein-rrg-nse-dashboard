@@ -1,0 +1,48 @@
+level,name,symbol,parent
+sector,Nifty Auto,^CNXAUTO,
+sector,Nifty Bank,^NSEBANK,
+sector,Nifty Financial Services,NIFTY_FIN_SERVICE.NS,
+sector,Nifty FMCG,^CNXFMCG,
+sector,Nifty IT,^CNXIT,
+sector,Nifty Media,^CNXMEDIA,
+sector,Nifty Metal,^CNXMETAL,
+sector,Nifty Pharma,^CNXPHARMA,
+sector,Nifty PSU Bank,^CNXPSUBANK,
+sector,Nifty Realty,^CNXREALTY,
+subsector,Private Banks,HDFCBANK.NS,Nifty Bank
+subsector,PSU Banks,SBIN.NS,Nifty PSU Bank
+subsector,IT Services,INFY.NS,Nifty IT
+subsector,Auto OEM,TATAMOTORS.NS,Nifty Auto
+subsector,Two Wheelers,BAJAJ-AUTO.NS,Nifty Auto
+subsector,Metals Steel,TATASTEEL.NS,Nifty Metal
+subsector,Pharma Largecap,SUNPHARMA.NS,Nifty Pharma
+subsector,FMCG Staples,HINDUNILVR.NS,Nifty FMCG
+subsector,Real Estate Developers,DLF.NS,Nifty Realty
+stock,HDFC Bank,HDFCBANK.NS,Private Banks
+stock,ICICI Bank,ICICIBANK.NS,Private Banks
+stock,Axis Bank,AXISBANK.NS,Private Banks
+stock,State Bank of India,SBIN.NS,PSU Banks
+stock,Bank of Baroda,BANKBARODA.NS,PSU Banks
+stock,Canara Bank,CANBK.NS,PSU Banks
+stock,Infosys,INFY.NS,IT Services
+stock,TCS,TCS.NS,IT Services
+stock,HCL Tech,HCLTECH.NS,IT Services
+stock,Wipro,WIPRO.NS,IT Services
+stock,Tata Motors,TATAMOTORS.NS,Auto OEM
+stock,Mahindra and Mahindra,M&M.NS,Auto OEM
+stock,Maruti Suzuki,MARUTI.NS,Auto OEM
+stock,Bajaj Auto,BAJAJ-AUTO.NS,Two Wheelers
+stock,Hero MotoCorp,HEROMOTOCO.NS,Two Wheelers
+stock,TVS Motor,TVSMOTOR.NS,Two Wheelers
+stock,Tata Steel,TATASTEEL.NS,Metals Steel
+stock,JSW Steel,JSWSTEEL.NS,Metals Steel
+stock,Hindalco,HINDALCO.NS,Metals Steel
+stock,Sun Pharma,SUNPHARMA.NS,Pharma Largecap
+stock,Dr Reddy's Laboratories,DRREDDY.NS,Pharma Largecap
+stock,Cipla,CIPLA.NS,Pharma Largecap
+stock,Hindustan Unilever,HINDUNILVR.NS,FMCG Staples
+stock,ITC,ITC.NS,FMCG Staples
+stock,Nestle India,NESTLEIND.NS,FMCG Staples
+stock,DLF,DLF.NS,Real Estate Developers
+stock,Godrej Properties,GODREJPROP.NS,Real Estate Developers
+stock,Macrotech Developers,LODHA.NS,Real Estate Developers
