@@ -1,6 +1,6 @@
 # Weinstein Stage 2 + RRG Daily Screener
 
-This is a configurable daily NSE screener that pulls OHLCV history from Yahoo Finance by default, checks Weinstein Stage 2 conditions for sectors, sub-sectors, and stocks, and adds a 5-day RRG-style relative-strength tail versus a benchmark.
+This is a configurable daily NSE screener and dashboard for stocks satisfying Weinstein Stage 2, RRG leadership, technical, fundamental, and backtested criteria. It pulls OHLCV history from Yahoo Finance by default, checks sectors, sub-sectors, and stocks, and adds a 5-day RRG-style relative-strength tail versus a benchmark.
 
 ## Setup
 
