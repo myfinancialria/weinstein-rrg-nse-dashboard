@@ -63,3 +63,9 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # GitHub's Pages backend occasionally stalls; give the deploy a
+          # longer window and more retries so a transient slow deploy doesn't
+          # abort with "Timeout reached" and freeze the site on stale data.
+          timeout: 1200000
+          error_count: 25
