@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03 18:02:39 IST",
+  "generated_at": "2026-07-03 18:18:34 IST",
   "title": "Pre-market Technical Blog - 03 Jul 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
@@ -54,8 +54,8 @@
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10640.23,
-      "change_pct": -0.12
+      "level": 10636.83,
+      "change_pct": -0.15
     },
     {
       "name": "Nikkei 225",
@@ -84,14 +84,14 @@
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 71.62,
-      "change_pct": -0.25
+      "level": 71.46,
+      "change_pct": -0.47
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4186.9,
-      "change_pct": 1.8
+      "level": 4186.0,
+      "change_pct": 1.78
     }
   ],
   "pattern_notes": [
@@ -162,10 +162,22 @@
   ],
   "fundamental_picks": [
     {
+      "name": "Timken India",
+      "symbol": "TIMKEN",
+      "industry": "Abrasives & Bearings",
+      "score": 77.08
+    },
+    {
       "name": "Grindwell Norton",
       "symbol": "GRINDWELL",
       "industry": "Abrasives & Bearings",
-      "score": 67.46
+      "score": 72.86
+    },
+    {
+      "name": "SKF India",
+      "symbol": "SKFINDIA",
+      "industry": "Abrasives & Bearings",
+      "score": 68.29
     },
     {
       "name": "SKF India Indus.",
@@ -174,40 +186,28 @@
       "score": 64.73
     },
     {
-      "name": "Timken India",
-      "symbol": "TIMKEN",
+      "name": "Carborundum Uni.",
+      "symbol": "CARBORUNIV",
       "industry": "Abrasives & Bearings",
-      "score": 61.62
+      "score": 43.56
     },
     {
-      "name": "SKF India",
-      "symbol": "SKFINDIA",
-      "industry": "Abrasives & Bearings",
-      "score": 59.59
-    },
-    {
-      "name": "Wendt India",
-      "symbol": "WENDT",
-      "industry": "Abrasives & Bearings",
-      "score": 41.69
+      "name": "Sigma Advanced System",
+      "symbol": "SIGMAADV",
+      "industry": "Aerospace & Defense",
+      "score": 91.0
     },
     {
       "name": "Hind.Aeronautics",
       "symbol": "HAL",
       "industry": "Aerospace & Defense",
-      "score": 77.43
+      "score": 86.57
     },
     {
       "name": "Bharat Electron",
       "symbol": "BEL",
       "industry": "Aerospace & Defense",
-      "score": 73.0
-    },
-    {
-      "name": "Garden Reach Sh.",
-      "symbol": "GRSE",
-      "industry": "Aerospace & Defense",
-      "score": 67.41
+      "score": 83.39
     }
   ],
   "recent_nifty": [
