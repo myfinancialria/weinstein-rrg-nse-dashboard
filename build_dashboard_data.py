@@ -300,68 +300,135 @@ def make_red_flags(row: pd.Series) -> list[str]:
     return flags[:5]
 
 
+def _swot_num(value, suffix: str = "") -> str:
+    """Format a numeric field for SWOT prose; '' if the value is missing."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return ""
+    try:
+        num = float(value)
+    except (TypeError, ValueError):
+        return ""
+    if abs(num) >= 100:
+        return f"{num:,.0f}{suffix}"
+    return f"{num:.1f}{suffix}"
+
+
 def make_swot(row: pd.Series) -> dict[str, list[str]]:
-    strengths = []
-    weaknesses = []
-    opportunities = []
-    threats = []
+    """Company-only SWOT built from the business itself.
 
-    if row.get("stage") == "stage_2":
-        strengths.append("The stock is in a confirmed uptrend structure.")
-    else:
-        weaknesses.append("The stock trend is not yet a clean Stage 2 setup.")
+    Strengths and Weaknesses are INTERNAL company factors (profitability,
+    balance sheet, cash flow, earnings momentum, ownership). Opportunities and
+    Threats are EXTERNAL factors (valuation environment, end-market demand,
+    interest rates, competition and regulation). Price-action / RRG /
+    moving-average signals are intentionally excluded here — those live in the
+    technical (Pros / Red Flags / Returns) sections of the drawer.
+    """
+    strengths: list = []
+    weaknesses: list = []
+    opportunities: list = []
+    threats: list = []
 
-    if row.get("rrg_quadrant") == "leading":
-        strengths.append("It is outperforming the Nifty 50 on RRG.")
-    elif row.get("rrg_quadrant") == "improving":
-        opportunities.append("Relative strength is improving and can move into leadership.")
-    else:
-        threats.append("Relative strength is weak or losing momentum.")
+    def val(key):
+        v = row.get(key)
+        if v is None or (isinstance(v, float) and pd.isna(v)):
+            return None
+        return v
 
-    if (row.get("weekly_ma_slope_4w_pct") or 0) > 0:
-        strengths.append("The 30-week average is rising, showing medium-term support.")
-    else:
-        weaknesses.append("The 30-week average is flat or falling.")
+    # --- Internal: profitability & capital efficiency ---
+    roe = val("roe_pct")
+    if roe is not None:
+        if roe >= 15:
+            strengths.append(f"Strong return on equity ({_swot_num(roe, '%')}) — capital is used efficiently.")
+        else:
+            weaknesses.append(f"Modest return on equity ({_swot_num(roe, '%')}) — capital efficiency has room to improve.")
 
-    if (row.get("roe_pct") or 0) >= 15:
-        strengths.append("ROE is healthy, suggesting good use of shareholder capital.")
-    elif pd.notna(row.get("roe_pct")):
-        weaknesses.append("ROE is modest, so capital efficiency needs watching.")
+    roce = val("roce")
+    if roce is not None and roce >= 15:
+        strengths.append(f"Healthy return on capital employed ({_swot_num(roce, '%')}) points to a profitable core business.")
+    elif roce is not None and roce < 8:
+        weaknesses.append(f"Low return on capital employed ({_swot_num(roce, '%')}) — the core business earns thin returns.")
 
-    if (row.get("net_margin_pct") or 0) >= 10:
-        strengths.append("Net margin is comfortable, showing reasonable profitability.")
-    elif pd.notna(row.get("net_margin_pct")):
-        weaknesses.append("Net margin is thin, leaving less cushion if costs rise.")
+    nm = val("net_margin_pct")
+    if nm is not None:
+        if nm >= 10:
+            strengths.append(f"Comfortable net margin ({_swot_num(nm, '%')}) reflects pricing power and cost control.")
+        else:
+            weaknesses.append(f"Thin net margin ({_swot_num(nm, '%')}) leaves little cushion if costs rise.")
 
-    if (row.get("free_cash_flow_cr") or 0) > 0:
-        strengths.append("Free cash flow is positive, which supports reinvestment or debt reduction.")
-    elif pd.notna(row.get("free_cash_flow_cr")):
-        weaknesses.append("Free cash flow is negative, so cash conversion needs attention.")
+    # --- Internal: cash flow & balance sheet ---
+    fcf = val("free_cash_flow_cr")
+    if fcf is not None:
+        if fcf > 0:
+            strengths.append(f"Positive free cash flow ({_swot_num(fcf)} Cr) funds growth, dividends or debt reduction internally.")
+        else:
+            weaknesses.append(f"Negative free cash flow ({_swot_num(fcf)} Cr) — the business is not yet self-funding.")
 
-    if pd.notna(row.get("debt_to_equity")) and row.get("debt_to_equity") <= 50:
-        strengths.append("Debt level appears manageable.")
-    elif pd.notna(row.get("debt_to_equity")):
-        threats.append("Debt is elevated and can pressure profits if rates or cash flows worsen.")
+    de = val("debt_to_equity")
+    if de is not None:
+        if de <= 50:
+            strengths.append(f"Low leverage (debt/equity {_swot_num(de)}) gives a resilient balance sheet.")
+        elif de > 100:
+            weaknesses.append(f"High leverage (debt/equity {_swot_num(de)}) makes profits sensitive to funding costs.")
 
-    if pd.notna(row.get("current_ratio")) and row.get("current_ratio") >= 1:
-        strengths.append("Current ratio is above 1, indicating acceptable short-term liquidity.")
-    elif pd.notna(row.get("current_ratio")):
-        weaknesses.append("Current ratio is below 1, suggesting tight short-term liquidity.")
+    cr = val("current_ratio")
+    if cr is not None:
+        if cr >= 1:
+            strengths.append(f"Adequate short-term liquidity (current ratio {_swot_num(cr)}).")
+        else:
+            weaknesses.append(f"Tight short-term liquidity (current ratio {_swot_num(cr)}).")
 
-    if pd.notna(row.get("pe_ratio")) and row.get("pe_ratio") > 60:
-        threats.append("Valuation is expensive on P/E, so earnings delivery must be strong.")
-    elif pd.notna(row.get("pe_ratio")) and row.get("pe_ratio") < 25:
-        opportunities.append("Valuation is not excessive on P/E if earnings stay stable.")
+    # --- Internal: earnings momentum & ownership ---
+    qpg = val("qtr_profit_var_pct")
+    if qpg is not None:
+        if qpg > 0:
+            strengths.append(f"Quarterly profit is growing year-on-year ({_swot_num(qpg, '%')}), showing earnings momentum.")
+        else:
+            weaknesses.append(f"Quarterly profit fell year-on-year ({_swot_num(qpg, '%')}), a sign of near-term earnings pressure.")
 
-    if (row.get("return_6m") or 0) > 0 and (row.get("return_1y") or 0) > 0:
-        opportunities.append("Positive 6-month and 1-year returns show market interest is already building.")
-    elif (row.get("return_1m") or 0) < -5:
-        threats.append("Recent 1-month price action is weak.")
+    hold = val("promoter_or_insider_holding_pct")
+    if hold is not None and hold >= 50:
+        strengths.append(f"High promoter/insider holding ({_swot_num(hold, '%')}) signals strong management commitment.")
+    elif hold is not None and hold < 30:
+        weaknesses.append(f"Low promoter/insider holding ({_swot_num(hold, '%')}) means less management skin in the game.")
 
+    dy = val("dividend_yield_pct")
+    if dy is not None and dy >= 1.5:
+        strengths.append(f"Regular dividend ({_swot_num(dy, '%')} yield) returns cash to shareholders.")
+
+    # --- External: valuation environment ---
+    pe = val("pe_ratio")
+    if pe is None:
+        pe = val("pe")
+    peg = val("peg_ratio")
+    if (pe is not None and pe < 25) or (peg is not None and 0 < peg < 1):
+        bits = []
+        if pe is not None:
+            bits.append(f"P/E {_swot_num(pe)}")
+        if peg is not None and peg > 0:
+            bits.append(f"PEG {_swot_num(peg)}")
+        opportunities.append(f"Undemanding valuation ({', '.join(bits)}) leaves room for re-rating if execution holds.")
+    if (pe is not None and pe > 60) or (peg is not None and peg > 2.5):
+        threats.append(f"Rich valuation (P/E {_swot_num(pe)}) raises de-rating risk if growth disappoints.")
+
+    # --- External: end-market demand & macro ---
+    qsg = val("qtr_sales_var_pct")
+    if qsg is not None and qsg >= 15:
+        opportunities.append(f"Strong revenue growth ({_swot_num(qsg, '%')} YoY) suggests expanding end-market demand to capture.")
+    elif qsg is not None and qsg < 0:
+        threats.append(f"Revenue contracted year-on-year ({_swot_num(qsg, '%')}), pointing to softer demand.")
+
+    if de is not None and de > 100:
+        threats.append("Elevated debt exposes earnings to rising interest rates.")
+
+    # Fallbacks so no quadrant is ever empty
+    if not strengths:
+        strengths.append("No standout financial strength in the current fundamentals.")
+    if not weaknesses:
+        weaknesses.append("No major financial weakness flagged in the current fundamentals.")
     if not opportunities:
-        opportunities.append("If the industry remains in RRG leadership, stronger stocks in the group can continue attracting attention.")
+        opportunities.append("Sector tailwinds, new products or operating leverage could open upside (see industry outlook below).")
     if not threats:
-        threats.append("Main risk is a reversal in industry momentum or broader market weakness.")
+        threats.append("Competition, input-cost inflation, a macro slowdown or regulatory change are the key external risks.")
 
     return {
         "strengths": strengths[:4],

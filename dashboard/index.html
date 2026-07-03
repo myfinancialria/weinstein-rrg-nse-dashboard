@@ -1134,6 +1134,8 @@
 
       function openStockDrawer(stock) {
         const thesis = (state.data.industryTheses || {})[stock.parent] || {};
+        const tvSymbol = (stock.display_symbol || (stock.symbol || "").replace(/\.NS$/i, "")).toUpperCase();
+        const tvUrl = `https://www.tradingview.com/chart/?symbol=NSE:${encodeURIComponent(tvSymbol)}`;
         el("drawerTitle").textContent = stock.name || stock.symbol || "Stock";
         el("drawerSubtitle").textContent = `${stock.display_symbol || stock.symbol || ""} • ${stock.parent || ""}`;
         el("drawerBody").innerHTML = `
@@ -1173,10 +1175,12 @@
           <div class="section-title">Why It Is A Fundamental Pick</div>
           <div class="chips">${listChips(stock.fundamental_reasons, "good")}</div>
 
-          <div class="section-title">TradingView Lightweight Chart</div>
-          <div class="chart-box" id="stockChart">
-            <div class="chart-message">Loading chart...</div>
-          </div>
+          <div class="section-title">Price Chart<a class="tv-link" style="margin-left:10px;font-size:12px;font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a></div>
+          <a class="chart-link" style="display:block;text-decoration:none;color:inherit;" href="${tvUrl}" target="_blank" rel="noopener" title="Open ${tvSymbol} on TradingView">
+            <div class="chart-box" id="stockChart">
+              <div class="chart-message">Loading chart...</div>
+            </div>
+          </a>
 
           <div class="section-title">Returns</div>
           <div class="detail-grid">
@@ -1202,7 +1206,7 @@
           <div class="section-title">Red Flags</div>
           <div class="chips">${listChips(stock.red_flags, "bad")}</div>
 
-          <div class="section-title">Simple SWOT From Fundamentals & Price Action</div>
+          <div class="section-title">SWOT &mdash; Company Internal (Strengths / Weaknesses) &amp; External (Opportunities / Threats) Factors</div>
           <div class="swot-grid">
             ${swotCard("Strengths", stock.swot && stock.swot.strengths)}
             ${swotCard("Weaknesses", stock.swot && stock.swot.weaknesses)}
