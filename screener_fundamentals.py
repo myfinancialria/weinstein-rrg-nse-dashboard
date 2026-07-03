@@ -43,7 +43,7 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 BASE_DIR = Path(__file__).resolve().parent
 CACHE_FILE = BASE_DIR / "reports" / "screener_fundamentals_cache.json"
 STALE_DAYS = 4          # refetch a cached symbol only if older than this
-MAX_WORKERS = 4         # small pool — be polite to screener.in
+MAX_WORKERS = 3         # small pool — be polite to screener.in
 BASE_DELAY = 1.5        # seconds between requests per worker (jitter added)
 
 # screener top-ratios label -> our field
@@ -85,16 +85,50 @@ def _screener_symbol(symbol: str, display_symbol: str = "") -> str:
     return sym
 
 
-def _fetch_html(session, symbol: str):
-    for suffix in ("/consolidated/", "/"):
-        url = f"{BASE}/company/{symbol}{suffix}"
+def _get(session, url, tries=3):
+    """GET with backoff; retries transient throttling (429/5xx) so a CI burst
+    against screener.in doesn't silently drop symbols."""
+    for attempt in range(tries):
         try:
             resp = session.get(url, timeout=25)
         except Exception:
+            time.sleep(2 * (attempt + 1) + random.uniform(0, 1))
             continue
-        if resp.status_code == 200 and 'id="top-ratios"' in resp.text:
+        if resp.status_code == 200:
             return resp.text
+        if resp.status_code in (429, 500, 502, 503, 504):
+            retry_after = resp.headers.get("Retry-After", "")
+            wait = float(retry_after) if retry_after.isdigit() else 3 * (attempt + 1)
+            time.sleep(min(wait, 20) + random.uniform(0, 1))
+            continue
+        return None  # 404 and friends: no point retrying
     return None
+
+
+def _has_top_data(html: str) -> bool:
+    """True only if the top-ratios box has actual numbers (a company's
+    consolidated page can exist but be empty — the data is on standalone)."""
+    if not html or 'id="top-ratios"' not in html or BeautifulSoup is None:
+        return False
+    ul = BeautifulSoup(html, "html.parser").find("ul", id="top-ratios")
+    if not ul:
+        return False
+    return any((num := li.find("span", class_="number")) and num.get_text(strip=True)
+               for li in ul.find_all("li"))
+
+
+def _fetch_html(session, symbol: str):
+    """Prefer the consolidated page, but fall back to standalone when
+    consolidated has no populated ratios (common for banks/NBFCs)."""
+    fallback = None
+    for suffix in ("/consolidated/", "/"):
+        html = _get(session, f"{BASE}/company/{symbol}{suffix}")
+        if not html:
+            continue
+        if _has_top_data(html):
+            return html
+        fallback = fallback or html
+    return fallback
 
 
 def _section_rows(soup, section_id):
@@ -158,11 +192,15 @@ def _parse(html: str) -> dict:
         out["pb_ratio"] = round(top["current_price"] / top["book_value"], 2)
 
     # --- annual P&L: margins + EPS ---
+    # banks/NBFCs label the top line "Revenue" (not "Sales") and show
+    # "Financing Margin %" (not "OPM %").
     pnl = _section_rows(soup, "profit-loss")
-    sales, net_profit = _last(pnl.get("Sales")), _last(pnl.get("Net Profit"))
-    if sales and net_profit is not None:
-        out["net_margin_pct"] = round(net_profit / sales * 100, 1)
-    opm = _last(pnl.get("OPM %"))
+    is_financial = "Sales" not in pnl and ("Revenue" in pnl or "Financing Profit" in pnl)
+    topline = _last(pnl.get("Sales")) if "Sales" in pnl else _last(pnl.get("Revenue"))
+    net_profit = _last(pnl.get("Net Profit"))
+    if topline and net_profit is not None:
+        out["net_margin_pct"] = round(net_profit / topline * 100, 1)
+    opm = _last(pnl.get("OPM %")) if "OPM %" in pnl else _last(pnl.get("Financing Margin %"))
     if opm is not None:
         out["operating_margin_pct"] = opm
     eps = _last(pnl.get("EPS in Rs"))
@@ -170,24 +208,30 @@ def _parse(html: str) -> dict:
         out["eps"] = eps
 
     # --- balance sheet: debt/equity (x100 to match Yahoo's convention) ---
-    bs = _section_rows(soup, "balance-sheet")
-    borrow = _last(bs.get("Borrowings"))
-    equity = _last(bs.get("Equity Capital"))
-    reserves = _last(bs.get("Reserves"))
-    if borrow is not None and equity is not None and reserves is not None:
-        networth = equity + reserves
-        if networth > 0:
-            out["debt_to_equity"] = round(borrow / networth * 100, 1)
+    # skip for banks/NBFCs — borrowings are their raw material, so the ratio is
+    # structurally huge and would wrongly read as a red flag in the SWOT.
+    if not is_financial:
+        bs = _section_rows(soup, "balance-sheet")
+        borrow = _last(bs.get("Borrowings"))
+        equity = _last(bs.get("Equity Capital"))
+        reserves = _last(bs.get("Reserves"))
+        if borrow is not None and equity is not None and reserves is not None:
+            networth = equity + reserves
+            if networth > 0:
+                out["debt_to_equity"] = round(borrow / networth * 100, 1)
 
     # --- cash flow: screener gives Free Cash Flow directly ---
-    cf = _section_rows(soup, "cash-flow")
-    fcf = _last(cf.get("Free Cash Flow"))
-    if fcf is None:  # fallback proxy: CFO + CFI
-        cfo, cfi = _last(cf.get("Cash from Operating Activity")), _last(cf.get("Cash from Investing Activity"))
-        if cfo is not None and cfi is not None:
-            fcf = cfo + cfi
-    if fcf is not None:
-        out["free_cash_flow_cr"] = round(fcf, 1)
+    # skip for banks/NBFCs — lending is their investing outflow, so FCF is
+    # structurally negative and would wrongly read as a weakness in the SWOT.
+    if not is_financial:
+        cf = _section_rows(soup, "cash-flow")
+        fcf = _last(cf.get("Free Cash Flow"))
+        if fcf is None:  # fallback proxy: CFO + CFI
+            cfo, cfi = _last(cf.get("Cash from Operating Activity")), _last(cf.get("Cash from Investing Activity"))
+            if cfo is not None and cfi is not None:
+                fcf = cfo + cfi
+        if fcf is not None:
+            out["free_cash_flow_cr"] = round(fcf, 1)
 
     # --- shareholding: promoter holding ---
     shp = _section_rows(soup, "shareholding")
@@ -195,9 +239,9 @@ def _parse(html: str) -> dict:
     if promoters is not None:
         out["promoter_or_insider_holding_pct"] = promoters
 
-    # --- quarters: YoY sales/profit growth ---
+    # --- quarters: YoY sales/profit growth (banks label it "Revenue") ---
     q = _section_rows(soup, "quarters")
-    qsg = _yoy(q.get("Sales"))
+    qsg = _yoy(q.get("Sales") if "Sales" in q else q.get("Revenue"))
     if qsg is not None:
         out["qtr_sales_var_pct"] = qsg
     qpg = _yoy(q.get("Net Profit"))
@@ -274,23 +318,26 @@ def add_screener_fundamentals(stocks: pd.DataFrame) -> pd.DataFrame:
         CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
         CACHE_FILE.write_text(json.dumps(cache, indent=2, sort_keys=True), encoding="utf-8")
 
-    # ensure target columns exist, then override from screener
-    for field in SCREENER_FIELDS:
-        if field not in stocks.columns:
-            stocks[field] = np.nan
-
-    def screener_val(row, field):
-        sym = _screener_symbol(row.get("symbol", ""),
-                               row.get("display_symbol", "") if "display_symbol" in stocks.columns else "")
-        entry = cache.get(sym) or {}
-        return entry.get(field)
+    # screener symbol per row (once), then override each field from the cache
+    has_disp = "display_symbol" in stocks.columns
+    row_syms = [
+        _screener_symbol(sym, dsym if has_disp else "")
+        for sym, dsym in zip(stocks["symbol"].fillna(""),
+                             (stocks["display_symbol"] if has_disp else stocks["symbol"]).fillna(""))
+    ]
+    sym_series = pd.Series(row_syms, index=stocks.index)
 
     filled = 0
     for field in SCREENER_FIELDS:
-        new = stocks.apply(lambda r: screener_val(r, field), axis=1)
-        mask = new.notna()
-        stocks.loc[mask, field] = new[mask]
-        filled += int(mask.sum())
+        new = pd.to_numeric(
+            sym_series.map(lambda k: (cache.get(k) or {}).get(field)),
+            errors="coerce",
+        )
+        if field not in stocks.columns:
+            stocks[field] = np.nan
+        existing = pd.to_numeric(stocks[field], errors="coerce")
+        stocks[field] = new.combine_first(existing)  # screener wins where present
+        filled += int(new.notna().sum())
     print(f"screener_fundamentals: applied {filled} field values across {len(stocks)} stocks.")
     return stocks
 
