@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03 18:18:34 IST",
+  "generated_at": "2026-07-03 18:38:24 IST",
   "title": "Pre-market Technical Blog - 03 Jul 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
@@ -54,8 +54,8 @@
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10636.83,
-      "change_pct": -0.15
+      "level": 10639.54,
+      "change_pct": -0.13
     },
     {
       "name": "Nikkei 225",
@@ -84,14 +84,14 @@
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 71.46,
-      "change_pct": -0.47
+      "level": 71.5,
+      "change_pct": -0.42
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4186.0,
-      "change_pct": 1.78
+      "level": 4185.1,
+      "change_pct": 1.76
     }
   ],
   "pattern_notes": [
@@ -162,6 +162,12 @@
   ],
   "fundamental_picks": [
     {
+      "name": "SKF India Indus.",
+      "symbol": "SKFINDUS",
+      "industry": "Abrasives & Bearings",
+      "score": 82.15
+    },
+    {
       "name": "Timken India",
       "symbol": "TIMKEN",
       "industry": "Abrasives & Bearings",
@@ -178,12 +184,6 @@
       "symbol": "SKFINDIA",
       "industry": "Abrasives & Bearings",
       "score": 68.29
-    },
-    {
-      "name": "SKF India Indus.",
-      "symbol": "SKFINDUS",
-      "industry": "Abrasives & Bearings",
-      "score": 64.73
     },
     {
       "name": "Carborundum Uni.",
