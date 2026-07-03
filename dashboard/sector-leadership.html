@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>India Sector Leadership Report &mdash; 3 July 2026</title>
+<meta name="description" content="India's strongest NSE industries ranked by combined RS-Ratio and RS-Momentum, with drivers, government schemes, Budget provisions and global forces.">
+<style>
+  :root{
+    --ink:#16211d; --paper:#f3f4f0; --raised:#fbfbf9;
+    --teal:#0e5c4f; --teal-deep:#0a3f36; --amber:#a9670f;
+    --rule:#dcded6; --rule-soft:#e7e8e1; --muted:#59635d; --up:#1f7a4d;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --measure:66ch;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--serif);
+    -webkit-font-smoothing:antialiased;line-height:1.62;margin:0}
+  .wrap{max-width:960px;margin:0 auto;padding:clamp(1.25rem,4vw,3.5rem) clamp(1.1rem,4vw,2.25rem) 5rem}
+  .col{max-width:var(--measure)}
+  .eyebrow{font-family:var(--sans);text-transform:uppercase;letter-spacing:.18em;
+    font-size:.7rem;font-weight:600;color:var(--teal)}
+  .num{font-variant-numeric:tabular-nums}
+  a{color:var(--teal);text-underline-offset:2px}
+
+  .back{font-family:var(--sans);font-size:.78rem;text-decoration:none;color:var(--muted);display:inline-block;margin-bottom:1rem}
+  .back:hover{color:var(--teal)}
+
+  .mast{border-top:3px solid var(--ink);padding-top:1.15rem;margin-bottom:2.6rem}
+  .mast h1{font-size:clamp(2.05rem,5.2vw,3.35rem);line-height:1.04;font-weight:600;
+    letter-spacing:-.012em;margin:.5rem 0 .35rem;text-wrap:balance;max-width:20ch}
+  .mast .dek{font-size:clamp(1.05rem,2.4vw,1.32rem);color:var(--muted);font-style:italic;
+    margin:0 0 1.15rem;max-width:52ch;text-wrap:balance}
+  .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;font-family:var(--sans);
+    font-size:.78rem;color:var(--muted);border-top:1px solid var(--rule);padding-top:.8rem}
+  .meta b{color:var(--ink);font-weight:600}
+
+  h2.sec{font-size:.82rem;font-family:var(--sans);text-transform:uppercase;letter-spacing:.16em;
+    color:var(--muted);font-weight:600;margin:0 0 1.1rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule)}
+  p{margin:0 0 1rem}
+  .lead-para{font-size:1.14rem}
+
+  .rank-wrap{overflow-x:auto;margin:1.6rem 0 0;border:1px solid var(--rule);border-radius:3px;background:var(--raised)}
+  table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:.86rem}
+  thead th{text-align:left;text-transform:uppercase;letter-spacing:.08em;font-size:.66rem;
+    color:var(--muted);font-weight:600;padding:.7rem .85rem;border-bottom:1.5px solid var(--rule);white-space:nowrap}
+  thead th.r{text-align:right}
+  tbody td{padding:.62rem .85rem;border-bottom:1px solid var(--rule-soft);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:#eef0ea}
+  td.rk{font-variant-numeric:tabular-nums;color:var(--amber);font-weight:700;width:2.4rem}
+  td.nm{font-family:var(--serif);font-size:1rem;font-weight:600;min-width:15rem}
+  td.nm a{color:inherit;text-decoration:none}
+  td.nm a:hover{color:var(--teal)}
+  td.r{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .bar{min-width:120px}
+  .bar .track{height:7px;background:#e4e6df;border-radius:4px;overflow:hidden}
+  .bar .fill{height:100%;background:linear-gradient(90deg,var(--teal),#2f8a76);border-radius:4px}
+  .bar .val{font-variant-numeric:tabular-nums;font-weight:600;font-size:.8rem;margin-bottom:.28rem;display:block}
+  .note{font-family:var(--sans);font-size:.74rem;color:var(--muted);margin-top:.6rem}
+
+  .leaders{margin-top:3.4rem;display:flex;flex-direction:column;gap:3.1rem}
+  .leader{scroll-margin-top:1rem}
+  .lhead{display:flex;align-items:baseline;gap:1rem;border-bottom:2px solid var(--ink);padding-bottom:.7rem}
+  .lhead .rk{font-family:var(--sans);font-weight:700;font-size:clamp(1.9rem,5vw,2.7rem);
+    color:var(--amber);line-height:.9;font-variant-numeric:tabular-nums;flex:none}
+  .lhead h3{font-size:clamp(1.4rem,3.2vw,1.9rem);font-weight:600;letter-spacing:-.01em;margin:0;line-height:1.1;text-wrap:balance}
+  .chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.85rem 0 1.4rem;font-family:var(--sans)}
+  .chip{display:inline-flex;align-items:baseline;gap:.4rem;border:1px solid var(--rule);
+    background:var(--raised);border-radius:100px;padding:.28rem .7rem;font-size:.72rem;color:var(--muted)}
+  .chip b{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700;font-size:.82rem}
+  .chip.hi{border-color:#bcd8cf;background:#eaf4f0}
+  .chip.hi b{color:var(--teal-deep)}
+  .scope{font-size:.95rem;color:var(--muted);border-left:2px solid var(--rule);padding-left:.9rem;margin-bottom:1.2rem}
+  .thin{font-family:var(--sans);font-size:.72rem;color:var(--amber);margin-bottom:1rem}
+
+  .dim{margin-top:1.25rem}
+  .dim .lab{font-family:var(--sans);text-transform:uppercase;letter-spacing:.13em;font-size:.68rem;
+    font-weight:600;color:var(--teal);display:flex;align-items:center;gap:.55rem;margin-bottom:.35rem}
+  .dim .lab::before{content:"";width:14px;height:1.5px;background:var(--amber);flex:none}
+  .dim p{max-width:var(--measure)}
+  .dim ul{margin:.2rem 0 1rem;padding-left:0;list-style:none;max-width:var(--measure)}
+  .dim li{position:relative;padding-left:1.15rem;margin-bottom:.5rem}
+  .dim li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;background:var(--teal);border-radius:50%}
+
+  .synth{margin-top:3.6rem;border-top:3px solid var(--ink);padding-top:1.6rem}
+  .synth h2{font-size:clamp(1.5rem,3.5vw,2rem);font-weight:600;margin:.2rem 0 1.1rem;letter-spacing:-.01em}
+  .engines{display:grid;gap:1rem;grid-template-columns:1fr;margin:1.4rem 0}
+  @media(min-width:720px){.engines{grid-template-columns:repeat(3,1fr)}}
+  .engine{background:var(--raised);border:1px solid var(--rule);border-top:3px solid var(--teal);border-radius:3px;padding:1.05rem 1.1rem}
+  .engine .k{font-family:var(--sans);font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--amber);font-weight:700;margin-bottom:.4rem}
+  .engine h4{margin:0 0 .5rem;font-size:1.12rem;font-weight:600}
+  .engine p{font-size:.92rem;margin:0;color:#39423d}
+  .pull{background:var(--raised);border:1px solid var(--rule);border-left:3px solid var(--teal);
+    border-radius:3px;padding:1.15rem 1.3rem;margin:1.6rem 0;max-width:var(--measure)}
+  .pull p{margin:0;font-size:1.02rem}
+
+  footer.disc{margin-top:3.4rem;border-top:1px solid var(--rule);padding-top:1.3rem;
+    font-family:var(--sans);font-size:.78rem;line-height:1.6;color:var(--muted);max-width:78ch}
+  footer.disc b{color:var(--ink)}
+
+  @media (prefers-reduced-motion:no-preference){
+    .leader,.mast,.rank-wrap,.synth{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">&larr; Back to dashboard</a>
+  <header class="mast">
+    <div class="eyebrow">NSE Industry Rotation &middot; Relative Strength Leaders</div>
+    <h1>India&rsquo;s Strongest Industries</h1>
+    <p class="dek">A momentum-ranked research analysis of the industry groups leading the market on combined RS-Ratio and RS-Momentum &mdash; and the fundamentals, policy and global forces behind each.</p>
+    <div class="meta">
+      <span><b>As of</b> 3 July 2026</span>
+      <span><b>Universe</b> 44 NSE industry groups vs. benchmark</span>
+      <span><b>Ranking</b> RS-Ratio + RS-Momentum (RRG)</span>
+      <span><b>Narrative</b> web-researched, last refreshed 2026-07-03</span>
+    </div>
+  </header>
+
+  <section>
+    <h2 class="sec">How the leaders were chosen</h2>
+    <div class="col">
+      <p class="lead-para">These are the 10 NSE industry groups ranking highest on a <b>combined Relative Strength score</b> &mdash; the sum of <b>RS-Ratio</b> (the trend of an industry&rsquo;s performance relative to the broad market) and <b>RS-Momentum</b> (the rate of change of that relative trend). A high combined score marks groups that are both <em>outperforming</em> the market and <em>accelerating</em>: the signature of sector leadership. <b>The ranking refreshes daily as leadership rotates.</b></p>
+    </div>
+    <div class="rank-wrap">
+      <table>
+        <thead><tr><th class="r">#</th><th>Industry</th><th class="r">RS-Ratio</th><th class="r">RS-Mom.</th><th>Combined strength</th></tr></thead>
+        <tbody><tr><td class="rk">1</td><td class="nm"><a href="#non-banking-financial-company-nbfc">Non Banking Financial Company (NBFC)</a></td><td class="r num">101.20</td><td class="r num">106.20</td><td class="bar"><span class="val">207.40</span><div class="track"><div class="fill" style="width:95%"></div></div></td></tr><tr><td class="rk">2</td><td class="nm"><a href="#other-construction-materials">Other Construction Materials</a></td><td class="r num">101.98</td><td class="r num">103.70</td><td class="bar"><span class="val">205.68</span><div class="track"><div class="fill" style="width:69%"></div></div></td></tr><tr><td class="rk">3</td><td class="nm"><a href="#footwear">Footwear</a></td><td class="r num">102.71</td><td class="r num">102.91</td><td class="bar"><span class="val">205.62</span><div class="track"><div class="fill" style="width:68%"></div></div></td></tr><tr><td class="rk">4</td><td class="nm"><a href="#microfinance-institutions">Microfinance Institutions</a></td><td class="r num">101.31</td><td class="r num">104.17</td><td class="bar"><span class="val">205.48</span><div class="track"><div class="fill" style="width:66%"></div></div></td></tr><tr><td class="rk">5</td><td class="nm"><a href="#passenger-cars-utility-vehicles">Passenger Cars &amp; Utility Vehicles</a></td><td class="r num">101.08</td><td class="r num">103.36</td><td class="bar"><span class="val">204.44</span><div class="track"><div class="fill" style="width:51%"></div></div></td></tr><tr><td class="rk">6</td><td class="nm"><a href="#meat-products-including-poultry">Meat Products including Poultry</a></td><td class="r num">102.00</td><td class="r num">101.96</td><td class="bar"><span class="val">203.96</span><div class="track"><div class="fill" style="width:44%"></div></div></td></tr><tr><td class="rk">7</td><td class="nm"><a href="#telecom-infrastructure">Telecom - Infrastructure</a></td><td class="r num">101.21</td><td class="r num">102.18</td><td class="bar"><span class="val">203.39</span><div class="track"><div class="fill" style="width:35%"></div></div></td></tr><tr><td class="rk">8</td><td class="nm"><a href="#auto-components-equipments">Auto Components &amp; Equipments</a></td><td class="r num">101.52</td><td class="r num">101.38</td><td class="bar"><span class="val">202.90</span><div class="track"><div class="fill" style="width:28%"></div></div></td></tr><tr><td class="rk">9</td><td class="nm"><a href="#medical-equipment-supplies">Medical Equipment &amp; Supplies</a></td><td class="r num">101.06</td><td class="r num">101.68</td><td class="bar"><span class="val">202.74</span><div class="track"><div class="fill" style="width:26%"></div></div></td></tr><tr><td class="rk">10</td><td class="nm"><a href="#animal-feed">Animal Feed</a></td><td class="r num">99.80</td><td class="r num">102.70</td><td class="bar"><span class="val">202.50</span><div class="track"><div class="fill" style="width:22%"></div></div></td></tr></tbody>
+      </table>
+    </div>
+    <p class="note">Bars scale the combined score within the current top-ten band to make the spread legible; a reading above 100 on either axis denotes market outperformance.</p>
+  </section>
+
+  <div class="leaders">
+    <section class="leader" id="non-banking-financial-company-nbfc">
+      <div class="lhead"><span class="rk">1</span><h3>Non Banking Financial Company (NBFC)</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>101.20</b></span><span class="chip">RS-Momentum <b>106.20</b></span><span class="chip hi">Combined <b>207.40</b></span></div>
+      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Powered by the <b>RBI&#x27;s rate-cutting cycle</b> — roughly <b>125 bps of repo cuts through 2025 to 5.25%</b>, held at the June 2026 MPC. Cheaper refinancing is expanding margins just as credit demand runs hot: NBFC credit grew <b>~20% in FY25 against banks&#x27; ~12%</b>, and NBFCs now originate <b>~41% of new personal-loan disbursements by value</b> (up from 27% two years earlier). Bajaj Finance returned +31.8% over the trailing year versus the Nifty&#x27;s +6.6%.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>Analysts see sector AUM <b>crossing ₹50 lakh crore by March 2027</b>, with NBFC MSME AUM alone passing <b>₹5.3 lakh crore by FY26</b> (~32% CAGR over FY21–24). Growth vectors: co-lending, digital lending, gold loans and affordable housing finance.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>RBI Scale-Based Regulation (SBR)</b> — the four-layer prudential framework; an SBR review was initiated in December 2025.</li><li><b>RBI Co-Lending Arrangements Directions, 2025</b> — in force 1 January 2026, extending co-lending beyond priority-sector loans (10% minimum retention, DLG up to 5%).</li><li><b>Risk-weight rollback (February 2025)</b> — the RBI cut the risk weight on bank loans to well-rated NBFCs by 25 ppt (effective 1 April 2025).</li><li>Revised <b>Priority-Sector-Lending Master Directions</b> (April 2025); SIDBI NBFC refinance of ₹64,189 crore at end-FY25.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> raised the MSME credit-guarantee cover from ₹5 crore to ₹10 crore and launched a ₹5 lakh micro-enterprise credit card — both channel demand through NBFCs. <b>FY2026-27</b> positioned an “NBFC roadmap” under Viksit Bharat and proposed restructuring the PSU NBFCs PFC and REC.</p></div><div class="dim"><div class="lab">Global forces</div><p>A US Fed easing bias is a tailwind for large dollar-bond issuers, but <b>West Asia tensions in early 2026 pushed hedging costs up 50–75 bps</b>, prompting several NBFCs to pause external commercial borrowing. Smaller NBFCs still face domestic funding stress.</p></div>
+    </section>
+    <section class="leader" id="other-construction-materials">
+      <div class="lhead"><span class="rk">2</span><h3>Other Construction Materials</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>101.98</b></span><span class="chip">RS-Momentum <b>103.70</b></span><span class="chip hi">Combined <b>205.68</b></span></div>
+      <p class="scope"><b>Scope:</b> Building materials excluding cement and steel — tiles &amp; sanitaryware (Kajaria, Cera), plywood/laminates/MDF (Century, Greenlam), PVC/CPVC pipes (Supreme, Astral, Finolex), wires &amp; cables (Polycab, KEI) and paints (Asian Paints, Berger).</p><div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Two forces compound: a <b>housing and infrastructure capex upcycle</b>, and a powerful <b>formalisation shift</b> as GST and a wave of BIS Quality Control Orders move share to organised, listed players. Organised share in plywood is already ~62%; ceramic tiles are moving from ~46% (FY25) toward ~55% by FY29. The BIS Wood-Based Boards / Plywood QCO took effect 28 February 2025.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>Structural runways: tiles USD 10.45bn (2025) → ~16.7bn by 2031 (8.1% CAGR); wires &amp; cables USD 21.2bn → 32.9bn by 2030 (9.1%); paints USD 11.5bn → 19.5bn by 2031 (9.3%). India is the world&#x27;s largest tile exporter (Morbi); big-cap entrants — UltraTech (₹1,800 crore Bharuch cable plant, live December 2026), Adani, Aditya Birla — signal deep-pocketed confidence.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>PM Awas Yojana</b> — 3 crore new homes; PMAY-U 2.0 (1 crore urban) and PMAY-G extended to 2028-29 (₹3,06,137 crore outlay).</li><li><b>Jal Jeevan Mission (JJM 2.0)</b> — extended to December 2028, ₹8.69 trillion outlay, ~81.6% of rural households connected: a direct driver of pipe demand.</li><li><b>Smart Cities Mission</b> and a new <b>Urban Challenge Fund</b> (₹1 lakh crore corpus).</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> lifted PMAY (urban + rural) to ₹78,126 crore (+64% over RE) and JJM to ₹67,000 crore. <b>FY2026-27</b> pushed total capital expenditure to <b>₹12.22 lakh crore</b> (₹17.15 lakh crore “effective”), with PMAY-U at ₹21,625 crore (+179%), PMAY-G at ₹54,917 crore (+69%) and JJM at ₹67,670 crore — a direct read-through to volumes.</p></div><div class="dim"><div class="lab">Global forces</div><p>India protects domestic makers with anti-dumping duties on Chinese inputs (PVC paste resin up to USD 707/t; CPVC resin USD 593–792/t to 2029), while facing external anti-dumping on tile exports. The key cost risk is energy — <b>Morbi&#x27;s natural-gas spike in 2026 shut 400+ tile factories</b> before Gujarat cut gas prices in December 2025.</p></div>
+    </section>
+    <section class="leader" id="footwear">
+      <div class="lhead"><span class="rk">3</span><h3>Footwear</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>102.71</b></span><span class="chip">RS-Momentum <b>102.91</b></span><span class="chip hi">Combined <b>205.62</b></span></div>
+      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Footwear pairs the <b>highest RS-Ratio of the top ten</b> — the most established relative-strength trend — with a classic formalisation story. The organised segment is only ~30–35% of value while the unorganised sector is ~85% of production volume. The <b>September 2025 GST rationalisation</b> (5% on footwear ≤₹2,500/pair, 18% above) advantages compliant players; premium is now ~54% of value.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>Sports and athleisure footwear is the fast lane (→ USD 4.49bn by 2030); Campus Activewear extended into apparel in early 2026. Exports are projected to <b>cross USD 6.5bn in FY26</b>, with <b>Tamil Nadu emerging as a non-leather hub</b> attracting Taiwanese contract makers under China+1.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>Indian Footwear &amp; Leather Development Programme (IFLDP)</b> — ₹1,700 crore outlay (extended to 31 March 2026).</li><li><b>Focus Product Scheme for Footwear &amp; Leather</b> — targets 22 lakh jobs, ₹4 lakh crore turnover and &gt;₹1.1 lakh crore exports.</li><li><b>BIS QCO on footwear</b> (in force 1 August 2024) — mandatory licensing for 24 categories, a formalisation lever.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> exempted crust and wet-blue leather from export/basic duties and launched the Focus Product Scheme. <b>FY2026-27</b> extended that support and widened it to non-leather footwear. No distinct new rupee allocation specific to footwear was confirmed in FY2026-27.</p></div><div class="dim"><div class="lab">Global forces</div><p>The dominant swing factor is <b>US tariffs</b>: the 2025 reciprocal tariff on India peaked at 50% (August 2025) before being cut to 18%. Leather &amp; footwear exports dipped 0.23% to USD 3.3bn over April–December FY26. The opportunity is global brands (Clarks, Decathlon, Puma) sourcing from India; the risk is raw-material cost.</p></div>
+    </section>
+    <section class="leader" id="microfinance-institutions">
+      <div class="lhead"><span class="rk">4</span><h3>Microfinance Institutions</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>101.31</b></span><span class="chip">RS-Momentum <b>104.17</b></span><span class="chip hi">Combined <b>205.48</b></span></div>
+      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>A <b>turnaround leader</b>. MFIN&#x27;s Q4 FY26 Micrometer shows <b>PAR (31–180 days) back to 2.0% (March 2026) from 6.3% a year earlier</b> — pre-March-2024 levels — with 90+ DPD around ~1.4%. Gross Loan Portfolio reached <b>₹3.25 trillion in Q4 FY26, the first sequential growth after seven quarters of contraction</b>. The 5.25% repo and a rural-demand rebound are the tailwinds.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>GLP is seen reaching <b>~₹5–5.5 trillion by FY2027</b> (CareEdge), led by geographic deepening in eastern and central India, digitisation, and self-help-group linkage.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>RBI Regulatory Framework for Microfinance Loans, 2022</b> — collateral-free; household income ≤₹3 lakh; repayment capped at 50% of monthly household income.</li><li><b>MFIN self-regulatory guardrails</b> (effective 1 January 2025) — lenders per borrower cut from 4 to 3; total indebtedness capped at ₹2 lakh.</li><li>Foundational rails: PMMY/MUDRA, PM Jan Dhan Yojana, NABARD SHG-Bank Linkage, SIDBI refinance, PSL classification.</li><li><b>Emerging risk — Bihar Microfinance Institutions Bill 2026</b>: Bihar is ~15% of the industry (~₹57,000 crore) and now faces state regulatory pressure.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p>The <b>MUDRA limit doubling to ₹20 lakh (“Tarun Plus”)</b> came in the July 2024 (FY2024-25) Budget, effective October 2024 — not February 2025. <b>FY2025-26</b> deepened SHG credit via “Lakhpati Didi”. <b>FY2026-27</b> raised the Gender Budget to ₹1,07,688 crore and funded DAY-NRLM at ₹19,200 crore.</p></div><div class="dim"><div class="lab">Global forces</div><p>International impact investors (BlueOrchard, IIV Mikrofinanzfonds) remain active, and a softer global rate path helps sentiment. The principal risks are domestic: post-stress investor caution, state-level regulation (Bihar) and borrower over-indebtedness.</p></div>
+    </section>
+    <section class="leader" id="passenger-cars-utility-vehicles">
+      <div class="lhead"><span class="rk">5</span><h3>Passenger Cars &amp; Utility Vehicles</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>101.08</b></span><span class="chip">RS-Momentum <b>103.36</b></span><span class="chip hi">Combined <b>204.44</b></span></div>
+      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Riding <b>record volumes and a decisive mix shift to SUVs</b>. FY2025-26 domestic PV sales hit <b>~46.43 lakh units (+7.9% YoY)</b>, and April 2026 opened +25.4%. SUVs are now ~53–57% of PV sales, lifting realisations and margins. Exports set a record at 9.05 lakh units (+17.5%), Maruti alone ~4.48 lakh (~49% share). Passenger-car EV penetration is ~3.5–5% but growing 75–86% YoY.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>PV EV output is projected at <b>~1.33 million units — ~20% of PV production — by 2030</b>, alongside an export hub for Africa and the Gulf (top FY26 destinations South Africa, Saudi Arabia). Rising ADAS and electronics content per vehicle is a durable tailwind.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>PLI for Automobiles &amp; Auto Components — ₹25,938 crore</b> (FY23–FY27; ₹1,350.83 crore disbursed by November 2025).</li><li><b>PM E-DRIVE — ₹10,900 crore</b> (Sept 2024–March 2026, the FAME-II successor; e-cars excluded).</li><li><b>SPMEPCI</b> — cuts CBU import duty to 15% for OEMs investing ≥₹4,150 crore (capped 8,000 units/yr).</li><li>Vehicle Scrappage Policy and a rare-earth magnet incentive (₹7,280 crore, approved 2025).</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> fully exempted customs on cobalt powder, lithium-ion battery scrap and 12 critical minerals, and launched the <b>National Critical Mineral Mission (₹16,300 crore)</b>. <b>FY2026-27</b> raised the Auto PLI head to ₹5,939.87 crore and extended duty exemptions on critical-mineral processing capital goods.</p></div><div class="dim"><div class="lab">Global forces</div><p>The acute risk is <b>China&#x27;s rare-earth magnet export curbs (April 2025)</b> — SIAM warned inventories were near-exhausted by end-May 2025, with production-halt risk. Exports (+24% in H1 FY26) offset. Other headwinds: Chinese-EV competition, US/EU tariffs, a global EV softening and semiconductor tightness.</p></div>
+    </section>
+    <section class="leader" id="meat-products-including-poultry">
+      <div class="lhead"><span class="rk">6</span><h3>Meat Products including Poultry</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>102.00</b></span><span class="chip">RS-Momentum <b>101.96</b></span><span class="chip hi">Combined <b>203.96</b></span></div>
+      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>A structural <b>protein-consumption upgrade</b> on rising incomes. India&#x27;s poultry market is ~USD 32.9bn (2025). Per-capita intake is strikingly low — chicken ~6–7 kg/year versus 20–25 globally, eggs ~102/year versus ~218 — so the runway is long. FY26 broiler volumes are up 6–8% and the market compounds ~8% toward ~USD 71.75bn by 2035.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>Two premium layers: <b>branded, ready-to-cook and online meat delivery</b> (~16% CAGR to ~USD 119mn by 2030; Licious reportedly targeting a ~USD 2bn IPO), and <b>carabeef (buffalo-meat) exports</b> — total meat exports ~USD 5.1bn (FY24-25) to Vietnam, Malaysia, Egypt, the Gulf and Indonesia.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>Animal Husbandry Infrastructure Development Fund (AHIDF)</b> — revised outlay ₹29,610 crore, 3% interest subvention, up to 90% loan cover.</li><li><b>National Livestock Mission</b> — rural poultry entrepreneurship subsidy up to ₹25 lakh (50% of project cost).</li><li><b>National Animal Disease Control Programme</b> — ₹13,343 crore for 100% FMD and brucellosis vaccination.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p>The <b>Department of Animal Husbandry &amp; Dairying allocation rose to ~₹6,153 crore in FY2026-27 (+~27%, a record)</b> from ₹4,840 crore, with Rashtriya Gokul Mission at ₹800 crore. Feed-grade maize was allowed at a concessional 15% duty via a tariff-rate quota to ease input costs.</p></div><div class="dim"><div class="lab">Global forces</div><p>The recurring hazard is <b>avian influenza (H5N1)</b> — 2025 saw ~602,000 birds culled in Andhra Pradesh, with fresh early-2026 outbreaks across Tamil Nadu, Andhra and Bihar. Feed is ~70% of variable cost, and CRISIL sees FY26 operating margins down ~50 bps on ethanol-driven maize demand. India&#x27;s cost-advantaged carabeef holds a defensible niche.</p></div>
+    </section>
+    <section class="leader" id="telecom-infrastructure">
+      <div class="lhead"><span class="rk">7</span><h3>Telecom - Infrastructure</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>101.21</b></span><span class="chip">RS-Momentum <b>102.18</b></span><span class="chip hi">Combined <b>203.39</b></span></div>
+      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Riding the <b>5G build-out and a data explosion</b>. By late 2025 India had deployed <b>~518,000 5G base stations</b>, and 5G already carries ~35–47% of data traffic; average monthly data use per subscriber crossed ~31 GB. The footprint keeps expanding — ~8.43 lakh towers and optical fibre up to ~42.36 lakh route-km — yet <b>fiberisation is still only ~35–46% against a 75% target</b>, the biggest runway.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>The <b>Bharat 6G Alliance</b> targets ≥10% of global 6G patents by 2030; <b>data-centre capacity more than doubled in 2025 and is projected to triple to &gt;4 GW by 2030</b> (~23% CAGR); plus small-cell densification, the fiberisation catch-up, rural BharatNet, IoT and overseas tower expansion.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>PLI for Telecom &amp; Networking Products — ₹12,195 crore</b> (Feb 2021); by Sept 2025 it drove ~₹4,646 crore investment, ~₹96,240 crore net sales and ~60% import substitution across 42 firms.</li><li><b>Amended BharatNet Program (Phase III)</b> — Cabinet-approved Aug 2023, ₹1.39 lakh crore to connect ~6.4 lakh villages.</li><li><b>Digital Bharat Nidhi</b> — the erstwhile USOF, renamed under the Telecom Act 2023.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2026-27</b> was decisively expansionary for digital infrastructure: <b>DoT outlay ~₹73,990 crore (+39% over FY26 RE)</b>, <b>BharatNet raised sharply to ₹20,000 crore</b> (from ~₹5,500 crore RE), and a BSNL capital infusion of ~₹28,473 crore.</p></div><div class="dim"><div class="lab">Global forces</div><p>India&#x27;s <b>“trusted-source” regime (December 2020)</b> effectively bars Huawei and ZTE from 5G, redirecting demand to approved vendors — an opportunity the PLI turned into genuine 4G/5G equipment export capability, with open-RAN and 6G IP next. The main risk is execution: BSNL/BharatNet Phase-III cost-overrun concerns surfaced in 2026.</p></div>
+    </section>
+    <section class="leader" id="auto-components-equipments">
+      <div class="lhead"><span class="rk">8</span><h3>Auto Components &amp; Equipments</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>101.52</b></span><span class="chip">RS-Momentum <b>101.38</b></span><span class="chip hi">Combined <b>202.90</b></span></div>
+      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Compounds the same SUV/premiumisation wave as the OEMs, with an added kicker — <b>content per vehicle is rising 20–25%</b>. ACMA reports FY25 industry turnover of <b>₹6.73 lakh crore (USD 80.2bn, +9.6% YoY)</b>, a near-doubling over five years. Exports rose ~8% to <b>USD 22.9bn</b> (North America 32%, Europe 29.5%); the aftermarket reached ~₹99,948 crore.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>The <b>EV-component market is projected to grow from USD 7.8bn (2025) to USD 28.5bn (2030), ~29.6% CAGR</b>, and ACMA targets USD 100bn of exports by 2030. China+1 localisation, rising ADAS/semiconductor content, and precision-forging leaders (Bharat Forge, Sona BLW, Uno Minda) drive it.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>PLI Auto &amp; Components (₹25,938 crore)</b> with a dedicated Component Champion track for advanced technologies.</li><li><b>PLI ACC Battery scheme (₹18,100 crore for 50 GWh)</b> — awardees include Reliance New Energy, Ola and Hyundai Global Motors.</li><li><b>PM E-DRIVE (₹10,900 crore)</b> and the <b>National Critical Mineral Mission (₹16,300 crore)</b>.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> exempted basic customs on cobalt, lithium-ion battery scrap, lead, zinc and 12 critical minerals (25 minerals to zero duty). <b>FY2026-27</b> added capital-goods exemptions for lithium-cell manufacturing and announced rare-earth corridors (Odisha, Kerala, Andhra Pradesh, Tamil Nadu) and a ₹10,000 crore SME Growth Fund (the last two are single-trade-source — plausible, not officially confirmed).</p></div><div class="dim"><div class="lab">Global forces</div><p>Two external forces dominate: <b>China&#x27;s April-2025 rare-earth licensing</b> on seven elements could raise EV-motor costs 18–25%; and the <b>US Section 232 25% tariff on autos and parts (March 2025)</b> hits ~USD 6.5bn of Indian parts exports, with proposed relief to 18% under a US-India deal.</p></div>
+    </section>
+    <section class="leader" id="medical-equipment-supplies">
+      <div class="lhead"><span class="rk">9</span><h3>Medical Equipment &amp; Supplies</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>101.06</b></span><span class="chip">RS-Momentum <b>101.68</b></span><span class="chip hi">Combined <b>202.74</b></span></div>
+      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Combines an <b>import-substitution</b> manufacturing story with structural healthcare demand. The market is ~<b>USD 15.2bn (2025), projected toward ~USD 50bn by 2030</b>; the domestic share of demand has risen from ~10% to ~30% over five years, though import dependence is still ~70–80%. Demand is amplified by insurance — <b>AB PM-JAY was extended in September 2024 to all citizens aged 70+</b> (₹5 lakh/family).</p></div><div class="dim"><div class="lab">Future opportunities</div><p><b>Exports surged ~88% to ~₹31,120 crore (USD 3.64bn) in FY25</b> (consumables, implants, imaging, IVD kits), and PLI greenfield projects now produce <b>MRI, CT, mammography and ultrasound systems domestically</b> — the high-value localisation that lifts margins.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>National Medical Devices Policy 2023</b> — the umbrella framework targeting a global manufacturing hub.</li><li><b>PLI for Medical Devices — ₹3,420 crore</b> (FY23–FY27); 26 projects approved, ₹1,206 crore committed.</li><li><b>Medical Device Parks</b> — four central-scheme parks in Himachal Pradesh, Madhya Pradesh, Tamil Nadu and Uttar Pradesh.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> fully exempted 36 lifesaving cancer/rare-disease drugs from basic customs duty and planned 200 cancer day-care centres. <b>FY2026-27</b> went further — full BCD exemption on 17 cancer drugs plus 7 rare-disease drugs, a new <b>BioPharma scheme of ₹10,000 crore over five years</b>, a Health Ministry allocation of ~₹1,06,530 crore, and five PPP regional medical hubs.</p></div><div class="dim"><div class="lab">Global forces</div><p>The core vulnerability is upstream: <b>China is the single largest import source (~20%)</b> and dominates critical inputs (an estimated ~97% of silicon-wafer imports and MRI rare-earth magnets). On exports, US FDA and EU MDR/IVDR certification demand heavy clinical validation, and India&#x27;s framework still lags EU-MDR harmonisation.</p></div>
+    </section>
+    <section class="leader" id="animal-feed">
+      <div class="lhead"><span class="rk">10</span><h3>Animal Feed</h3></div>
+      <div class="chips"><span class="chip">RS-Ratio <b>99.80</b></span><span class="chip">RS-Momentum <b>102.70</b></span><span class="chip hi">Combined <b>202.50</b></span></div>
+      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>The mirror-image of the protein story — as poultry, dairy and aquaculture scale, so does scientifically formulated compound feed. The market is ~<b>₹1,186bn (2025), growing to ₹2,113bn by 2034 (6.6% CAGR)</b>. Poultry feed is ~56% of the market; <b>aquafeed is the fast-growth pocket — USD 1.90bn (2025) → USD 4.26bn by 2035 (8.4% CAGR)</b> — on shrimp-export momentum (Avanti Feeds, Godrej Agrovet, Waterbase).</p></div><div class="dim"><div class="lab">Future opportunities</div><p>India posted <b>record seafood exports in FY2025-26 — 19.72 lakh tonnes worth ₹73,890 crore (USD 8.46bn)</b>, of which frozen shrimp was ₹49,038 crore (66.5% of dollar earnings, +8.6%). Value-added specialty feed and additives are the margin lever.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>PM Matsya Sampada Yojana (PMMSY)</b> and its sub-scheme <b>PM-MKSSY (~₹6,000 crore over FY24–FY27)</b> for formalising the fisheries value chain.</li><li><b>Fisheries &amp; Aquaculture Infrastructure Development Fund (FIDF, ₹7,522 crore)</b>; National Livestock Mission feed component; KCC extended to fisheries.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> cut basic customs duty on aqua-feed inputs — fish hydrolysate 15%→5%, frozen fish paste/surimi 30%→5%, shrimp broodstock 30%→5%. <b>FY2026-27</b> set a <b>record fisheries allocation of ₹2,761.80 crore with PMMSY at ₹2,500 crore</b>, plus support for 34 fisheries clusters and 200 startups.</p></div><div class="dim"><div class="lab">Global forces</div><p>The pivotal variable is <b>US shrimp trade policy</b> (the US is India&#x27;s #1 shrimp market by value). After the reciprocal tariff peaked near 50% in 2025, a <b>US-India deal on 2 February 2026 cut it to 18%</b> and removed the Russia-oil surtax; shrimp now carries ~18% plus antidumping (~3.76%) and countervailing (~5.77%) duties. A proposed “India Shrimp Tariff Act” (10%→20%→40% over 2026-28) is a legislative overhang, not law.</p></div>
+    </section></div>
+
+  <section class="synth">
+    <div class="eyebrow">Reading across the leaders</div>
+    <h2>Three engines drive the leadership board</h2>
+    <div class="engines">
+      <div class="engine"><div class="k">Engine 01</div><h4>The credit cycle</h4><p>The RBI&rsquo;s ~125 bps of 2025 easing to 5.25% lifts margins, and a supportive regulatory turn does the rest &mdash; with microfinance adding a turnaround as asset quality normalises.</p></div>
+      <div class="engine"><div class="k">Engine 02</div><h4>Consumption &amp; formalisation</h4><p>GST rationalisation and a wave of BIS Quality Control Orders transfer share from the unorganised sector to listed players, atop premiumisation and a housing/infra upcycle.</p></div>
+      <div class="engine"><div class="k">Engine 03</div><h4>Capex &amp; China+1</h4><p>The PLI architecture, the National Critical Mineral Mission and rising technology content per unit anchor the manufacturing-investment leg of leadership.</p></div>
+    </div>
+    <div class="pull"><p><b>The common policy tailwind.</b> Almost every leader touches record public capital expenditure (&#8377;12.22 lakh crore in FY2026-27), the PLI incentive stack, and formalisation via GST and BIS Quality Control Orders.</p></div>
+    <div class="pull" style="border-left-color:var(--amber)"><p><b>The common global risk.</b> Two threads recur: <b>US tariff policy</b> (a 2025 spike toward ~50%, cut to ~18% via the February-2026 US-India deal) and <b>critical-mineral dependence on China</b>. Both are being mitigated but neither is fully resolved.</p></div>
+  </section>
+
+  <footer class="disc">
+    <p><b>Methodology.</b> Rankings are derived from the NSE industry-group Relative Rotation Graph, combining RS-Ratio and RS-Momentum versus the benchmark; they reflect price-relative strength as of 3 July 2026 and rotate over time. The per-industry narrative was web-verified from government (PIB, indiabudget.gov.in, RBI, DAHD, BIS), rating-agency (CareEdge, CRISIL) and industry-body (SIAM, ACMA, MFIN, MPEDA) sources and was last refreshed on 2026-07-03; market-size and multi-year projections are third-party estimates and directional.</p>
+    <p style="margin-top:.7rem"><b>Disclaimer.</b> This is a research and educational analysis, not investment advice. Relative-strength leadership is a momentum signal, not a valuation or quality judgement.</p>
+  </footer>
+</div>
+</body>
+</html>
