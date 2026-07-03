@@ -10,6 +10,8 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 
+from screener_fundamentals import add_screener_fundamentals
+
 
 BASE_DIR = Path(__file__).resolve().parent
 REPORTS_DIR = BASE_DIR / "reports"
@@ -635,6 +637,9 @@ def main() -> None:
     ].copy()
     leading_stocks = stocks[stocks["parent"].isin(leading_industries["name"])].copy()
     leading_stocks = add_yahoo_fundamentals(leading_stocks)
+    # screener.in fills the gaps Yahoo leaves (ROE/ROCE/margins/debt/FCF/
+    # promoter holding/quarterly growth) so the per-stock SWOT is complete.
+    leading_stocks = add_screener_fundamentals(leading_stocks)
     leading_stocks = add_fundamental_scores(leading_stocks)
     leading_stocks = add_stock_notes(leading_stocks)
     stocks = add_stock_notes(stocks)
