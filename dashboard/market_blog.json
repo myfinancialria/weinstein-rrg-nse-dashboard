@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-03 17:05:36 IST",
+  "generated_at": "2026-07-03 17:10:54 IST",
   "title": "Pre-market Technical Blog - 03 Jul 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
@@ -54,8 +54,8 @@
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10611.65,
-      "change_pct": -0.39
+      "level": 10609.61,
+      "change_pct": -0.41
     },
     {
       "name": "Nikkei 225",
@@ -84,14 +84,14 @@
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 71.74,
-      "change_pct": -0.08
+      "level": 71.76,
+      "change_pct": -0.06
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4197.2,
-      "change_pct": 2.05
+      "level": 4196.0,
+      "change_pct": 2.03
     }
   ],
   "pattern_notes": [
