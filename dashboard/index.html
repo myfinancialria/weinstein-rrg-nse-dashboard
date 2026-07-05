@@ -462,6 +462,7 @@
         <button class="tab-button" data-tab="market-blog">Market Blog</button>
         <button class="tab-button" data-tab="backtest-daily">Daily Backtest</button>
         <button class="tab-button" data-tab="backtest-weekly">Weekly Backtest</button>
+        <button class="tab-button" data-tab="backtest-52w">52W High Breakout</button>
       </section>
 
       <section class="split tab-view active" id="tab-screener">
@@ -687,6 +688,59 @@
         </div>
         <div class="note">Backtest is rule-based and excludes brokerage, taxes, slippage and liquidity constraints.</div>
       </section>
+
+      <section class="panel tab-view" id="tab-backtest-52w">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">52-Week High Breakout &mdash; 6-Year Backtest</div>
+            <div class="subtle" id="high52wBacktestRules"></div>
+          </div>
+          <div class="subtle" id="high52wBacktestGenerated"></div>
+        </div>
+        <div class="kpis" style="padding:14px;">
+          <div class="kpi"><div class="label">Trades</div><div class="value" id="high52wBtTrades">-</div></div>
+          <div class="kpi"><div class="label">Win Rate</div><div class="value" id="high52wBtWinRate">-</div></div>
+          <div class="kpi"><div class="label">Total P&L</div><div class="value" id="high52wBtPnl">-</div></div>
+          <div class="kpi"><div class="label">Max Drawdown</div><div class="value" id="high52wBtDrawdown">-</div></div>
+          <div class="kpi"><div class="label">Avg R</div><div class="value" id="high52wBtAvgR">-</div></div>
+          <div class="kpi"><div class="label">Avg Hold (days)</div><div class="value" id="high52wBtHold">-</div></div>
+        </div>
+        <div class="mini-chart" id="high52wEquityChart"></div>
+        <div class="split" style="padding: 0 14px 14px;">
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Month-wise P&L</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Trades</th><th>P&L</th><th>Win %</th></tr></thead><tbody id="high52wMonthlyPnlBody"></tbody></table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Capital Deployed Per Month</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Entries</th><th>Capital</th><th>Avg/Trade</th><th>Max Trade</th></tr></thead><tbody id="high52wMonthlyCapitalBody"></tbody></table></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="symbol">Symbol</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="name">Name</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="industry">Industry</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="entry_date">Entry Date</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="entry_price">Entry<br>(52W High)</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="initial_sl_52w_ma">Initial SL<br>(52W MA)</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="quantity">Qty</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="exit_date">Exit Date</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="exit_price">Exit</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="exit_52w_ma">52W MA<br>Exit</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="holding_days">Hold<br>Days</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="pnl">P&L</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="r_multiple">R</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="exit_reason">Reason</button></th>
+              </tr>
+            </thead>
+            <tbody id="high52wBacktestBody"></tbody>
+          </table>
+        </div>
+        <div class="note">Entry on a fresh 52-week high breakout; stop trails at the 52-week MA; held until a weekly close below the 52-week MA. Rule-based, excludes brokerage, taxes, slippage and liquidity constraints.</div>
+      </section>
     </main>
 
     <div class="drawer-backdrop" id="drawerBackdrop"></div>
@@ -711,6 +765,7 @@
           fundamentals: { key: "fundamental_score", dir: "desc" },
           dailyTrades: { key: "entry_date", dir: "desc" },
           weeklyTrades: { key: "entry_date", dir: "desc" },
+          high52wTrades: { key: "entry_date", dir: "desc" },
         },
       };
       const el = (id) => document.getElementById(id);
@@ -1008,6 +1063,46 @@
       function renderBacktest() {
         renderBacktestTimeframe("daily");
         renderBacktestTimeframe("weekly");
+        renderHigh52wBacktest();
+      }
+
+      function renderHigh52wBacktest() {
+        const backtest = state.data.backtest52w || { summary: {}, trades: [], monthlyPnl: [], monthlyCapital: [], equityCurve: [] };
+        const s = backtest.summary || {};
+        el("high52wBacktestRules").textContent = s.rules || "";
+        el("high52wBacktestGenerated").textContent = s.generated_at ? `Generated ${s.generated_at}` : "";
+        el("high52wBtTrades").textContent = s.trade_count ?? "-";
+        el("high52wBtWinRate").textContent = s.win_rate_pct === null || s.win_rate_pct === undefined ? "-" : `${Number(s.win_rate_pct).toFixed(1)}%`;
+        el("high52wBtPnl").textContent = s.total_pnl === undefined ? "-" : Number(s.total_pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        el("high52wBtDrawdown").textContent = s.max_drawdown === undefined ? "-" : Number(s.max_drawdown).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        el("high52wBtAvgR").textContent = s.avg_r_multiple === null || s.avg_r_multiple === undefined ? "-" : Number(s.avg_r_multiple).toFixed(2);
+        el("high52wBtHold").textContent = s.avg_holding_days === null || s.avg_holding_days === undefined ? "-" : Number(s.avg_holding_days).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        renderMiniEquityChart(el("high52wEquityChart"), backtest.equityCurve || []);
+        renderMonthlyPnl("high52wMonthlyPnlBody", backtest.monthlyPnl || []);
+        renderMonthlyCapital("high52wMonthlyCapitalBody", backtest.monthlyCapital || []);
+        const filters = getFilters();
+        const trades = sortRows((backtest.trades || []).filter((trade) => {
+          if (filters.industry && trade.industry !== filters.industry) return false;
+          return rowMatchesSearch(trade, filters.search);
+        }), "high52wTrades");
+        el("high52wBacktestBody").innerHTML = trades.length ? trades.map((trade) => `
+          <tr>
+            <td>${trade.symbol}</td>
+            <td class="truncate">${trade.name}</td>
+            <td class="truncate">${trade.industry}</td>
+            <td>${trade.entry_date}</td>
+            <td>${fmt(trade.entry_price)}</td>
+            <td>${fmt(trade.initial_sl_52w_ma)}</td>
+            <td>${trade.quantity}</td>
+            <td>${trade.exit_date || "Open"}</td>
+            <td>${fmt(trade.exit_price)}</td>
+            <td>${fmt(trade.exit_52w_ma)}</td>
+            <td>${trade.holding_days ?? "-"}</td>
+            <td style="color:${Number(trade.pnl) >= 0 ? "var(--green)" : "var(--red)"}">${Number(trade.pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td>
+            <td>${fmt(trade.r_multiple)}</td>
+            <td>${trade.exit_reason}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="14" class="empty">No trades found for this rule set.</td></tr>`;
       }
 
       function renderBacktestTimeframe(timeframe) {

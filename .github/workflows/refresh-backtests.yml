@@ -1,0 +1,48 @@
+name: Refresh backtests
+
+# The backtests are heavy Yahoo Finance pulls, so they are refreshed on their
+# own weekly cadence instead of in the daily "Publish dashboard" job. This
+# workflow only commits the backtest JSON artefacts; the daily job embeds them
+# into dashboard_data.json on its next run. Those commits touch dashboard/*.json,
+# which pages.yml deliberately ignores, so this does not trigger a deploy loop.
+
+on:
+  schedule:
+    # 8:00 AM IST every Saturday, after the week's weekly candle has closed.
+    - cron: "30 2 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-backtests
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run backtests
+        run: |
+          python backtest_strategy.py
+          python backtest_52w_high.py
+
+      - name: Commit refreshed backtest data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Refresh backtest data"
+          file_pattern: dashboard/backtest_results.json dashboard/backtest_52w_high.json

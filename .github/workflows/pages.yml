@@ -3,6 +3,16 @@ name: Publish dashboard
 on:
   push:
     branches: [main]
+    # The "Commit refreshed dashboard data" step below pushes these exact
+    # paths back to main. Without this filter that push re-triggers the
+    # workflow, and the resulting overlapping runs raced each other on both
+    # `git push` (non-fast-forward) and the GitHub Pages deployment
+    # ("Deployment failed, try again later."). Ignoring the auto-generated
+    # artefacts breaks the self-trigger loop; real code/HTML pushes still run.
+    paths-ignore:
+      - 'dashboard/*.json'
+      - 'dashboard/sector-leadership.html'
+      - 'reports/*.json'
   schedule:
     # 9:00 PM IST, Monday to Friday. Market holidays are skipped by the data
     # provider returning unchanged/empty data; the dashboard still publishes.

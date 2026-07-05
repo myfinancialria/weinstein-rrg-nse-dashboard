@@ -19,6 +19,7 @@ DASHBOARD_DIR = BASE_DIR / "dashboard"
 DATA_PATH = DASHBOARD_DIR / "dashboard_data.json"
 FUNDAMENTALS_CACHE = REPORTS_DIR / "yahoo_fundamentals_cache.json"
 BACKTEST_JSON = DASHBOARD_DIR / "backtest_results.json"
+BACKTEST_52W_JSON = DASHBOARD_DIR / "backtest_52w_high.json"
 
 INDUSTRY_CSV = REPORTS_DIR / "screener_industry_weinstein_rrg_2026-06-28.csv"
 STOCK_CSV = REPORTS_DIR / "screener_industry_stock_rankings_2026-06-28.csv"
@@ -669,6 +670,13 @@ def main() -> None:
         except json.JSONDecodeError:
             backtest = {"summary": {}, "trades": []}
 
+    backtest_52w = {"summary": {}, "trades": [], "monthlyPnl": [], "monthlyCapital": [], "equityCurve": []}
+    if BACKTEST_52W_JSON.exists():
+        try:
+            backtest_52w = json.loads(BACKTEST_52W_JSON.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+
     payload = {
         "metrics": metrics,
         "industries": clean_records(industries),
@@ -679,6 +687,7 @@ def main() -> None:
         "industryTheses": INDUSTRY_THESES,
         "chartData": chart_data,
         "backtest": backtest,
+        "backtest52w": backtest_52w,
     }
     DASHBOARD_DIR.mkdir(parents=True, exist_ok=True)
     DATA_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
