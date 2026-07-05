@@ -239,6 +239,8 @@
         line-height: 1.35;
       }
       .clickable-row { cursor: pointer; }
+      .link-symbol { color: var(--blue); font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+      .link-symbol:hover { text-decoration: none; }
       .pill {
         display: inline-flex;
         align-items: center;
@@ -459,6 +461,7 @@
 
       <section class="tabs">
         <button class="tab-button active" data-tab="screener">Screener</button>
+        <button class="tab-button" data-tab="high52w-stocks">52W High Stocks</button>
         <button class="tab-button" data-tab="market-blog">Market Blog</button>
         <button class="tab-button" data-tab="backtest-daily">Daily Backtest</button>
         <button class="tab-button" data-tab="backtest-weekly">Weekly Backtest</button>
@@ -544,6 +547,43 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <section class="panel tab-view" id="tab-high52w-stocks">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Stocks With A Weekly Close Above The 52-Week High</div>
+            <div class="subtle">Latest weekly candle closed at or above the highest of the prior 52 weeks. Click a row for full fundamentals, financials and chart.</div>
+          </div>
+          <div class="subtle"><span id="high52wStockCount">0 shown</span></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="parent">Industry</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="name">Stock</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="display_symbol">Symbol</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="common_product_business">Known Product / Business</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="cmp">CMP</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="high_52w">52W High</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="pct_above_52wh">% Above</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="breakout_week">Breakout Week</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="fundamental_score">Fund Score</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="pe_value">P/E</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="roce">ROCE</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="roe_pct">ROE</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="net_margin_pct">Net Margin</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="debt_to_equity">D/E</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="stage">Stage</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="rrg_quadrant">RRG</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="stock_score">Score</button></th>
+              </tr>
+            </thead>
+            <tbody id="high52wStockBody"></tbody>
+          </table>
+        </div>
+        <div class="note">A weekly close above the 52-week high is the live entry trigger for the 52W High Breakout strategy. Fundamentals are Yahoo/Screener sourced and may be partial for newly covered names.</div>
       </section>
 
       <section class="tab-view" id="tab-market-blog">
@@ -763,6 +803,7 @@
           industries: { key: "rs_momentum", dir: "desc" },
           stocks: { key: "stock_score", dir: "desc" },
           fundamentals: { key: "fundamental_score", dir: "desc" },
+          breakout52w: { key: "pct_above_52wh", dir: "desc" },
           dailyTrades: { key: "entry_date", dir: "desc" },
           weeklyTrades: { key: "entry_date", dir: "desc" },
           high52wTrades: { key: "entry_date", dir: "desc" },
@@ -1058,6 +1099,71 @@
             render();
           });
         });
+        renderBreakout52w();
+      }
+
+      function buildSymbolIndex() {
+        const index = {};
+        const add = (row) => {
+          if (!row || !row.symbol) return;
+          const key = String(row.symbol).toUpperCase();
+          // Later (richer) sources overwrite earlier ones for the same symbol.
+          index[key] = { ...(index[key] || {}), ...row };
+        };
+        (state.data.stocks || []).forEach(add);
+        (state.data.leadingStocks || []).forEach(add);
+        (state.data.breakout52wStocks || []).forEach(add);
+        state.symbolIndex = index;
+      }
+
+      function stockForSymbol(yahooSymbol, fallback) {
+        const key = String(yahooSymbol || "").toUpperCase();
+        const found = (state.symbolIndex || {})[key];
+        if (found) return found;
+        // No enriched record - build a minimal object so the drawer + chart
+        // (keyed on the Yahoo symbol) still render for backtest-only names.
+        return {
+          symbol: yahooSymbol,
+          display_symbol: (fallback && fallback.symbol) || String(yahooSymbol || "").replace(/\.NS$/i, ""),
+          name: (fallback && fallback.name) || "",
+          parent: (fallback && fallback.industry) || "",
+        };
+      }
+
+      function renderBreakout52w() {
+        const rows = state.data.breakout52wStocks || [];
+        const filters = getFilters();
+        const list = sortRows(rows.filter((row) => {
+          if (filters.industry && row.parent !== filters.industry) return false;
+          return rowMatchesSearch(row, filters.search);
+        }), "breakout52w");
+        el("high52wStockCount").textContent = `${list.length} shown`;
+        el("high52wStockBody").innerHTML = list.length ? list.map((row) => `
+          <tr>
+            <td class="truncate">${row.parent || ""}</td>
+            <td><strong>${row.name || ""}</strong></td>
+            <td>${row.display_symbol || row.symbol || ""}</td>
+            <td class="product-cell">${row.common_product_business || "-"}</td>
+            <td>${fmt(row.cmp)}</td>
+            <td>${fmt(row.high_52w)}</td>
+            <td>${pct(row.pct_above_52wh)}</td>
+            <td>${row.breakout_week || "-"}</td>
+            <td><strong>${fmt(row.fundamental_score)}</strong></td>
+            <td>${fmt(row.pe_ratio || row.pe)}</td>
+            <td>${fmt(row.roce)}</td>
+            <td>${pct(row.roe_pct)}</td>
+            <td>${pct(row.net_margin_pct)}</td>
+            <td>${fmt(row.debt_to_equity)}</td>
+            <td>${pill(row.stage, row.stage === "stage_2" ? "stage2" : "")}</td>
+            <td>${pill(row.rrg_quadrant)}</td>
+            <td>${fmt(row.stock_score)}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="17" class="empty">No stocks closed above their 52-week high in the latest week.</td></tr>`;
+        [...document.querySelectorAll("#high52wStockBody tr")].forEach((tr, index) => {
+          if (!list[index]) return;
+          tr.classList.add("clickable-row");
+          tr.addEventListener("click", () => openStockDrawer(list[index]));
+        });
       }
 
       function renderBacktest() {
@@ -1087,7 +1193,7 @@
         }), "high52wTrades");
         el("high52wBacktestBody").innerHTML = trades.length ? trades.map((trade) => `
           <tr>
-            <td>${trade.symbol}</td>
+            <td><span class="link-symbol">${trade.symbol}</span></td>
             <td class="truncate">${trade.name}</td>
             <td class="truncate">${trade.industry}</td>
             <td>${trade.entry_date}</td>
@@ -1103,6 +1209,7 @@
             <td>${trade.exit_reason}</td>
           </tr>
         `).join("") : `<tr><td colspan="14" class="empty">No trades found for this rule set.</td></tr>`;
+        attachTradeSymbolLinks("high52wBacktestBody", trades);
       }
 
       function renderBacktestTimeframe(timeframe) {
@@ -1125,7 +1232,7 @@
         }), `${timeframe}Trades`);
         el(`${prefix}BacktestBody`).innerHTML = trades.length ? trades.map((trade) => `
           <tr>
-            <td>${trade.symbol}</td>
+            <td><span class="link-symbol">${trade.symbol}</span></td>
             <td class="truncate">${trade.name}</td>
             <td class="truncate">${trade.industry}</td>
             <td>${trade.entry_date}</td>
@@ -1143,6 +1250,20 @@
             <td>${trade.exit_reason}</td>
           </tr>
         `).join("") : `<tr><td colspan="16" class="empty">No trades found for this rule set.</td></tr>`;
+        attachTradeSymbolLinks(`${prefix}BacktestBody`, trades);
+      }
+
+      function attachTradeSymbolLinks(bodyId, trades) {
+        [...document.querySelectorAll(`#${bodyId} tr`)].forEach((tr, index) => {
+          const trade = trades[index];
+          if (!trade) return;
+          const cell = tr.querySelector("td .link-symbol");
+          if (!cell) return;
+          cell.addEventListener("click", (event) => {
+            event.stopPropagation();
+            openStockDrawer(stockForSymbol(trade.yahoo_symbol || `${trade.symbol}.NS`, trade));
+          });
+        });
       }
 
       function renderMonthlyPnl(id, rows) {
@@ -1484,6 +1605,7 @@
         .then((response) => response.json())
         .then((data) => {
           state.data = data;
+          buildSymbolIndex();
           renderKpis();
           renderIndustryOptions();
           render();

@@ -84,13 +84,13 @@ def pct_return(series: pd.Series, periods: int) -> float | None:
     return round(float((current / previous - 1) * 100), 2)
 
 
-def add_return_metrics(stocks: pd.DataFrame) -> pd.DataFrame:
-    stocks = stocks.copy()
-    symbols = sorted(stocks["symbol"].dropna().unique().tolist())
-    for column in ["return_1w", "return_1m", "return_3m", "return_6m", "return_1y", "return_3y", "return_5y"]:
-        stocks[column] = None
+def download_universe_prices(symbols: list[str]) -> pd.DataFrame | None:
+    """Single 6-year daily pull for the whole universe, reused for return
+    metrics, the 52-week-high breakout scan and the drawer charts so the daily
+    job only hits Yahoo once for prices."""
+    symbols = sorted(set(symbols))
     if not symbols:
-        return stocks
+        return None
     try:
         prices = yf.download(
             symbols,
@@ -102,8 +102,33 @@ def add_return_metrics(stocks: pd.DataFrame) -> pd.DataFrame:
             group_by="column",
         )
     except Exception:
+        return None
+    if prices is None or prices.empty:
+        return None
+    return prices
+
+
+def _symbol_series(prices: pd.DataFrame, field: str, symbol: str) -> pd.Series | None:
+    try:
+        if isinstance(prices.columns, pd.MultiIndex):
+            series = prices[(field, symbol)]
+        else:
+            series = prices[field]
+        return series.dropna()
+    except Exception:
+        return None
+
+
+def add_return_metrics(stocks: pd.DataFrame, prices: pd.DataFrame | None = None) -> pd.DataFrame:
+    stocks = stocks.copy()
+    symbols = sorted(stocks["symbol"].dropna().unique().tolist())
+    for column in ["return_1w", "return_1m", "return_3m", "return_6m", "return_1y", "return_3y", "return_5y"]:
+        stocks[column] = None
+    if not symbols:
         return stocks
-    if prices.empty:
+    if prices is None:
+        prices = download_universe_prices(symbols)
+    if prices is None or prices.empty:
         return stocks
     close = prices["Close"] if isinstance(prices.columns, pd.MultiIndex) else prices[["Close"]].rename(columns={"Close": symbols[0]})
     windows = {
@@ -125,46 +150,68 @@ def add_return_metrics(stocks: pd.DataFrame) -> pd.DataFrame:
     return stocks
 
 
-def build_chart_data(symbols: list[str]) -> dict[str, list[dict]]:
+def compute_52w_high(prices: pd.DataFrame | None, symbols: list[str]) -> dict[str, dict]:
+    """Weekly 52-week-high breakout scan. A stock is flagged when its most
+    recent weekly close is at/above the highest of the prior 52 weeks' highs -
+    i.e. the latest weekly candle closed above the 52-week high."""
+    info: dict[str, dict] = {}
+    if prices is None or prices.empty:
+        return info
+    for symbol in symbols:
+        high = _symbol_series(prices, "High", symbol)
+        close = _symbol_series(prices, "Close", symbol)
+        if high is None or close is None or high.empty or close.empty:
+            continue
+        weekly_high = high.resample("W-FRI").max().dropna()
+        weekly_close = close.resample("W-FRI").last().dropna()
+        prior_52w_high = weekly_high.rolling(52).max().shift(1)
+        joined = pd.concat([weekly_close.rename("close"), prior_52w_high.rename("high_52w")], axis=1).dropna()
+        if joined.empty:
+            continue
+        last = joined.iloc[-1]
+        latest_close = float(last["close"])
+        high_52w = float(last["high_52w"])
+        above = latest_close >= high_52w and high_52w > 0
+        info[symbol] = {
+            "high_52w": round(high_52w, 2),
+            "weekly_close": round(latest_close, 2),
+            "weekly_close_above_52wh": bool(above),
+            "pct_above_52wh": round((latest_close / high_52w - 1) * 100, 2) if high_52w > 0 else None,
+            "breakout_week": joined.index[-1].date().isoformat(),
+        }
+    return info
+
+
+def add_52w_high_flag(stocks: pd.DataFrame, info: dict[str, dict]) -> pd.DataFrame:
+    stocks = stocks.copy()
+    stocks["high_52w"] = stocks["symbol"].map(lambda s: (info.get(s) or {}).get("high_52w"))
+    stocks["weekly_close_above_52wh"] = stocks["symbol"].map(lambda s: bool((info.get(s) or {}).get("weekly_close_above_52wh")))
+    stocks["pct_above_52wh"] = stocks["symbol"].map(lambda s: (info.get(s) or {}).get("pct_above_52wh"))
+    stocks["breakout_week"] = stocks["symbol"].map(lambda s: (info.get(s) or {}).get("breakout_week"))
+    return stocks
+
+
+def build_chart_data(symbols: list[str], prices: pd.DataFrame | None = None) -> dict[str, list[dict]]:
+    """Compact daily close series (time + close only - all the drawer line
+    chart reads) for every symbol, reusing the shared price pull when given."""
     if not symbols:
         return {}
-    try:
-        prices = yf.download(
-            sorted(set(symbols)),
-            period="18mo",
-            interval="1d",
-            auto_adjust=False,
-            progress=False,
-            threads=True,
-            group_by="column",
-        )
-    except Exception:
-        return {}
-    if prices.empty:
+    if prices is None:
+        prices = download_universe_prices(symbols)
+    if prices is None or prices.empty:
         return {}
 
     chart_data: dict[str, list[dict]] = {}
-    fields = ["Open", "High", "Low", "Close"]
     for symbol in symbols:
-        try:
-            if isinstance(prices.columns, pd.MultiIndex):
-                frame = pd.DataFrame({field.lower(): prices[(field, symbol)] for field in fields})
-            else:
-                frame = prices[fields].rename(columns={field: field.lower() for field in fields})
-            frame = frame.dropna()
-            chart_data[symbol] = [
-                {
-                    "time": idx.strftime("%Y-%m-%d"),
-                    "open": round(float(row.open), 2),
-                    "high": round(float(row.high), 2),
-                    "low": round(float(row.low), 2),
-                    "close": round(float(row.close), 2),
-                    "value": round(float(row.close), 2),
-                }
-                for idx, row in frame.tail(320).iterrows()
-            ]
-        except Exception:
+        close = _symbol_series(prices, "Close", symbol)
+        if close is None or close.empty:
             chart_data[symbol] = []
+            continue
+        tail = close.tail(230)
+        chart_data[symbol] = [
+            {"time": idx.strftime("%Y-%m-%d"), "close": round(float(value), 2)}
+            for idx, value in tail.items()
+        ]
     return chart_data
 
 
@@ -630,7 +677,14 @@ def main() -> None:
     stocks["common_product_business"] = stocks["symbol"].map(product_map).fillna("")
     stocks = add_display_symbol(stocks)
     stocks = add_trade_levels(stocks)
-    stocks = add_return_metrics(stocks)
+
+    # One shared price pull for the whole universe, reused by return metrics,
+    # the 52-week-high scan and the drawer charts.
+    universe_symbols = stocks["symbol"].dropna().unique().tolist()
+    universe_prices = download_universe_prices(universe_symbols)
+    stocks = add_return_metrics(stocks, prices=universe_prices)
+    high52_info = compute_52w_high(universe_prices, universe_symbols)
+    stocks = add_52w_high_flag(stocks, high52_info)
 
     leading_industries = industries[
         (industries["stage"] == "stage_2")
@@ -643,8 +697,24 @@ def main() -> None:
     leading_stocks = add_screener_fundamentals(leading_stocks)
     leading_stocks = add_fundamental_scores(leading_stocks)
     leading_stocks = add_stock_notes(leading_stocks)
+
+    # Stocks whose latest weekly candle closed above their 52-week high, given
+    # the same fundamentals/financials/SWOT treatment as the leading stocks.
+    # Yahoo/Screener caches are warm from the leading run, so overlapping
+    # symbols are not re-fetched.
+    breakout_stocks = stocks[stocks["weekly_close_above_52wh"]].copy()
+    breakout_stocks = add_yahoo_fundamentals(breakout_stocks)
+    breakout_stocks = add_screener_fundamentals(breakout_stocks)
+    breakout_stocks = add_fundamental_scores(breakout_stocks)
+    breakout_stocks = add_stock_notes(breakout_stocks)
+    breakout_stocks = breakout_stocks.sort_values(
+        ["stock_score", "market_cap_cr"], ascending=[False, False]
+    )
+
     stocks = add_stock_notes(stocks)
-    chart_data = build_chart_data(leading_stocks["symbol"].dropna().unique().tolist())
+    # Charts for the full universe so any screener, breakout or backtest stock
+    # opens with a price chart in the drawer.
+    chart_data = build_chart_data(universe_symbols, prices=universe_prices)
     fundamental_picks = (
         leading_stocks.sort_values(["parent", "fundamental_score", "market_cap_cr"], ascending=[True, False, False])
         .groupby("parent", group_keys=False)
@@ -659,6 +729,7 @@ def main() -> None:
             len(stocks[(stocks["stage"] == "stage_2") & (stocks["rrg_quadrant"] == "leading")])
         ),
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "stocks_above_52w_high": int(len(breakout_stocks)),
         "coverage_note": "Current data uses the latest completed Screener/Yahoo run. The last full industry scrape was rate-limited by Screener, so coverage is partial until the daily updater completes without rate-limit errors.",
         "trade_level_note": "CMP is the latest close. Entry is set at CMP. SL uses the tighter of the 30-week moving average when below CMP, or 8% below CMP. Target is 2R from entry.",
     }
@@ -683,6 +754,7 @@ def main() -> None:
         "leadingIndustries": clean_records(leading_industries),
         "stocks": clean_records(stocks),
         "leadingStocks": clean_records(leading_stocks),
+        "breakout52wStocks": clean_records(breakout_stocks),
         "fundamentalPicks": clean_records(fundamental_picks),
         "industryTheses": INDUSTRY_THESES,
         "chartData": chart_data,
