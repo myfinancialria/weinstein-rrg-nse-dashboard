@@ -1,4 +1,20 @@
 {
+  "ABDL": {
+    "_scraped": "2026-07-06",
+    "debt_to_equity": 69.2,
+    "dividend_yield_pct": 0.77,
+    "eps": 8.16,
+    "free_cash_flow_cr": 16.0,
+    "net_margin_pct": 5.6,
+    "operating_margin_pct": 14.0,
+    "pb_ratio": 11.84,
+    "pe_ratio": 85.7,
+    "promoter_or_insider_holding_pct": 80.91,
+    "qtr_profit_var_pct": -51.9,
+    "qtr_sales_var_pct": 9.3,
+    "roce": 18.4,
+    "roe_pct": 14.3
+  },
   "ABSLAMC": {
     "_scraped": "2026-07-03",
     "debt_to_equity": 1.6,
@@ -243,6 +259,20 @@
     "qtr_sales_var_pct": 18.7,
     "roce": 19.2,
     "roe_pct": 13.9
+  },
+  "CHOLAFIN": {
+    "_scraped": "2026-07-06",
+    "dividend_yield_pct": 0.11,
+    "eps": 61.41,
+    "net_margin_pct": 16.8,
+    "operating_margin_pct": 22.0,
+    "pb_ratio": 5.18,
+    "pe_ratio": 30.2,
+    "promoter_or_insider_holding_pct": 49.25,
+    "qtr_profit_var_pct": 30.6,
+    "qtr_sales_var_pct": 19.5,
+    "roce": 9.7,
+    "roe_pct": 19.3
   },
   "CMRGREEN": {
     "_scraped": "2026-07-03",
@@ -771,6 +801,20 @@
     "qtr_sales_var_pct": 100.4,
     "roce": 21.4,
     "roe_pct": 20.1
+  },
+  "LTF": {
+    "_scraped": "2026-07-06",
+    "dividend_yield_pct": 0.82,
+    "eps": 11.9,
+    "net_margin_pct": 16.7,
+    "operating_margin_pct": 24.0,
+    "pb_ratio": 3.0,
+    "pe_ratio": 28.0,
+    "promoter_or_insider_holding_pct": 65.99,
+    "qtr_profit_var_pct": 27.2,
+    "qtr_sales_var_pct": 18.6,
+    "roce": 8.4,
+    "roe_pct": 11.2
   },
   "MCL": {
     "_scraped": "2026-07-03",
