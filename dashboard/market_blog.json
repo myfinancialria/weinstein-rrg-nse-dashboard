@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-07 21:21:13 IST",
+  "generated_at": "2026-07-07 23:03:28 IST",
   "title": "Pre-market Technical Blog - 07 Jul 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 48,
-    "down": 43,
+    "up": 49,
+    "down": 42,
     "sideways": 9
   },
   "nifty": {
@@ -36,20 +36,20 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7495.77,
-      "change_pct": -0.55
+      "level": 7517.08,
+      "change_pct": -0.27
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52865.97,
-      "change_pct": -0.36
+      "level": 52940.16,
+      "change_pct": -0.22
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 25795.01,
-      "change_pct": -1.25
+      "level": 25942.15,
+      "change_pct": -0.69
     },
     {
       "name": "FTSE 100",
@@ -66,32 +66,32 @@
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 23496.89,
-      "change_pct": -0.51
+      "level": 23616.32,
+      "change_pct": 1.14
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3990.24,
-      "change_pct": -1.26
+      "level": 4041.24,
+      "change_pct": -0.06
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 94.96,
-      "change_pct": -0.27
+      "level": 94.95,
+      "change_pct": -0.28
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 73.71,
-      "change_pct": 2.39
+      "level": 74.29,
+      "change_pct": 3.19
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4158.3,
-      "change_pct": 0.08
+      "level": 4153.3,
+      "change_pct": -0.04
     }
   ],
   "pattern_notes": [
