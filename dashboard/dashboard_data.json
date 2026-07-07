@@ -4,7 +4,7 @@
     "stage2_leading_industries": 11,
     "stocks_analyzed": 344,
     "stage2_leading_stocks": 40,
-    "generated_at": "2026-07-07 13:37:01",
+    "generated_at": "2026-07-07 14:01:17",
     "stocks_above_52w_high": 7,
     "coverage_note": "Current data uses the latest completed Screener/Yahoo run. The last full industry scrape was rate-limited by Screener, so coverage is partial until the daily updater completes without rate-limit errors.",
     "trade_level_note": "CMP is the latest close. Entry is set at CMP. SL uses the tighter of the 30-week moving average when below CMP, or 8% below CMP. Target is 2R from entry."
@@ -39911,6 +39911,204 @@
       "future_possibilities": "Copper winding wires, aluminium recycling, transformers, motors, renewables, and EV supply chains offer growth pathways.",
       "policy_support": "Supported indirectly by power infrastructure, renewables, EV localization, recycling priorities, and manufacturing localization policies.",
       "policy_sources": "Power, renewable energy, EV and manufacturing policy ecosystem."
+    },
+    "2/3 Wheelers": {
+      "relevance_now": "Two- and three-wheelers are the backbone of Indian personal and last-mile mobility; rural recovery, replacement demand and the EV transition keep the segment in focus.",
+      "future_possibilities": "Electric 2W/3W adoption, financing penetration, premiumisation, exports to Africa/ASEAN and connected-vehicle features can extend the growth runway.",
+      "policy_support": "Supported by FAME-II/EV subsidies, state EV policies, PLI for auto and advanced chemistry cells, and Make in India localisation; watch for subsidy tapering.",
+      "policy_sources": "FAME-II; state EV policies; auto/ACC PLI."
+    },
+    "Passenger Cars & Utility Vehicles": {
+      "relevance_now": "SUV-led premiumisation, rising incomes and low car penetration versus global peers keep passenger vehicles a structural consumption theme.",
+      "future_possibilities": "EV and hybrid line-ups, connected/ADAS features, CNG variants, exports and financing depth can expand the addressable market.",
+      "policy_support": "Backed by auto PLI, FAME/EV incentives, scrappage policy and Make in India; emission (BS-VI/CAFE) norms shape the product mix.",
+      "policy_sources": "Auto PLI; FAME-II; vehicle scrappage policy."
+    },
+    "Advertising & Media Agencies": {
+      "relevance_now": "Ad spends track nominal GDP and the shift to digital; agencies benefit as brands formalise marketing and move budgets online.",
+      "future_possibilities": "Programmatic/digital advertising, retail media, data-led targeting, regional-language content and performance marketing can lift margins.",
+      "policy_support": "No direct subsidy; indirectly aided by digital-economy growth, Digital India and rising internet/smartphone penetration.",
+      "policy_sources": "Digital India; broader digital-economy trend."
+    },
+    "Media & Entertainment": {
+      "relevance_now": "Rising discretionary spends, streaming, live events and regional content keep media relevant even as consumption shifts from linear TV to digital.",
+      "future_possibilities": "OTT monetisation, gaming, live experiences, IP libraries, regional-language reach and ad-plus-subscription models can drive growth.",
+      "policy_support": "Supported by AVGC (animation, VFX, gaming, comics) policy focus, ease of filming and a growing creative-economy agenda.",
+      "policy_sources": "AVGC policy; creative-economy initiatives."
+    },
+    "Film Production, Distribution & Exhibition": {
+      "relevance_now": "Box-office recovery, premium formats and a strong regional-cinema slate support content producers and multiplex chains.",
+      "future_possibilities": "Premium screens, food & beverage/ad income, streaming syndication, IP creation and regional expansion can improve economics.",
+      "policy_support": "Aided by AVGC promotion, single-window filming clearances and GST treatment of tickets; content and screen supply are key swing factors.",
+      "policy_sources": "AVGC policy; state film-friendly initiatives."
+    },
+    "E-Learning": {
+      "relevance_now": "Digital adoption, skilling needs, test-prep demand and enterprise upskilling keep online education structurally relevant.",
+      "future_possibilities": "Vernacular content, AI tutoring, certification, B2B/enterprise learning and hybrid models can widen the market beyond metros.",
+      "policy_support": "Supported by NEP 2020's digital-education push, Digital India, SWAYAM/DIKSHA platforms and skilling missions.",
+      "policy_sources": "NEP 2020; Digital India; national skilling missions."
+    },
+    "Consulting Services": {
+      "relevance_now": "Enterprise digital transformation, ESG, GCC (global capability centre) expansion and India's services exports keep consulting demand firm.",
+      "future_possibilities": "AI/analytics advisory, cloud and ERP transformation, ESG/sustainability consulting and mid-market outsourcing can extend growth.",
+      "policy_support": "Indirectly supported by services-export incentives, GCC-friendly state policies and ease-of-doing-business reforms.",
+      "policy_sources": "Services-export framework; GCC/state IT-ITeS policies."
+    },
+    "Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO)": {
+      "relevance_now": "India's cost and talent advantage, GCC build-out and demand for back-office/analytics keep the BPO/KPO theme durable.",
+      "future_possibilities": "Higher-value KPO, automation-plus-human models, analytics, GenAI-augmented delivery and non-voice/domain expertise can raise realisations.",
+      "policy_support": "Supported by IT-ITeS/GCC state policies, SEZ/STPI benefits and services-export incentives; automation is both a tailwind and a risk.",
+      "policy_sources": "STPI/SEZ framework; state IT-ITeS policies."
+    },
+    "Non Banking Financial Company (NBFC)": {
+      "relevance_now": "NBFCs fill credit gaps banks under-serve \u2014 retail, MSME, vehicle and housing finance \u2014 and benefit as credit demand broadens.",
+      "future_possibilities": "Co-lending with banks, digital underwriting, secured retail, MSME and affordable-housing loans can support high-quality growth.",
+      "policy_support": "RBI's scale-based regulation, co-lending framework and financial-inclusion push are supportive; tighter norms follow any asset-quality stress.",
+      "policy_sources": "RBI scale-based regulation; co-lending framework."
+    },
+    "Life Insurance": {
+      "relevance_now": "Under-penetrated protection, financialisation of savings and a young population make life insurance a long-duration compounding theme.",
+      "future_possibilities": "Protection and annuity mix, bancassurance, digital distribution, deeper tier-2/3 reach and product innovation can lift VNB margins.",
+      "policy_support": "Supported by IRDAI reforms, 'Insurance for All by 2047', higher FDI limits and tax treatment of long-term savings.",
+      "policy_sources": "IRDAI reforms; Insurance for All 2047; FDI norms."
+    },
+    "General Insurance": {
+      "relevance_now": "Low non-life penetration, rising health and motor demand, and formalisation of assets keep general insurance structurally attractive.",
+      "future_possibilities": "Health insurance growth, digital/embedded distribution, better underwriting and government scheme participation can expand premiums.",
+      "policy_support": "Aided by IRDAI reforms, Ayushman Bharat/health-cover push, crop and motor mandates and higher FDI limits.",
+      "policy_sources": "IRDAI reforms; Ayushman Bharat; motor/crop mandates."
+    },
+    "Logistics Solution Provider": {
+      "relevance_now": "Manufacturing shift, e-commerce, GST-led warehousing consolidation and multimodal freight demand keep logistics a structural theme.",
+      "future_possibilities": "3PL/express, cold-chain, warehousing REIT-isation, port-led logistics, digital freight and multimodal corridors can drive growth.",
+      "policy_support": "Strongly supported by PM Gati Shakti, the National Logistics Policy, dedicated freight corridors and multimodal infrastructure push.",
+      "policy_sources": "National Logistics Policy; PM Gati Shakti; DFC."
+    },
+    "Household Appliances": {
+      "relevance_now": "Rising incomes, low appliance penetration, electrification and premiumisation drive durable consumer-appliance demand.",
+      "future_possibilities": "Premium and energy-efficient products, air-conditioning penetration, rural reach, exports and backward integration can expand margins.",
+      "policy_support": "Supported by PLI for white goods (AC and LED components), Make in India and import-substitution priorities.",
+      "policy_sources": "White-goods PLI; Make in India."
+    },
+    "Footwear": {
+      "relevance_now": "Formalisation, branded-play growth, quality-control norms and rising discretionary spends favour organised footwear makers.",
+      "future_possibilities": "Premiumisation, athleisure, domestic manufacturing shift from imports, exports and omnichannel retail can lift share and margins.",
+      "policy_support": "Supported by mandatory BIS quality-control orders, footwear/leather export incentives and Make in India localisation.",
+      "policy_sources": "BIS quality-control orders; leather/footwear export schemes."
+    },
+    "Breweries & Distilleries": {
+      "relevance_now": "Premiumisation, a young legal-drinking-age population and rising discretionary spends support beer and spirits volumes.",
+      "future_possibilities": "Premium and craft segments, ethanol blending economics for distilleries, exports and portfolio premiumisation can drive value.",
+      "policy_support": "Ethanol-blending programme (EBP/E20) is a strong tailwind for distilleries; however, state excise, pricing controls and licensing are key risks.",
+      "policy_sources": "Ethanol Blending Programme (E20); state excise policies."
+    },
+    "Cigarettes & Tobacco Products": {
+      "relevance_now": "Cigarettes offer resilient, cash-generative demand with pricing power, even as volumes face regulatory and taxation pressure.",
+      "future_possibilities": "Premium mixes, market-share gains from illicit trade and portfolio diversification into FMCG can sustain earnings.",
+      "policy_support": "Highly regulated: heavy GST/cess, advertising bans and public-health measures are structural headwinds; taxation stability is the key swing factor.",
+      "policy_sources": "GST/cess on tobacco; COTPA public-health regulation."
+    },
+    "Lubricants": {
+      "relevance_now": "Lubricant demand tracks vehicle parc, industrial activity and freight movement, offering steady, brand-led cash flows.",
+      "future_possibilities": "Premium synthetics, industrial and EV-fluid segments, rural distribution and exports can offset EV-driven auto-lubricant risk.",
+      "policy_support": "No direct subsidy; linked to industrial/auto activity, Make in India manufacturing and infrastructure capex.",
+      "policy_sources": "Industrial and auto-sector demand ecosystem."
+    },
+    "Oil Exploration & Production": {
+      "relevance_now": "Domestic E&P underpins energy security; crude/gas price cycles and output from new fields drive earnings.",
+      "future_possibilities": "New discoveries, enhanced recovery, gas monetisation and the energy-transition pivot into gas and low-carbon can shape the long term.",
+      "policy_support": "Supported by HELP/OALP licensing, gas-pricing reforms and energy-security priorities; windfall taxes and subsidy sharing are risks.",
+      "policy_sources": "HELP/OALP; gas-pricing reforms."
+    },
+    "Oil Equipment & Services": {
+      "relevance_now": "Rising domestic E&P capex, gas infrastructure build-out and refinery expansion support oilfield equipment and services demand.",
+      "future_possibilities": "City-gas and pipeline projects, offshore development, refinery upgrades and energy-transition infrastructure can extend order books.",
+      "policy_support": "Aided by energy-security push, gas-infrastructure expansion, HELP/OALP activity and Make in India domestic-sourcing preferences.",
+      "policy_sources": "HELP/OALP; national gas-grid programme."
+    },
+    "Offshore Support Solution Drilling": {
+      "relevance_now": "Offshore drilling and support demand rise with higher upstream capex and firm energy prices, a cyclical but high-operating-leverage theme.",
+      "future_possibilities": "Higher day-rates, fleet utilisation, deepwater development and gas-focused offshore projects can drive an up-cycle.",
+      "policy_support": "Linked to national energy-security and domestic-production goals, HELP/OALP activity and offshore field development.",
+      "policy_sources": "Energy-security priorities; HELP/OALP."
+    },
+    "LPG/CNG/PNG/LNG Supplier": {
+      "relevance_now": "India's gas-economy push, cleaner-fuel adoption and city-gas expansion make gas distributors a structural energy-transition play.",
+      "future_possibilities": "City-gas network build-out, CNG vehicle growth, PNG household connections, LNG imports and industrial fuel-switching can expand volumes.",
+      "policy_support": "Strongly supported by the push to raise gas in the energy mix to ~15%, city-gas distribution licensing, and cleaner-fuel priorities.",
+      "policy_sources": "National gas-grid; city-gas distribution (PNGRB) rounds."
+    },
+    "Aluminium": {
+      "relevance_now": "Aluminium is a key light-weighting and electrification metal; power, transport, packaging and renewables demand keep it strategically important.",
+      "future_possibilities": "EV and solar demand, recycling, downstream value-added products and cost-curve advantages can support integrated producers.",
+      "policy_support": "Aided by infrastructure/renewables capex, import-duty structures and Make in India; power costs and global prices are key swing factors.",
+      "policy_sources": "Renewable-energy and infrastructure policy; metal-import duties."
+    },
+    "Sponge Iron": {
+      "relevance_now": "Sponge iron feeds India's growing secondary steel capacity; construction and infrastructure demand drive volumes.",
+      "future_possibilities": "Capacity additions, integration into steel/power, pellet and DRI efficiency, and green-steel pathways can support growth.",
+      "policy_support": "Supported by infrastructure capex, housing and the National Steel Policy; raw-material (iron ore/coal) access and emissions are key risks.",
+      "policy_sources": "National Steel Policy; infrastructure capex."
+    },
+    "Other Construction Materials": {
+      "relevance_now": "Housing, infrastructure execution and real-estate upcycle drive demand for building and construction materials.",
+      "future_possibilities": "Premiumisation, branded building products, tiles/sanitaryware/boards, exports and rural housing can extend the runway.",
+      "policy_support": "Supported by PM Awas Yojana, infrastructure and capex push, and housing-for-all priorities.",
+      "policy_sources": "PM Awas Yojana; infrastructure capex programmes."
+    },
+    "Plastic Products - Industrial": {
+      "relevance_now": "Industrial plastics serve piping, infrastructure, agriculture and packaging; water, sanitation and construction demand keep volumes firm.",
+      "future_possibilities": "Piping/PVC for water and housing, agri-infrastructure, exports, and value-added engineered plastics can drive growth.",
+      "policy_support": "Aided by Jal Jeevan Mission (water/piping), housing, agriculture and infrastructure spending; input (crude/PVC) prices are a key swing factor.",
+      "policy_sources": "Jal Jeevan Mission; housing and infrastructure programmes."
+    },
+    "Rubber": {
+      "relevance_now": "Rubber products serve autos, industry and infrastructure; tyre and industrial demand track vehicle parc and capex cycles.",
+      "future_possibilities": "Value-added and specialty rubber, tyre premiumisation, exports and import-substitution can improve realisations.",
+      "policy_support": "Supported by auto/tyre PLI-adjacent demand, quality-control orders and Make in India; natural-rubber and crude-derivative prices are risks.",
+      "policy_sources": "Auto-sector demand; BIS quality-control orders."
+    },
+    "Animal Feed": {
+      "relevance_now": "Rising protein consumption, organised poultry/dairy and aquaculture growth drive structural animal-feed demand.",
+      "future_possibilities": "Feed prem: additives, aqua and cattle feed, integration with protein producers, and branded/scientific nutrition can lift margins.",
+      "policy_support": "Aided by animal-husbandry, dairy and fisheries missions, and food-processing infrastructure support; grain prices are a key input risk.",
+      "policy_sources": "Animal husbandry and fisheries development programmes."
+    },
+    "Other Agricultural Products": {
+      "relevance_now": "Agri-inputs and products benefit from rural demand, food security priorities and the shift to organised, value-added agriculture.",
+      "future_possibilities": "Branded agri-products, exports, agri-inputs, processing and farm-mechanisation can expand the addressable market.",
+      "policy_support": "Supported by agri-infrastructure funds, MSP/food-security programmes, export incentives and food-processing schemes.",
+      "policy_sources": "Agri-Infrastructure Fund; food-processing (PMKSY) schemes."
+    },
+    "Medical Equipment & Supplies": {
+      "relevance_now": "Rising healthcare spend, hospital expansion, insurance penetration and import-substitution make medical devices a structural theme.",
+      "future_possibilities": "Domestic device manufacturing, diagnostics, consumables, exports and premium equipment can reduce import dependence and lift growth.",
+      "policy_support": "Supported by PLI for medical devices, med-tech parks, Ayushman Bharat and import-substitution priorities.",
+      "policy_sources": "Medical-devices PLI; med-tech parks; Ayushman Bharat."
+    },
+    "Real Estate Investment Trusts (REITs)": {
+      "relevance_now": "REITs offer regular, rent-yielding exposure to Grade-A commercial real estate as office demand and GCC leasing recover.",
+      "future_possibilities": "Retail and warehousing REITs, portfolio expansion, occupancy and rental escalation, and rate-cycle tailwinds can improve total returns.",
+      "policy_support": "Enabled by SEBI's REIT framework, favourable taxation of distributions and commercial-real-estate formalisation.",
+      "policy_sources": "SEBI REIT regulations; commercial-real-estate formalisation."
+    },
+    "Amusement Parks/ Other Recreation": {
+      "relevance_now": "Rising discretionary spends, experience-led consumption and urban leisure demand support amusement and recreation operators.",
+      "future_possibilities": "New park capacity, premium experiences, food & beverage/retail monetisation, tourism tie-ins and asset-light expansion can drive growth.",
+      "policy_support": "Indirectly aided by tourism promotion, ease of doing business and consumption/urban-leisure trends; discretionary and seasonal risks remain.",
+      "policy_sources": "Tourism-promotion initiatives; consumption trend."
+    },
+    "Other Consumer Services": {
+      "relevance_now": "Formalisation of services, rising incomes and organised-play share gains keep consumer-services businesses structurally relevant.",
+      "future_possibilities": "Premiumisation, digital delivery, franchise/scale expansion and new-category adoption can extend growth.",
+      "policy_support": "Indirectly supported by consumption growth, digital adoption, formalisation and ease-of-doing-business reforms.",
+      "policy_sources": "Consumption and formalisation trend; Digital India."
+    },
+    "Stationary": {
+      "relevance_now": "Stationery and school/office products benefit from education demand, back-to-office normalisation and branded-play formalisation.",
+      "future_possibilities": "Premium and branded products, art/craft and office segments, exports and distribution expansion can lift margins.",
+      "policy_support": "Indirectly aided by education spending, NEP 2020, GST formalisation and Make in India; input (paper/plastic) prices are a swing factor.",
+      "policy_sources": "Education spending; NEP 2020; GST formalisation."
     }
   },
   "chartData": {
