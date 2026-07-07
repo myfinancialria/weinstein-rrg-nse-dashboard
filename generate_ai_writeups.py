@@ -139,9 +139,14 @@ def _chat(model: str, system: str, user: str, timeout: int = 90) -> str:
         },
         timeout=timeout,
     )
-    resp.raise_for_status()
+    if resp.status_code >= 400:
+        # surface the provider's reason (helps diagnose 400s in CI logs)
+        raise RuntimeError(f"HTTP {resp.status_code}: {resp.text[:300]}")
     data = resp.json()
-    return (data["choices"][0]["message"]["content"] or "").strip()
+    choices = data.get("choices") or []
+    if not choices:
+        raise RuntimeError(f"no choices in response: {json.dumps(data)[:300]}")
+    return (choices[0].get("message", {}).get("content") or "").strip()
 
 
 def _with_retry(fn, *args, tries: int = 3, **kwargs):
@@ -181,15 +186,32 @@ def merge_prompt(kind: str, name: str, draft_a: str, draft_b: str) -> str:
     )
 
 
+def _safe_chat(model: str, system: str, user: str) -> str:
+    """Best-effort call: returns '' instead of raising, so one model failing
+    (e.g. a transient provider 400) never sinks the whole item."""
+    try:
+        return _with_retry(_chat, model, system, user)
+    except Exception as exc:  # noqa: BLE001
+        print(f"    (model {model} failed: {exc})")
+        return ""
+
+
 def generate_one(kind: str, name: str, facts: dict) -> str:
     prompt = draft_prompt(kind, facts)
-    draft_q = _with_retry(_chat, QWEN_MODEL, SYSTEM, prompt)
-    draft_l = _with_retry(_chat, LLAMA_MODEL, SYSTEM, prompt)
+    draft_q = _safe_chat(QWEN_MODEL, SYSTEM, prompt)
+    draft_l = _safe_chat(LLAMA_MODEL, SYSTEM, prompt)
+    if not draft_q and not draft_l:
+        raise RuntimeError("both Qwen and Llama drafts failed")
     if not draft_q:
         return draft_l
     if not draft_l:
         return draft_q
-    return _with_retry(_chat, MERGE_MODEL, SYSTEM, merge_prompt(kind, name, draft_q, draft_l))
+    # Merge; if the merge call fails, fall back to the fuller of the two drafts
+    # so a flaky merge never costs us the item.
+    merged = _safe_chat(MERGE_MODEL, SYSTEM, merge_prompt(kind, name, draft_q, draft_l))
+    if merged:
+        return merged
+    return draft_q if len(draft_q) >= len(draft_l) else draft_l
 
 
 def load_json(path: Path, default):

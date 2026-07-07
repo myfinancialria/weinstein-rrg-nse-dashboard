@@ -1471,21 +1471,24 @@
         return String(s == null ? "" : s).replace(/[&<>"]/g, (c) =>
           ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
       }
-      // Render a simple AI write-up (plain text with "- " / "•" bullets) into safe HTML.
+      // Escape, then apply light inline markdown (**bold**).
+      function inlineMd(s) {
+        return escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      }
+      // Render a simple AI write-up (markdown headings / bold / bullets) into safe HTML.
       function aiHtml(text) {
         const lines = String(text || "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
         let html = "", inList = false;
+        const closeList = () => { if (inList) { html += "</ul>"; inList = false; } };
         for (const line of lines) {
-          const bullet = /^[-*•]\s+/.test(line);
-          if (bullet) {
-            if (!inList) { html += "<ul>"; inList = true; }
-            html += `<li>${escapeHtml(line.replace(/^[-*•]\s+/, ""))}</li>`;
-          } else {
-            if (inList) { html += "</ul>"; inList = false; }
-            html += `<p class="prose" style="margin:6px 0 0">${escapeHtml(line)}</p>`;
-          }
+          const heading = line.match(/^#{1,6}\s+(.*)$/);
+          if (heading) { closeList(); html += `<p class="prose" style="margin:8px 0 2px;font-weight:700">${inlineMd(heading[1])}</p>`; continue; }
+          const bullet = line.match(/^[-*•]\s+(.*)$/);
+          if (bullet) { if (!inList) { html += "<ul>"; inList = true; } html += `<li>${inlineMd(bullet[1])}</li>`; continue; }
+          closeList();
+          html += `<p class="prose" style="margin:6px 0 0">${inlineMd(line)}</p>`;
         }
-        if (inList) html += "</ul>";
+        closeList();
         return html;
       }
       // AI callout block; shows a friendly pending note if the write-up isn't generated yet.
