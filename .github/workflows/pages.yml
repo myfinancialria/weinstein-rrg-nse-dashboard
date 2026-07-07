@@ -57,6 +57,14 @@ jobs:
           python build_sector_report.py
           python generate_market_blog.py
 
+      # Plain-English "why it's strong" write-ups via Qwen + Llama (OpenRouter).
+      # Cached in reports/ai_writeups_cache.json, so only new/changed items cost tokens.
+      # If OPENROUTER_API_KEY is not set, this is a no-op (writes cached results only).
+      - name: Generate AI write-ups (Qwen + Llama)
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: python generate_ai_writeups.py
+
       - name: Commit refreshed dashboard data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:

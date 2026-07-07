@@ -1,0 +1,11 @@
+{
+  "generated_at": "2026-07-07 13:37:01",
+  "models": {
+    "qwen": "qwen/qwen-2.5-72b-instruct",
+    "llama": "meta-llama/llama-3.3-70b-instruct",
+    "merge": "qwen/qwen-2.5-72b-instruct"
+  },
+  "version": "v1",
+  "industries": {},
+  "stocks": {}
+}
