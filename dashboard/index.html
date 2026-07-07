@@ -1312,10 +1312,10 @@
           </div>
 
           <div class="section-title">Product / Business</div>
-          <div class="prose">${asText(stock.common_product_business)}</div>
+          <div class="prose">${asText(stock.common_product_business || stock.yahoo_industry || stock.sector)}</div>
 
           <div class="section-title">Company Description</div>
-          <div class="prose">${asText(stock.company_description)}</div>
+          <div class="prose">${asText(stock.company_description || stock.common_product_business || (stock.name ? `${stock.name} operates in ${stock.yahoo_industry || stock.parent || stock.sector || "its"} segment.` : ""))}</div>
 
           <div class="section-title">Pros</div>
           <div class="chips">${listChips(stock.pros, "good")}</div>
@@ -1341,7 +1341,13 @@
           <div class="prose">${asText(thesis.policy_support)}</div>
 
           <div class="section-title">Links</div>
-          <div class="prose">${stock.website ? `<a href="${stock.website}" target="_blank">${stock.website}</a>` : "-"}<br>${asText(thesis.policy_sources)}</div>
+          <div class="chips">
+            <a class="chip" href="https://www.screener.in/company/${encodeURIComponent(tvSymbol)}/" target="_blank" rel="noopener">Screener ↗</a>
+            <a class="chip" href="${tvUrl}" target="_blank" rel="noopener">TradingView ↗</a>
+            <a class="chip" href="https://www.nseindia.com/get-quotes/equity?symbol=${encodeURIComponent(tvSymbol)}" target="_blank" rel="noopener">NSE ↗</a>
+            ${stock.website ? `<a class="chip" href="${stock.website}" target="_blank" rel="noopener">Company site ↗</a>` : ""}
+          </div>
+          ${thesis.policy_sources ? `<div class="prose" style="margin-top:8px"><b>Policy references:</b> ${asText(thesis.policy_sources)}</div>` : ""}
         `;
         el("drawerBackdrop").classList.add("open");
         el("stockDrawer").classList.add("open");
