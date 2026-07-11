@@ -261,6 +261,19 @@
       .detail-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--soft); }
       .detail-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; font-weight: 600; }
       .detail-card .value { margin-top: 5px; font-size: 16px; font-weight: 700; }
+      /* per-metric "vs industry" info button + popover */
+      .mi { margin-left: 5px; width: 15px; height: 15px; line-height: 13px; font-size: 10px; font-style: italic; font-weight: 700; font-family: Georgia, "Times New Roman", serif; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--muted); cursor: pointer; padding: 0; vertical-align: middle; }
+      .mi:hover { border-color: #1f6feb; color: #1f6feb; }
+      .mi-pop { position: fixed; z-index: 200; width: 264px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 40px rgba(15,23,42,.22); padding: 12px 14px; font-size: 12.5px; }
+      .mi-title { font-weight: 700; font-size: 13px; }
+      .mi-def { color: var(--muted); margin: 3px 0 10px; line-height: 1.35; }
+      .mi-row { display: flex; justify-content: space-between; font-size: 12px; margin-top: 7px; }
+      .mi-bar { height: 7px; border-radius: 4px; background: var(--soft); overflow: hidden; margin-top: 3px; }
+      .mi-bar i { display: block; height: 100%; border-radius: 4px; }
+      .mi-bar i.mi-good { background: #16a34a; } .mi-bar i.mi-bad { background: #dc2626; }
+      .mi-bar i.mi-mid { background: #64748b; } .mi-bar i.mi-ind { background: #94a3b8; }
+      .mi-verdict { margin-top: 10px; font-weight: 600; line-height: 1.35; }
+      .mi-verdict.mi-good { color: #16a34a; } .mi-verdict.mi-bad { color: #dc2626; } .mi-verdict.mi-mid { color: var(--muted); }
 
       /* ---------- swot / chips / prose ---------- */
       .chips { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -762,6 +775,7 @@
       </div>
       <div class="drawer-body" id="drawerBody"></div>
     </aside>
+    <div id="metricPop" class="mi-pop" hidden></div>
 
     <script>
       let AI_WRITEUPS = { industries: {}, stocks: {}, models: {} };
@@ -1333,9 +1347,9 @@
             ${detail("SL", fmt(stock.sl))}
             ${detail("Target", fmt(stock.target))}
             ${detail("Market Cap Cr", fmt(stock.market_cap_cr))}
-            ${detail("P/E", fmt(stock.pe_ratio || stock.pe))}
-            ${detail("ROCE %", fmt(stock.roce))}
-            ${detail("Promoter/Insider %", fmt(stock.promoter_or_insider_holding_pct))}
+            ${detailC("P/E", fmt(stock.pe_ratio || stock.pe), "pe_ratio")}
+            ${detailC("ROCE %", fmt(stock.roce), "roce")}
+            ${detailC("Promoter/Insider %", fmt(stock.promoter_or_insider_holding_pct), "promoter_or_insider_holding_pct")}
             ${detail("Fund Score", fmt(stock.fundamental_score))}
           </div>
 
@@ -1348,19 +1362,19 @@
 
           <div class="section-title">Fundamentals</div>
           <div class="detail-grid">
-            ${detail("EPS", fmt(stock.eps))}
+            ${detailC("EPS", fmt(stock.eps), "eps")}
             ${detail("Gross Margin", pct(stock.gross_margin_pct))}
-            ${detail("Operating Margin", pct(stock.operating_margin_pct))}
-            ${detail("Net Margin", pct(stock.net_margin_pct))}
-            ${detail("ROE", pct(stock.roe_pct))}
-            ${detail("Debt / Equity", fmt(stock.debt_to_equity))}
+            ${detailC("Operating Margin", pct(stock.operating_margin_pct), "operating_margin_pct")}
+            ${detailC("Net Margin", pct(stock.net_margin_pct), "net_margin_pct")}
+            ${detailC("ROE", pct(stock.roe_pct), "roe_pct")}
+            ${detailC("Debt / Equity", fmt(stock.debt_to_equity), "debt_to_equity")}
             ${detail("Current Ratio", fmt(stock.current_ratio))}
             ${detail("Quick Ratio", fmt(stock.quick_ratio))}
-            ${detail("FCF Cr", fmt(stock.free_cash_flow_cr))}
-            ${detail("P/E", fmt(stock.pe_ratio || stock.pe))}
-            ${detail("P/B", fmt(stock.pb_ratio))}
+            ${detailC("FCF Cr", fmt(stock.free_cash_flow_cr), "free_cash_flow_cr")}
+            ${detailC("P/E", fmt(stock.pe_ratio || stock.pe), "pe_ratio")}
+            ${detailC("P/B", fmt(stock.pb_ratio), "pb_ratio")}
             ${detail("PEG", fmt(stock.peg_ratio))}
-            ${detail("Dividend Yield", pct(stock.dividend_yield_pct))}
+            ${detailC("Dividend Yield", pct(stock.dividend_yield_pct), "dividend_yield_pct")}
             ${detail("Sales Qtr Cr", fmt(stock.sales_qtr_cr))}
             ${detail("NP Qtr Cr", fmt(stock.np_qtr_cr))}
             ${detail("Qtr Sales Growth", pct(stock.qtr_sales_var_pct))}
@@ -1432,6 +1446,7 @@
           </div>
           ${thesis.policy_sources ? `<div class="prose" style="margin-top:8px"><b>Policy references:</b> ${asText(thesis.policy_sources)}</div>` : ""}
         `;
+        state.drawerStock = stock;
         el("drawerBackdrop").classList.add("open");
         el("stockDrawer").classList.add("open");
         el("stockDrawer").setAttribute("aria-hidden", "false");
@@ -1728,6 +1743,104 @@
         return `<div class="detail-card"><div class="label">${label}</div><div class="value">${value}</div></div>`;
       }
 
+      // A detail card with a "vs industry" (i) button. `key` is a METRIC_META key.
+      function detailC(label, value, key) {
+        return `<div class="detail-card"><div class="label">${label}<button type="button" class="mi" data-mkey="${key}" aria-label="Compare ${label} to the industry">i</button></div><div class="value">${value}</div></div>`;
+      }
+
+      // ---- Per-metric "where does this stock stand vs its industry" ----
+      const METRIC_META = {
+        pe_ratio: { label: "P/E", def: "Price ÷ earnings per share. Lower is cheaper relative to profits.", higherBetter: false, unit: "x" },
+        pb_ratio: { label: "P/B", def: "Price ÷ book value. Lower is cheaper relative to net assets.", higherBetter: false, unit: "x" },
+        roe_pct: { label: "ROE", def: "Net profit ÷ shareholder equity. Higher = better return on owners' capital.", higherBetter: true, unit: "%" },
+        roce: { label: "ROCE", def: "Return on capital employed. Higher = more efficient use of all capital.", higherBetter: true, unit: "%" },
+        net_margin_pct: { label: "Net margin", def: "Net profit ÷ sales. Higher = more of each rupee of sales kept as profit.", higherBetter: true, unit: "%" },
+        operating_margin_pct: { label: "Operating margin", def: "Operating profit ÷ sales. Higher = stronger core operations.", higherBetter: true, unit: "%" },
+        debt_to_equity: { label: "Debt / Equity", def: "Total debt ÷ equity. Lower = less leverage and financial risk.", higherBetter: false, unit: "" },
+        dividend_yield_pct: { label: "Dividend yield", def: "Dividend ÷ price. Higher = more income per rupee invested.", higherBetter: true, unit: "%" },
+        eps: { label: "EPS", def: "Net profit earned per share.", higherBetter: true, unit: "" },
+        free_cash_flow_cr: { label: "Free cash flow", def: "Cash left after capex. Higher = more self-funded growth and payouts.", higherBetter: true, unit: "cr" },
+        promoter_or_insider_holding_pct: { label: "Promoter holding", def: "% of the company owned by promoters. Higher often signals owner commitment.", higherBetter: true, unit: "%" },
+      };
+      let INDUSTRY_STATS = {};
+      function _median(arr) {
+        if (!arr.length) return null;
+        const a = [...arr].sort((x, y) => x - y), m = Math.floor(a.length / 2);
+        return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
+      }
+      // Median of each metric within each industry (parent), computed once from all stocks.
+      function computeIndustryStats() {
+        const by = {};
+        (state.data.stocks || []).forEach((s) => {
+          const k = s.parent || "—";
+          (by[k] = by[k] || []).push(s);
+        });
+        INDUSTRY_STATS = {};
+        for (const [ind, list] of Object.entries(by)) {
+          const st = {};
+          for (const key of Object.keys(METRIC_META)) {
+            const vals = list.map((s) => Number(s[key])).filter(Number.isFinite);
+            st[key] = { median: _median(vals), n: vals.length };
+          }
+          INDUSTRY_STATS[ind] = st;
+        }
+      }
+      function _fmtMetric(v, meta) {
+        if (!Number.isFinite(v)) return "-";
+        if (meta.unit === "%") return v.toFixed(1) + "%";
+        if (meta.unit === "x") return v.toFixed(1) + "×";
+        if (meta.unit === "cr") return "₹" + Math.round(v).toLocaleString("en-IN") + " cr";
+        return v.toFixed(2);
+      }
+      function metricPopHtml(key, stock) {
+        const meta = METRIC_META[key];
+        if (!meta) return "";
+        const val = Number(stock[key]);
+        const ind = stock.parent || "—";
+        const st = (INDUSTRY_STATS[ind] || {})[key] || {};
+        let body;
+        if (Number.isFinite(val) && st.median != null && st.n >= 3) {
+          const med = st.median, diff = val - med;
+          const near = med !== 0 ? Math.abs(diff / Math.abs(med)) < 0.08 : Math.abs(diff) < 1e-9;
+          const higher = diff > 0;
+          const good = near ? null : (meta.higherBetter ? higher : !higher);
+          const cls = near ? "mi-mid" : (good ? "mi-good" : "mi-bad");
+          const verdict = near
+            ? "In line with the industry"
+            : `${higher ? "Above" : "Below"} the industry median — ${good ? "stronger than peers" : "weaker than peers"}`;
+          const mx = (Math.max(Math.abs(val), Math.abs(med)) * 1.25) || 1;
+          const cw = Math.max(2, Math.min(100, Math.abs(val) / mx * 100));
+          const mw = Math.max(2, Math.min(100, Math.abs(med) / mx * 100));
+          body = `<div class="mi-row"><span>This stock</span><b>${_fmtMetric(val, meta)}</b></div>`
+            + `<div class="mi-bar"><i class="${cls}" style="width:${cw}%"></i></div>`
+            + `<div class="mi-row"><span>Industry median</span><b>${_fmtMetric(med, meta)}</b></div>`
+            + `<div class="mi-bar"><i class="mi-ind" style="width:${mw}%"></i></div>`
+            + `<div class="mi-verdict ${cls}">${verdict} &middot; ${st.n} peers in ${escapeHtml(ind)}</div>`;
+        } else {
+          body = `<div class="mi-verdict mi-mid">Not enough industry peers to compare${Number.isFinite(val) ? "" : " (no value for this stock)"}.</div>`;
+        }
+        return `<div class="mi-title">${meta.label}</div><div class="mi-def">${meta.def}</div>${body}`;
+      }
+      function showMetricPop(btn, key) {
+        const pop = el("metricPop");
+        if (!pop || !state.drawerStock) return;
+        pop.innerHTML = metricPopHtml(key, state.drawerStock);
+        pop.hidden = false;
+        const r = btn.getBoundingClientRect(), w = 264;
+        pop.style.left = Math.max(10, Math.min(r.left - 8, window.innerWidth - w - 10)) + "px";
+        pop.style.top = (r.bottom + 6) + "px";
+      }
+      function hideMetricPop() {
+        const p = el("metricPop");
+        if (p) p.hidden = true;
+      }
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".mi");
+        if (btn) { e.stopPropagation(); showMetricPop(btn, btn.dataset.mkey); return; }
+        if (!e.target.closest("#metricPop")) hideMetricPop();
+      });
+      window.addEventListener("scroll", hideMetricPop, true);
+
       function escapeHtml(s) {
         return String(s == null ? "" : s).replace(/[&<>"]/g, (c) =>
           ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -1777,6 +1890,7 @@
       }
 
       function closeDrawer() {
+        hideMetricPop();
         el("drawerBackdrop").classList.remove("open");
         el("stockDrawer").classList.remove("open");
         el("stockDrawer").setAttribute("aria-hidden", "true");
@@ -1947,6 +2061,7 @@
         .then((data) => {
           state.data = data;
           buildSymbolIndex();
+          computeIndustryStats();
           renderKpis();
           renderIndustryOptions();
           render();

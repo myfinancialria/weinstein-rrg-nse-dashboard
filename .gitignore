@@ -19,3 +19,8 @@ __pycache__/
 # shipped in the Pages artifact (upload-pages-artifact uploads dashboard/), but
 # NOT committed — all ~344 change daily, which would bloat git history.
 dashboard/charts/
+
+# Tickertape universe cache (~1.8MB, refreshed every couple days). Cheap to
+# rebuild (~12 bulk requests); the enriched values are baked into
+# dashboard_data.json, so no need to commit this.
+reports/tickertape_fundamentals_cache.json

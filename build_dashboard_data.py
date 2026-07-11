@@ -975,6 +975,12 @@ def main() -> None:
     high52_info = compute_52w_high(universe_prices, universe_symbols)
     stocks = add_52w_high_flag(stocks, high52_info)
 
+    # Tickertape (public API) fundamentals for the WHOLE universe so every stock
+    # — not just the leading/breakout picks — carries P/E, P/B, ROE, ROCE,
+    # margins, EPS, FCF, promoter holding, debt/equity and market cap. This
+    # powers the per-metric "vs industry median" comparison in the drawer.
+    stocks = add_tickertape_fundamentals(stocks)
+
     leading_industries = industries[
         (industries["stage"] == "stage_2")
         & (industries["rrg_quadrant"] == "leading")
@@ -984,10 +990,8 @@ def main() -> None:
     # screener.in fills the gaps Yahoo leaves (ROE/ROCE/margins/debt/FCF/
     # promoter holding/quarterly growth) so the per-stock SWOT is complete.
     leading_stocks = add_screener_fundamentals(leading_stocks)
-    # Tickertape (public API) is the primary fundamentals source — applied last
-    # so its values win where present (PE/PB/ROE/ROCE/margins/EPS/FCF/promoter/
-    # debt-equity/market-cap), with Yahoo+screener as fallbacks for gaps.
-    leading_stocks = add_tickertape_fundamentals(leading_stocks)
+    # (Tickertape values are already on the base `stocks` and inherited by this
+    # copy; Yahoo+screener above only fill the extra description/SWOT gaps.)
     leading_stocks = add_fundamental_scores(leading_stocks)
     leading_stocks = add_stock_notes(leading_stocks)
 
@@ -998,7 +1002,6 @@ def main() -> None:
     breakout_stocks = stocks[stocks["weekly_close_above_52wh"]].copy()
     breakout_stocks = add_yahoo_fundamentals(breakout_stocks)
     breakout_stocks = add_screener_fundamentals(breakout_stocks)
-    breakout_stocks = add_tickertape_fundamentals(breakout_stocks)
     breakout_stocks = add_fundamental_scores(breakout_stocks)
     breakout_stocks = add_stock_notes(breakout_stocks)
     breakout_stocks = breakout_stocks.sort_values(

@@ -1,16 +1,20 @@
-"""Enrich stock fundamentals from Tickertape's public API (tickertape.in).
+"""Enrich stock fundamentals from Tickertape's public screener API.
 
-All endpoints used here are public — verified live with no cookie/auth:
-  search   GET  /search?text=<SYM>&types=stock              -> sid (e.g. TIMK)
-  ratios   POST /screener/query {project,sids}               -> pe/pb/roe/roce/…
-  income   GET  /stocks/financials/income/<sid>/annual/normal?count=1
-  income   GET  /stocks/financials/income/<sid>/interim/normal?count=5  (qtr YoY)
-  cashflow GET  /stocks/financials/cashflow/<sid>/annual/normal?count=1  -> FCF
-  holdings GET  /stocks/holdings/<sid>                       -> promoter %
+Uses ONE bulk endpoint — `POST /screener/query` — paginated over the whole NSE
+universe (~5,800 stocks, 500/page → ~12 requests), keyed by the NSE ticker in
+`stock.info.ticker`. This avoids per-stock lookups entirely, so it scales to all
+344 stocks without tripping Tickertape's request-rate limit (per-stock search
+gets IP-limited fast and, worse, returns EMPTY under the limit — indistinguishable
+from "not found").
 
-Values override Yahoo/screener where present (Tickertape is the requested
-fundamentals source). Cached in reports/tickertape_fundamentals_cache.json.
-Safe no-op if requests is unavailable. Set SKIP_TICKERTAPE=1 to disable.
+All public — verified live, no cookie/auth. Fields pulled per stock:
+  pe, pbr(P/B), roe, roce, pftMrg(net margin), opmg(operating margin),
+  dbtEqt(debt/equity), divYield, mrktCapf(market cap ₹cr), incEps(EPS),
+  cafFcf(free cash flow ₹cr), strown(promoter/strategic holding %).
+
+Values override Yahoo/screener where present. The whole universe map is cached
+in reports/tickertape_fundamentals_cache.json (refreshed every STALE_DAYS).
+Safe no-op if requests is unavailable or SKIP_TICKERTAPE=1.
 """
 from __future__ import annotations
 
@@ -19,7 +23,6 @@ import json
 import os
 import random
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import numpy as np
@@ -34,30 +37,34 @@ BASE = "https://api.tickertape.in"
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36"
 BASE_DIR = Path(__file__).resolve().parent
 CACHE_FILE = BASE_DIR / "reports" / "tickertape_fundamentals_cache.json"
-STALE_DAYS = 4
-MAX_WORKERS = 4
-BASE_DELAY = 0.4
+STALE_DAYS = 2
+PAGE = 500
+MAX_PAGES = 30  # safety cap (~15k stocks)
+DELAY = 0.5     # between pages
 
-# dashboard field -> Tickertape advancedRatios key (POST /screener/query)
-_RATIO_MAP = {
+# dashboard field -> Tickertape advancedRatios key
+_FIELD_MAP = {
     "pe_ratio": "pe",
-    "pb_ratio": "pb",
+    "pb_ratio": "pbr",
     "roe_pct": "roe",
     "roce": "roce",
-    "dividend_yield_pct": "divYield",
     "net_margin_pct": "pftMrg",
+    "operating_margin_pct": "opmg",
+    "dividend_yield_pct": "divYield",
     "market_cap_cr": "mrktCapf",
+    "eps": "incEps",
+    "free_cash_flow_cr": "cafFcf",
+    "promoter_or_insider_holding_pct": "strown",
     # debt_to_equity handled separately (Tickertape gives a raw ratio; the
     # dashboard/Yahoo convention is x100).
 }
-_RATIO_PROJECT = list(dict.fromkeys(list(_RATIO_MAP.values()) + ["dbtEqt"]))
+_PROJECT = list(dict.fromkeys(list(_FIELD_MAP.values()) + ["dbtEqt"]))
 
 # numeric fields Tickertape is authoritative for (override where present)
 TICKERTAPE_FIELDS = [
     "pe_ratio", "pb_ratio", "roe_pct", "roce", "dividend_yield_pct",
     "net_margin_pct", "operating_margin_pct", "eps", "debt_to_equity",
     "free_cash_flow_cr", "promoter_or_insider_holding_pct", "market_cap_cr",
-    "qtr_sales_var_pct", "qtr_profit_var_pct",
 ]
 
 
@@ -76,123 +83,64 @@ def _tt_symbol(symbol: str, display_symbol: str = "") -> str:
     return sym[:-3] if sym.endswith(".NS") else sym
 
 
-def _get(session, url, tries=3):
+def _post(session, url, body, tries=4):
     for attempt in range(tries):
         try:
-            resp = session.get(url, timeout=20)
+            resp = session.post(url, json=body, timeout=30)
         except Exception:
-            time.sleep(1.5 * (attempt + 1) + random.uniform(0, 1))
+            time.sleep(2 * (attempt + 1) + random.uniform(0, 1))
             continue
         if resp.status_code == 200:
             try:
-                return resp.json()
+                data = resp.json()
             except Exception:
                 return None
+            # Under rate-limit the API returns {"message":"REQUEST_LIMIT_EXCEEDED"}
+            # with a 200 — treat as transient and back off.
+            if isinstance(data, dict) and data.get("message") == "REQUEST_LIMIT_EXCEEDED":
+                time.sleep(5 * (attempt + 1) + random.uniform(0, 2))
+                continue
+            return data
         if resp.status_code in (429, 500, 502, 503, 504):
-            time.sleep(2 * (attempt + 1) + random.uniform(0, 1))
+            time.sleep(3 * (attempt + 1) + random.uniform(0, 1))
             continue
         return None
     return None
 
 
-def _post(session, url, body, tries=3):
-    for attempt in range(tries):
-        try:
-            resp = session.post(url, json=body, timeout=20)
-        except Exception:
-            time.sleep(1.5 * (attempt + 1) + random.uniform(0, 1))
-            continue
-        if resp.status_code == 200:
-            try:
-                return resp.json()
-            except Exception:
-                return None
-        if resp.status_code in (429, 500, 502, 503, 504):
-            time.sleep(2 * (attempt + 1) + random.uniform(0, 1))
-            continue
-        return None
-    return None
-
-
-def _sid(session, tt_sym: str):
-    data = _get(session, f"{BASE}/search?text={requests.utils.quote(tt_sym)}&types=stock")
-    stocks = (((data or {}).get("data")) or {}).get("stocks") or []
-    if not stocks:
-        return None
-    # Prefer the exact ticker match, else the top result.
-    for s in stocks:
-        if str(s.get("ticker", "")).upper() == tt_sym or s.get("match") == "EXACT":
-            return s.get("sid")
-    return stocks[0].get("sid")
-
-
-def _income_row(session, sid, period):
-    data = _get(session, f"{BASE}/stocks/financials/income/{sid}/{period}/normal?count=5")
-    rows = (data or {}).get("data") or []
-    return rows
-
-
-def _fetch_one(session, tt_sym: str) -> dict:
+def _fetch_universe(session) -> dict:
+    """{NSE_TICKER: {advancedRatios}} for the whole screenable NSE universe."""
     out = {}
-    sid = _sid(session, tt_sym)
-    if not sid:
-        return out
-    out["_sid"] = sid
+    offset = 0
+    for _ in range(MAX_PAGES):
+        data = _post(session, f"{BASE}/screener/query",
+                     {"match": {}, "project": _PROJECT, "count": PAGE, "offset": offset})
+        block = (data or {}).get("data") or {}
+        results = block.get("results") or []
+        if not results:
+            break
+        for r in results:
+            st = r.get("stock") or {}
+            ticker = ((st.get("info") or {}).get("ticker") or "").upper()
+            if ticker:
+                out[ticker] = st.get("advancedRatios") or {}
+        total = (block.get("stats") or {}).get("count")
+        offset += PAGE
+        if total and offset >= total:
+            break
+        time.sleep(DELAY + random.uniform(0, 0.4))
+    return out
 
-    # --- ratios (pe/pb/roe/roce/divYield/net-margin/mcap/debt-equity) ---
-    rq = _post(session, f"{BASE}/screener/query",
-               {"match": {}, "project": _RATIO_PROJECT, "count": 1, "sids": [sid]})
-    try:
-        ratios = rq["data"]["results"][0]["stock"]["advancedRatios"]
-    except Exception:
-        ratios = {}
-    for field, key in _RATIO_MAP.items():
-        v = _num(ratios.get(key))
+
+def _fields_from_ratios(ar: dict) -> dict:
+    out = {}
+    for field, key in _FIELD_MAP.items():
+        v = _num(ar.get(key))
         if v is not None:
             out[field] = round(v, 2)
-    de = _num(ratios.get("dbtEqt"))
+    de = _num(ar.get("dbtEqt"))
     if de is not None:
-        out["debt_to_equity"] = round(de * 100, 2)  # match Yahoo/screener x100 convention
-
-    # --- annual income: EPS + operating (EBITDA) margin proxy ---
-    annual = _income_row(session, sid, "annual")
-    # newest annual row that isn't the appended TTM aggregate, else the TTM row
-    latest = next((r for r in reversed(annual) if r.get("displayPeriod") != "TTM"), annual[-1] if annual else None)
-    if latest:
-        eps = _num(latest.get("incEps"))
-        if eps is not None:
-            out["eps"] = round(eps, 2)
-        trev, ebi = _num(latest.get("incTrev")), _num(latest.get("incEbi"))
-        if trev and ebi is not None and trev > 0:
-            out["operating_margin_pct"] = round(ebi / trev * 100, 1)
-
-    # --- quarterly income: YoY sales/profit growth (latest vs 4 quarters ago) ---
-    interim = _income_row(session, sid, "interim")
-    if len(interim) >= 5:
-        cur, yago = interim[-1], interim[-5]
-        cs, ys = _num(cur.get("incTrev")), _num(yago.get("incTrev"))
-        if cs is not None and ys not in (None, 0):
-            out["qtr_sales_var_pct"] = round((cs / ys - 1) * 100, 1)
-        cp, yp = _num(cur.get("incNinc")), _num(yago.get("incNinc"))
-        if cp is not None and yp not in (None, 0) and yp > 0:
-            out["qtr_profit_var_pct"] = round((cp / yp - 1) * 100, 1)
-
-    # --- cash flow: free cash flow ---
-    cf = _get(session, f"{BASE}/stocks/financials/cashflow/{sid}/annual/normal?count=1")
-    cfrows = (cf or {}).get("data") or []
-    if cfrows:
-        fcf = _num(cfrows[-1].get("cafFcf"))
-        if fcf is not None:
-            out["free_cash_flow_cr"] = round(fcf, 1)
-
-    # --- shareholding: promoter holding (latest quarter) ---
-    hold = _get(session, f"{BASE}/stocks/holdings/{sid}")
-    hrows = (hold or {}).get("data") or []
-    if hrows:
-        pm = _num((hrows[-1].get("data") or {}).get("pmPctT"))
-        if pm is not None:
-            out["promoter_or_insider_holding_pct"] = round(pm, 2)
-
+        out["debt_to_equity"] = round(de * 100, 2)  # x100 to match Yahoo/screener convention
     return out
 
 
@@ -203,13 +151,9 @@ def _load_cache() -> dict:
         return {}
 
 
-def _fresh(entry) -> bool:
-    if not isinstance(entry, dict):
-        return False
-    if not any(not k.startswith("_") for k in entry):
-        return False  # empty result -> retry next run
-    scraped = entry.get("_scraped")
-    if not scraped:
+def _cache_fresh(cache: dict) -> bool:
+    scraped = cache.get("_scraped")
+    if not scraped or not cache.get("universe"):
         return False
     try:
         return (dt.date.today() - dt.date.fromisoformat(scraped)).days < STALE_DAYS
@@ -226,54 +170,47 @@ def add_tickertape_fundamentals(stocks: pd.DataFrame) -> pd.DataFrame:
         print("tickertape_fundamentals: requests unavailable — skipping.")
         return stocks
 
-    disp = stocks["display_symbol"] if "display_symbol" in stocks.columns else stocks["symbol"]
-    pairs = {}
-    for sym, dsym in zip(stocks["symbol"].fillna(""), disp.fillna("")):
-        s = _tt_symbol(sym, dsym)
-        if s:
-            pairs.setdefault(s, None)
-    tt_syms = list(pairs)
-
     cache = _load_cache()
-    todo = [s for s in tt_syms if not _fresh(cache.get(s))]
-
-    def worker(sym):
+    if _cache_fresh(cache):
+        universe = cache["universe"]
+    else:
         session = requests.Session()
-        session.headers.update({"User-Agent": UA, "Referer": "https://www.tickertape.in/"})
-        time.sleep(BASE_DELAY + random.uniform(0, 0.5))
-        try:
-            data = _fetch_one(session, sym)
-        except Exception as exc:
-            print(f"tickertape_fundamentals: {sym} failed: {exc}")
-            data = {}
-        data["_scraped"] = dt.date.today().isoformat()
-        return sym, data
-
-    if todo:
-        print(f"tickertape_fundamentals: fetching {len(todo)}/{len(tt_syms)} symbols "
-              f"({len(tt_syms) - len(todo)} fresh in cache)...")
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
-            for future in as_completed([pool.submit(worker, s) for s in todo]):
-                sym, data = future.result()
-                cache[sym] = data
-        CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
-        CACHE_FILE.write_text(json.dumps(cache, indent=2, sort_keys=True), encoding="utf-8")
+        session.headers.update({
+            "User-Agent": UA, "Referer": "https://www.tickertape.in/",
+            "Content-Type": "application/json", "Accept": "application/json",
+        })
+        universe = _fetch_universe(session)
+        if universe:
+            CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+            CACHE_FILE.write_text(
+                json.dumps({"_scraped": dt.date.today().isoformat(), "universe": universe}),
+                encoding="utf-8",
+            )
+            print(f"tickertape_fundamentals: fetched {len(universe)} NSE tickers from screener/query.")
+        else:
+            universe = cache.get("universe") or {}  # fall back to stale on failure
+            print("tickertape_fundamentals: bulk fetch failed — using cached universe.")
 
     has_disp = "display_symbol" in stocks.columns
-    row_syms = [
+    row_tickers = [
         _tt_symbol(sym, dsym if has_disp else "")
         for sym, dsym in zip(stocks["symbol"].fillna(""),
                              (stocks["display_symbol"] if has_disp else stocks["symbol"]).fillna(""))
     ]
-    sym_series = pd.Series(row_syms, index=stocks.index)
+    per_field = {f: [] for f in TICKERTAPE_FIELDS}
+    for tk in row_tickers:
+        fields = _fields_from_ratios(universe.get(tk) or {})
+        for f in TICKERTAPE_FIELDS:
+            per_field[f].append(fields.get(f))
 
+    matched = sum(1 for tk in row_tickers if tk in universe)
     filled = 0
     for field in TICKERTAPE_FIELDS:
-        new = pd.to_numeric(sym_series.map(lambda k: (cache.get(k) or {}).get(field)), errors="coerce")
+        new = pd.to_numeric(pd.Series(per_field[field], index=stocks.index), errors="coerce")
         if field not in stocks.columns:
             stocks[field] = np.nan
         existing = pd.to_numeric(stocks[field], errors="coerce")
         stocks[field] = new.combine_first(existing)  # Tickertape wins where present
         filled += int(new.notna().sum())
-    print(f"tickertape_fundamentals: applied {filled} field values across {len(stocks)} stocks.")
+    print(f"tickertape_fundamentals: matched {matched}/{len(stocks)} stocks, applied {filled} field values.")
     return stocks
