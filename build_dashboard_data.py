@@ -13,6 +13,7 @@ import yfinance as yf
 
 from screener_fundamentals import add_screener_fundamentals
 from screener_segments import fetch_segments_map
+from tickertape_fundamentals import add_tickertape_fundamentals
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -983,6 +984,10 @@ def main() -> None:
     # screener.in fills the gaps Yahoo leaves (ROE/ROCE/margins/debt/FCF/
     # promoter holding/quarterly growth) so the per-stock SWOT is complete.
     leading_stocks = add_screener_fundamentals(leading_stocks)
+    # Tickertape (public API) is the primary fundamentals source — applied last
+    # so its values win where present (PE/PB/ROE/ROCE/margins/EPS/FCF/promoter/
+    # debt-equity/market-cap), with Yahoo+screener as fallbacks for gaps.
+    leading_stocks = add_tickertape_fundamentals(leading_stocks)
     leading_stocks = add_fundamental_scores(leading_stocks)
     leading_stocks = add_stock_notes(leading_stocks)
 
@@ -993,6 +998,7 @@ def main() -> None:
     breakout_stocks = stocks[stocks["weekly_close_above_52wh"]].copy()
     breakout_stocks = add_yahoo_fundamentals(breakout_stocks)
     breakout_stocks = add_screener_fundamentals(breakout_stocks)
+    breakout_stocks = add_tickertape_fundamentals(breakout_stocks)
     breakout_stocks = add_fundamental_scores(breakout_stocks)
     breakout_stocks = add_stock_notes(breakout_stocks)
     breakout_stocks = breakout_stocks.sort_values(
