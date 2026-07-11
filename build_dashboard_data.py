@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
@@ -17,6 +18,10 @@ BASE_DIR = Path(__file__).resolve().parent
 REPORTS_DIR = BASE_DIR / "reports"
 DASHBOARD_DIR = BASE_DIR / "dashboard"
 DATA_PATH = DASHBOARD_DIR / "dashboard_data.json"
+# Per-symbol lazy-loaded chart files (git-ignored; generated at build time and
+# shipped in the GitHub Pages artifact, not committed — see .gitignore).
+CHARTS_DIR = DASHBOARD_DIR / "charts"
+CHART_HISTORY_YEARS = 20
 FUNDAMENTALS_CACHE = REPORTS_DIR / "yahoo_fundamentals_cache.json"
 BACKTEST_JSON = DASHBOARD_DIR / "backtest_results.json"
 BACKTEST_52W_JSON = DASHBOARD_DIR / "backtest_52w_high.json"
@@ -191,60 +196,93 @@ def add_52w_high_flag(stocks: pd.DataFrame, info: dict[str, dict]) -> pd.DataFra
     return stocks
 
 
-def build_chart_data(symbols: list[str], prices: pd.DataFrame | None = None) -> dict[str, list[dict]]:
-    """Compact weekly OHLC series (~3 years, last 160 bars) per symbol for the
-    drawer candlestick chart, reusing the shared daily price pull when given.
+def chart_filename(symbol: str) -> str:
+    """URL/filesystem-safe basename for a symbol's chart file: drop the ``.NS``
+    suffix and replace anything outside ``[A-Za-z0-9_-]`` (e.g. the ``&`` in
+    ``M&M.NS``). The frontend derives the same name from ``stock.symbol``, so the
+    two must stay in lock-step."""
+    base = re.sub(r"\.NS$", "", symbol, flags=re.IGNORECASE)
+    return re.sub(r"[^A-Za-z0-9_-]", "_", base)
 
-    Resampled to weekly (W-FRI) because Weinstein stage analysis is a
-    weekly-chart method — the drawer overlays a 30-week MA on these bars. Falls
-    back to weekly close-only for any symbol missing OHLC fields; the frontend
-    chart renders candles when open/high/low are present and an area otherwise."""
-    if not symbols:
-        return {}
-    if prices is None:
-        prices = download_universe_prices(symbols)
-    if prices is None or prices.empty:
-        return {}
 
-    chart_data: dict[str, list[dict]] = {}
-    for symbol in symbols:
-        close = _symbol_series(prices, "Close", symbol)
-        if close is None or close.empty:
-            chart_data[symbol] = []
-            continue
-        open_ = _symbol_series(prices, "Open", symbol)
-        high = _symbol_series(prices, "High", symbol)
-        low = _symbol_series(prices, "Low", symbol)
-        if open_ is None or high is None or low is None:
-            weekly_close = close.resample("W-FRI").last().dropna().tail(160)
-            chart_data[symbol] = [
-                {"time": idx.strftime("%Y-%m-%d"), "close": round(float(value), 2)}
-                for idx, value in weekly_close.items()
-            ]
-            continue
-        frame = pd.concat(
-            {"open": open_, "high": high, "low": low, "close": close}, axis=1
-        ).dropna()
-        if frame.empty:
-            chart_data[symbol] = []
-            continue
-        weekly = (
-            frame.resample("W-FRI")
-            .agg({"open": "first", "high": "max", "low": "min", "close": "last"})
-            .dropna()
-            .tail(160)
-        )
-        chart_data[symbol] = [
-            {
-                "time": idx.strftime("%Y-%m-%d"),
-                "open": round(float(row["open"]), 2),
-                "high": round(float(row["high"]), 2),
-                "low": round(float(row["low"]), 2),
-                "close": round(float(row["close"]), 2),
-            }
-            for idx, row in weekly.iterrows()
+def _weekly_bars(prices: pd.DataFrame, symbol: str, max_bars: int) -> list[dict]:
+    """Weekly (W-FRI) OHLC bars for one symbol, newest ``max_bars`` kept. Falls
+    back to weekly close-only when OHLC fields are missing; the frontend renders
+    candles when open/high/low are present and an area chart otherwise."""
+    close = _symbol_series(prices, "Close", symbol)
+    if close is None or close.empty:
+        return []
+    open_ = _symbol_series(prices, "Open", symbol)
+    high = _symbol_series(prices, "High", symbol)
+    low = _symbol_series(prices, "Low", symbol)
+    if open_ is None or high is None or low is None:
+        weekly_close = close.resample("W-FRI").last().dropna().tail(max_bars)
+        return [
+            {"time": idx.strftime("%Y-%m-%d"), "close": round(float(value), 2)}
+            for idx, value in weekly_close.items()
         ]
-    return chart_data
+    frame = pd.concat({"open": open_, "high": high, "low": low, "close": close}, axis=1).dropna()
+    if frame.empty:
+        return []
+    weekly = (
+        frame.resample("W-FRI")
+        .agg({"open": "first", "high": "max", "low": "min", "close": "last"})
+        .dropna()
+        .tail(max_bars)
+    )
+    return [
+        {
+            "time": idx.strftime("%Y-%m-%d"),
+            "open": round(float(row["open"]), 2),
+            "high": round(float(row["high"]), 2),
+            "low": round(float(row["low"]), 2),
+            "close": round(float(row["close"]), 2),
+        }
+        for idx, row in weekly.iterrows()
+    ]
+
+
+def write_chart_files(
+    symbols: list[str],
+    out_dir: Path = CHARTS_DIR,
+    years: int = CHART_HISTORY_YEARS,
+) -> int:
+    """Write one compact weekly-OHLC JSON per symbol (~``years`` of history) that
+    the drawer lazy-loads on open — ``charts/<chart_filename(symbol)>.json``.
+
+    Uses a separate full-history (``period='max'``) pull so the shared 6-year
+    universe pull that feeds return metrics and the 52-week-high scan stays
+    light. These files are git-ignored: generated at build time and shipped in
+    the Pages artifact, never committed (they would change daily). Returns the
+    number of symbols with data."""
+    symbols = sorted({s for s in symbols if s})
+    if not symbols:
+        return 0
+    out_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        prices = yf.download(
+            symbols,
+            period="max",
+            interval="1d",
+            auto_adjust=False,
+            progress=False,
+            threads=True,
+            group_by="column",
+        )
+    except Exception:
+        prices = None
+    if prices is None or prices.empty:
+        return 0
+
+    max_bars = years * 53  # 53 to cover 52 ISO weeks + partial boundary weeks
+    written = 0
+    for symbol in symbols:
+        bars = _weekly_bars(prices, symbol, max_bars)
+        path = out_dir / f"{chart_filename(symbol)}.json"
+        path.write_text(json.dumps(bars, separators=(",", ":")), encoding="utf-8")
+        if bars:
+            written += 1
+    return written
 
 
 def add_yahoo_fundamentals(stocks: pd.DataFrame) -> pd.DataFrame:
@@ -942,9 +980,12 @@ def main() -> None:
     )
 
     stocks = add_stock_notes(stocks)
-    # Charts for the full universe so any screener, breakout or backtest stock
-    # opens with a price chart in the drawer.
-    chart_data = build_chart_data(universe_symbols, prices=universe_prices)
+    # Per-symbol chart files (~20yr weekly OHLC each) for the full universe so
+    # any screener, breakout or backtest stock opens with a price chart in the
+    # drawer. Written to dashboard/charts/ and lazy-loaded by the frontend on
+    # drawer open, keeping dashboard_data.json small.
+    chart_symbols_written = write_chart_files(universe_symbols)
+    print(f"chart files written: {chart_symbols_written}/{len(universe_symbols)} -> {CHARTS_DIR}")
     fundamental_picks = (
         leading_stocks.sort_values(["parent", "fundamental_score", "market_cap_cr"], ascending=[True, False, False])
         .groupby("parent", group_keys=False)
@@ -987,7 +1028,9 @@ def main() -> None:
         "breakout52wStocks": clean_records(breakout_stocks),
         "fundamentalPicks": clean_records(fundamental_picks),
         "industryTheses": INDUSTRY_THESES,
-        "chartData": chart_data,
+        # chartData moved to per-symbol files under dashboard/charts/ (lazy-loaded
+        # on drawer open). Kept as an empty object for backward compatibility.
+        "chartData": {},
         "backtest": backtest,
         "backtest52w": backtest_52w,
     }

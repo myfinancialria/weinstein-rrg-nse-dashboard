@@ -14,3 +14,8 @@ __pycache__/
 # Keep dashboard JSON committed for GitHub Pages, but do not commit ad-hoc local archives.
 *.tmp
 *.bak
+
+# Per-symbol chart files: generated at build time by build_dashboard_data.py and
+# shipped in the Pages artifact (upload-pages-artifact uploads dashboard/), but
+# NOT committed — all ~344 change daily, which would bloat git history.
+dashboard/charts/

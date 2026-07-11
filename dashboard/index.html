@@ -197,6 +197,22 @@
       .chart-box canvas { width: 100%; height: 100%; display: block; }
       .chart-message { height: 100%; display: flex; align-items: center; justify-content: center; color: var(--muted); padding: 18px; text-align: center; }
 
+      /* Global search console */
+      .omnisearch { position: relative; margin: 0 0 18px; }
+      .omni-box { display: flex; align-items: center; gap: 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 2px 14px; box-shadow: var(--shadow-sm); }
+      .omni-box:focus-within { border-color: #1f6feb; box-shadow: 0 0 0 3px rgba(31,111,235,.12); }
+      .omni-icon { font-size: 16px; opacity: .7; }
+      #omniInput { flex: 1; border: 0; outline: 0; background: transparent; font-size: 15px; padding: 13px 0; color: var(--ink); }
+      .omni-results { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 60; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(15,23,42,.16); max-height: 60vh; overflow-y: auto; }
+      .omni-item { display: flex; align-items: baseline; gap: 10px; padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--line); }
+      .omni-item:last-child { border-bottom: 0; }
+      .omni-item.active, .omni-item:hover { background: #f1f5fb; }
+      .omni-name { font-weight: 600; color: var(--ink); }
+      .omni-sym { font-size: 12px; color: var(--muted); font-weight: 600; }
+      .omni-meta { font-size: 12px; color: var(--muted); margin-left: auto; text-align: right; max-width: 48%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .omni-empty { padding: 14px; color: var(--muted); font-size: 13px; }
+      .omni-item mark, .omni-meta mark { background: #fde68a; color: inherit; padding: 0 1px; border-radius: 2px; }
+
       /* ---------- drawer ---------- */
       .drawer-backdrop { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.4); z-index: 40; backdrop-filter: blur(2px); }
       .drawer-backdrop.open { display: block; }
@@ -274,6 +290,15 @@
     </header>
 
     <main class="layout">
+      <section class="omnisearch" id="omnisearch">
+        <div class="omni-box">
+          <span class="omni-icon" aria-hidden="true">🔎</span>
+          <input id="omniInput" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="omniResults" aria-autocomplete="list"
+            placeholder="Search any NSE stock — company, symbol, industry, or product / service (e.g. “Bolero”, “Thums Up”, “paints”)…">
+        </div>
+        <div class="omni-results" id="omniResults" role="listbox" hidden></div>
+      </section>
+
       <section class="kpis">
         <div class="kpi"><div class="label">Industries Analyzed</div><div class="value" id="kpiIndustries">-</div></div>
         <div class="kpi"><div class="label">Stage 2 + Leading Industries</div><div class="value" id="kpiLeadingIndustries">-</div></div>
@@ -1313,7 +1338,7 @@
           <div class="chart-box" id="stockChart" style="height:460px">
             <div class="chart-message">Loading chart&hellip;</div>
           </div>
-          <div class="subtle" style="margin-top:6px;font-size:12px;">Weekly candles, ~3 years &middot; <b style="color:#f59e0b">orange line = 30-week MA</b> (Weinstein stage line). Hover for values, scroll to zoom, drag to pan. For intraday, live data &amp; more indicators, use <a class="tv-link" style="font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>.</div>
+          <div class="subtle" style="margin-top:6px;font-size:12px;">Weekly candles, up to ~20 years &middot; <b style="color:#f59e0b">orange line = 30-week MA</b> (Weinstein stage line). Hover for values, scroll to zoom, drag to pan. For intraday, live data &amp; more indicators, use <a class="tv-link" style="font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>.</div>
 
           <div class="section-title">Returns</div>
           <div class="detail-grid">
@@ -1416,18 +1441,35 @@
         return medianGapDays >= 4 ? 30 : 150;
       }
 
+      // Per-symbol chart files (~20yr weekly OHLC) are lazy-loaded on drawer open
+      // and cached. chartFile() mirrors build_dashboard_data.chart_filename():
+      // drop .NS, replace anything outside [A-Za-z0-9_-] (e.g. the & in M&M).
+      const _chartCache = {};
+      function chartFile(symbol) {
+        return (symbol || "").replace(/\.NS$/i, "").replace(/[^A-Za-z0-9_-]/g, "_");
+      }
+      function fetchChartBars(symbol) {
+        if (_chartCache[symbol]) return _chartCache[symbol];
+        const p = fetch(`./charts/${chartFile(symbol)}.json`)
+          .then((r) => (r.ok ? r.json() : []))
+          .catch(() => []);
+        _chartCache[symbol] = p;
+        // Don't cache misses/errors, so a later re-open can retry.
+        p.then((bars) => { if (!Array.isArray(bars) || !bars.length) delete _chartCache[symbol]; });
+        return p;
+      }
+
       function renderStockChart(stock) {
         const container = el("stockChart");
         if (!container) return;
-        const bars = (state.data.chartData || {})[stock.symbol] || [];
-        if (!bars.length) {
-          container.innerHTML = `<div class="chart-message">No chart data available for ${stock.display_symbol || stock.symbol}.</div>`;
-          return;
-        }
         container.innerHTML = `<div class="chart-message">Loading chart&hellip;</div>`;
-        loadLightweightCharts().then((ok) => {
+        Promise.all([fetchChartBars(stock.symbol), loadLightweightCharts()]).then(([bars, ok]) => {
           // Drawer may have been closed or switched to another stock meanwhile.
           if (!document.body.contains(container) || el("stockChart") !== container) return;
+          if (!Array.isArray(bars) || !bars.length) {
+            container.innerHTML = `<div class="chart-message">No chart data available for ${stock.display_symbol || stock.symbol}.</div>`;
+            return;
+          }
           if (!ok || !window.LightweightCharts) {
             renderLineChart(container, bars, stock.display_symbol || stock.symbol);
             return;
@@ -1651,6 +1693,121 @@
       });
       el("drawerClose").addEventListener("click", closeDrawer);
       el("drawerBackdrop").addEventListener("click", closeDrawer);
+
+      // ---- Global search console: type a company, symbol, industry, OR a
+      // product/service and jump straight to that company's drawer. Searches the
+      // full analysed universe (state.data.stocks), not just the visible table. ----
+      (function () {
+        const input = el("omniInput");
+        const results = el("omniResults");
+        const box = el("omnisearch");
+        if (!input || !results || !box) return;
+        let items = [];
+        let active = -1;
+
+        const escapeHtml = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+        function universe() {
+          const seen = new Set();
+          const out = [];
+          (((state.data || {}).stocks) || []).forEach((s) => {
+            if (s && s.symbol && !seen.has(s.symbol)) { seen.add(s.symbol); out.push(s); }
+          });
+          return out;
+        }
+
+        // Ranked match across symbol/name (highest), then industry, then
+        // product/service — so a product query still resolves to the company.
+        function scoreStock(s, q) {
+          const sym = (s.display_symbol || s.symbol || "").toLowerCase();
+          const name = (s.name || "").toLowerCase();
+          const ind = (s.parent || "").toLowerCase();
+          const prod = (s.common_product_business || "").toLowerCase();
+          if (sym.startsWith(q)) return 100;
+          if (name.startsWith(q)) return 90;
+          if (sym.includes(q)) return 70;
+          if (name.includes(q)) return 60;
+          if (ind.includes(q)) return 40;
+          if (prod.includes(q)) return 30;
+          return 0;
+        }
+
+        function search(q) {
+          return universe()
+            .map((s) => ({ s, score: scoreStock(s, q) }))
+            .filter((r) => r.score > 0)
+            .sort((a, b) => b.score - a.score || (a.s.name || "").localeCompare(b.s.name || ""))
+            .slice(0, 10)
+            .map((r) => r.s);
+        }
+
+        function highlight(text, q) {
+          const t = String(text || "");
+          const i = t.toLowerCase().indexOf(q);
+          if (i < 0) return escapeHtml(t);
+          return escapeHtml(t.slice(0, i)) + "<mark>" + escapeHtml(t.slice(i, i + q.length)) + "</mark>" + escapeHtml(t.slice(i + q.length));
+        }
+
+        function open() { results.hidden = false; input.setAttribute("aria-expanded", "true"); }
+        function close() { results.hidden = true; input.setAttribute("aria-expanded", "false"); active = -1; }
+
+        function render() {
+          const q = input.value.trim().toLowerCase();
+          if (!q) { close(); return; }
+          items = search(q);
+          active = -1;
+          if (!items.length) {
+            results.innerHTML = `<div class="omni-empty">No stock matches “${escapeHtml(q)}”. Try a company, symbol, industry, or product name.</div>`;
+            open();
+            return;
+          }
+          results.innerHTML = items.map((s, i) => {
+            const sym = s.display_symbol || (s.symbol || "").replace(/\.NS$/i, "");
+            const prod = s.common_product_business || "";
+            // When the hit is only in the product/service text, surface that snippet.
+            const inProd = prod.toLowerCase().includes(q)
+              && !(s.name || "").toLowerCase().includes(q)
+              && !sym.toLowerCase().includes(q);
+            const meta = inProd ? highlight(prod, q) : escapeHtml(s.parent || "");
+            return `<div class="omni-item" role="option" data-i="${i}">`
+              + `<span class="omni-name">${highlight(s.name || sym, q)}</span>`
+              + `<span class="omni-sym">${highlight(sym, q)}</span>`
+              + `<span class="omni-meta">${meta}</span>`
+              + `</div>`;
+          }).join("");
+          open();
+        }
+
+        function setActive(i) {
+          const nodes = Array.from(results.querySelectorAll(".omni-item"));
+          nodes.forEach((n, k) => n.classList.toggle("active", k === i));
+          if (nodes[i]) nodes[i].scrollIntoView({ block: "nearest" });
+          active = i;
+        }
+
+        function choose(i) {
+          const s = items[i];
+          if (!s) return;
+          close();
+          input.value = "";
+          openStockDrawer(s);
+        }
+
+        input.addEventListener("input", render);
+        input.addEventListener("focus", () => { if (input.value.trim()) render(); });
+        input.addEventListener("keydown", (e) => {
+          if (results.hidden) return;
+          if (e.key === "ArrowDown") { e.preventDefault(); setActive(Math.min(active + 1, items.length - 1)); }
+          else if (e.key === "ArrowUp") { e.preventDefault(); setActive(Math.max(active - 1, 0)); }
+          else if (e.key === "Enter") { e.preventDefault(); choose(active >= 0 ? active : 0); }
+          else if (e.key === "Escape") { close(); }
+        });
+        results.addEventListener("click", (e) => {
+          const item = e.target.closest(".omni-item");
+          if (item) choose(Number(item.dataset.i));
+        });
+        document.addEventListener("click", (e) => { if (!box.contains(e.target)) close(); });
+      })();
 
       fetch("./dashboard_data.json")
         .then((response) => response.json())
