@@ -192,8 +192,13 @@ def add_52w_high_flag(stocks: pd.DataFrame, info: dict[str, dict]) -> pd.DataFra
 
 
 def build_chart_data(symbols: list[str], prices: pd.DataFrame | None = None) -> dict[str, list[dict]]:
-    """Compact daily close series (time + close only - all the drawer line
-    chart reads) for every symbol, reusing the shared price pull when given."""
+    """Compact weekly OHLC series (~3 years, last 160 bars) per symbol for the
+    drawer candlestick chart, reusing the shared daily price pull when given.
+
+    Resampled to weekly (W-FRI) because Weinstein stage analysis is a
+    weekly-chart method — the drawer overlays a 30-week MA on these bars. Falls
+    back to weekly close-only for any symbol missing OHLC fields; the frontend
+    chart renders candles when open/high/low are present and an area otherwise."""
     if not symbols:
         return {}
     if prices is None:
@@ -207,10 +212,37 @@ def build_chart_data(symbols: list[str], prices: pd.DataFrame | None = None) -> 
         if close is None or close.empty:
             chart_data[symbol] = []
             continue
-        tail = close.tail(230)
+        open_ = _symbol_series(prices, "Open", symbol)
+        high = _symbol_series(prices, "High", symbol)
+        low = _symbol_series(prices, "Low", symbol)
+        if open_ is None or high is None or low is None:
+            weekly_close = close.resample("W-FRI").last().dropna().tail(160)
+            chart_data[symbol] = [
+                {"time": idx.strftime("%Y-%m-%d"), "close": round(float(value), 2)}
+                for idx, value in weekly_close.items()
+            ]
+            continue
+        frame = pd.concat(
+            {"open": open_, "high": high, "low": low, "close": close}, axis=1
+        ).dropna()
+        if frame.empty:
+            chart_data[symbol] = []
+            continue
+        weekly = (
+            frame.resample("W-FRI")
+            .agg({"open": "first", "high": "max", "low": "min", "close": "last"})
+            .dropna()
+            .tail(160)
+        )
         chart_data[symbol] = [
-            {"time": idx.strftime("%Y-%m-%d"), "close": round(float(value), 2)}
-            for idx, value in tail.items()
+            {
+                "time": idx.strftime("%Y-%m-%d"),
+                "open": round(float(row["open"]), 2),
+                "high": round(float(row["high"]), 2),
+                "low": round(float(row["low"]), 2),
+                "close": round(float(row["close"]), 2),
+            }
+            for idx, row in weekly.iterrows()
         ]
     return chart_data
 

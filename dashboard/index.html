@@ -1310,11 +1310,10 @@
           <div class="chips">${listChips(stock.fundamental_reasons, "good")}</div>
 
           <div class="section-title">Price Chart<a class="tv-link" style="margin-left:10px;font-size:12px;font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a></div>
-          <a class="chart-link" style="display:block;text-decoration:none;color:inherit;" href="${tvUrl}" target="_blank" rel="noopener" title="Open ${tvSymbol} on TradingView">
-            <div class="chart-box" id="stockChart">
-              <div class="chart-message">Loading chart...</div>
-            </div>
-          </a>
+          <div class="chart-box" id="stockChart" style="height:460px">
+            <div class="chart-message">Loading chart&hellip;</div>
+          </div>
+          <div class="subtle" style="margin-top:6px;font-size:12px;">Weekly candles, ~3 years &middot; <b style="color:#f59e0b">orange line = 30-week MA</b> (Weinstein stage line). Hover for values, scroll to zoom, drag to pan. For intraday, live data &amp; more indicators, use <a class="tv-link" style="font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>.</div>
 
           <div class="section-title">Returns</div>
           <div class="detail-grid">
@@ -1372,6 +1371,51 @@
         setTimeout(() => renderStockChart(stock), 0);
       }
 
+      // Lazily inject TradingView's open-source Lightweight Charts lib once.
+      // (The free TradingView *embed* widget can't show NSE data anonymously —
+      // NSE symbols require a logged-in TradingView session — so we render the
+      // OHLC/close bars the dashboard already ships instead.) Resolves false if
+      // the CDN is blocked so we fall back to the pre-baked canvas line chart.
+      let _lwcLoader = null;
+      function loadLightweightCharts() {
+        if (window.LightweightCharts) return Promise.resolve(true);
+        if (_lwcLoader) return _lwcLoader;
+        _lwcLoader = new Promise((resolve) => {
+          const s = document.createElement("script");
+          s.src = "https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js";
+          s.async = true;
+          s.onload = () => resolve(true);
+          s.onerror = () => { _lwcLoader = null; resolve(false); };
+          document.head.appendChild(s);
+        });
+        return _lwcLoader;
+      }
+
+      // Simple moving average over close, aligned to bar time (null until `period` bars).
+      function movingAverage(bars, period) {
+        const out = [];
+        let sum = 0;
+        for (let i = 0; i < bars.length; i++) {
+          sum += bars[i].close;
+          if (i >= period) sum -= bars[i - period].close;
+          if (i >= period - 1) out.push({ time: bars[i].time, value: +(sum / period).toFixed(2) });
+        }
+        return out;
+      }
+
+      // Bars = Stan Weinstein's 30-week MA regardless of timeframe: 30 bars on
+      // weekly data (the pipeline's default), ~150 trading days on daily data.
+      function maPeriodFor30Week(bars) {
+        if (bars.length < 3) return 30;
+        const gaps = [];
+        for (let i = 1; i < bars.length; i++) {
+          gaps.push((Date.parse(bars[i].time) - Date.parse(bars[i - 1].time)) / 86400000);
+        }
+        gaps.sort((a, b) => a - b);
+        const medianGapDays = gaps[Math.floor(gaps.length / 2)];
+        return medianGapDays >= 4 ? 30 : 150;
+      }
+
       function renderStockChart(stock) {
         const container = el("stockChart");
         if (!container) return;
@@ -1380,7 +1424,49 @@
           container.innerHTML = `<div class="chart-message">No chart data available for ${stock.display_symbol || stock.symbol}.</div>`;
           return;
         }
-        renderLineChart(container, bars, stock.display_symbol || stock.symbol);
+        container.innerHTML = `<div class="chart-message">Loading chart&hellip;</div>`;
+        loadLightweightCharts().then((ok) => {
+          // Drawer may have been closed or switched to another stock meanwhile.
+          if (!document.body.contains(container) || el("stockChart") !== container) return;
+          if (!ok || !window.LightweightCharts) {
+            renderLineChart(container, bars, stock.display_symbol || stock.symbol);
+            return;
+          }
+          container.innerHTML = "";
+          const clean = bars
+            .filter((b) => b && b.time && Number.isFinite(Number(b.close)))
+            .map((b) => ({ time: b.time, open: +b.open, high: +b.high, low: +b.low, close: +b.close }));
+          if (!clean.length) {
+            renderLineChart(container, bars, stock.display_symbol || stock.symbol);
+            return;
+          }
+          // Auto-upgrade to candles if the pipeline ever bakes OHLC; else area of closes.
+          const hasOHLC = clean.every((b) => Number.isFinite(b.open) && Number.isFinite(b.high) && Number.isFinite(b.low));
+          const chart = LightweightCharts.createChart(container, {
+            autoSize: true,
+            layout: { background: { color: "transparent" }, textColor: "#5b6472", fontFamily: "inherit" },
+            grid: { horzLines: { color: "#eef1f4" }, vertLines: { color: "#f4f6f8" } },
+            rightPriceScale: { borderColor: "#e5e9ee" },
+            timeScale: { borderColor: "#e5e9ee" },
+            crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+          });
+          if (hasOHLC) {
+            chart.addCandlestickSeries({
+              upColor: "#16a34a", downColor: "#dc2626",
+              wickUpColor: "#16a34a", wickDownColor: "#dc2626", borderVisible: false,
+            }).setData(clean);
+          } else {
+            chart.addAreaSeries({
+              lineColor: "#1f6feb", topColor: "rgba(31,111,235,0.20)",
+              bottomColor: "rgba(31,111,235,0.02)", lineWidth: 2,
+            }).setData(clean.map((b) => ({ time: b.time, value: b.close })));
+          }
+          const ma = movingAverage(clean, maPeriodFor30Week(clean));
+          if (ma.length) {
+            chart.addLineSeries({ color: "#f59e0b", lineWidth: 2, priceLineVisible: false, lastValueVisible: false }).setData(ma);
+          }
+          chart.timeScale().fitContent();
+        });
       }
 
       function renderLineChart(container, bars, label) {
