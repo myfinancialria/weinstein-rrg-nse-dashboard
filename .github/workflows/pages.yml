@@ -52,6 +52,9 @@ jobs:
         env:
           GIFT_NIFTY_LEVEL: ${{ secrets.GIFT_NIFTY_LEVEL }}
           GIFT_NIFTY_SYMBOL: ${{ secrets.GIFT_NIFTY_SYMBOL }}
+          # Optional: screener.in premium sessionid cookie. When set, populates
+          # the drawer's revenue-by-segment pie; absent = graceful no-op.
+          SCREENER_SESSION_COOKIE: ${{ secrets.SCREENER_SESSION_COOKIE }}
         run: |
           python build_dashboard_data.py
           python build_sector_report.py

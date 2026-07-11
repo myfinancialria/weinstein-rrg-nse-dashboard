@@ -12,6 +12,7 @@ import pandas as pd
 import yfinance as yf
 
 from screener_fundamentals import add_screener_fundamentals
+from screener_segments import fetch_segments_map
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -995,6 +996,17 @@ def main() -> None:
     # drawer open, keeping dashboard_data.json small.
     chart_symbols_written = write_chart_files(universe_symbols)
     print(f"chart files written: {chart_symbols_written}/{len(universe_symbols)} -> {CHARTS_DIR}")
+
+    # Product/business segment revenue breakups (screener.in) for the drawer pie.
+    # Premium-gated: populated only when SCREENER_SESSION_COOKIE is set; otherwise
+    # a graceful no-op and the drawer shows a "not disclosed" fallback.
+    seg_display = (
+        stocks["display_symbol"] if "display_symbol" in stocks.columns else stocks["symbol"]
+    )
+    segments_map = fetch_segments_map(
+        stocks["symbol"].fillna("").tolist(),
+        seg_display.fillna("").tolist(),
+    )
     fundamental_picks = (
         leading_stocks.sort_values(["parent", "fundamental_score", "market_cap_cr"], ascending=[True, False, False])
         .groupby("parent", group_keys=False)
@@ -1040,6 +1052,9 @@ def main() -> None:
         # chartData moved to per-symbol files under dashboard/charts/ (lazy-loaded
         # on drawer open). Kept as an empty object for backward compatibility.
         "chartData": {},
+        # {symbol: {segments:[{name,value,pct}], names:[...], gated, period}} for
+        # the drawer revenue-breakup pie. Empty unless SCREENER_SESSION_COOKIE set.
+        "segments": segments_map,
         "backtest": backtest,
         "backtest52w": backtest_52w,
     }

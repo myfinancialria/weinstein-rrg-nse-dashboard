@@ -167,6 +167,21 @@
       .ivl-btn { border: 0; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 6px; cursor: pointer; }
       .ivl-btn.active { background: var(--panel); color: var(--ink); box-shadow: var(--shadow-sm); }
 
+      /* Revenue-by-segment donut */
+      .seg-wrap { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+      .seg-svg { flex: 0 0 auto; }
+      .seg-slice { cursor: pointer; transition: opacity .12s ease; stroke: var(--panel); stroke-width: 1.5; }
+      .seg-center-1 { font-size: 12px; font-weight: 600; fill: var(--muted); }
+      .seg-center-2 { font-size: 21px; font-weight: 800; fill: var(--ink); }
+      .seg-legend { list-style: none; margin: 0; padding: 0; flex: 1 1 190px; min-width: 170px; }
+      .seg-legend li { display: flex; align-items: center; gap: 9px; padding: 5px 6px; border-radius: 7px; cursor: pointer; font-size: 13px; }
+      .seg-legend li.active { background: var(--soft); }
+      .seg-sw { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 auto; }
+      .seg-lname { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .seg-lpct { margin-left: auto; font-weight: 700; color: var(--muted); }
+      .seg-note { color: var(--muted); font-size: 13px; padding: 8px 0; }
+      .seg-src { color: var(--faint); font-size: 11px; margin-top: 8px; }
+
       /* ---------- tables ---------- */
       .table-wrap { max-height: 580px; overflow: auto; border-radius: 0 0 var(--radius) var(--radius); }
       table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
@@ -1324,6 +1339,9 @@
             ${detail("Fund Score", fmt(stock.fundamental_score))}
           </div>
 
+          <div class="section-title">Revenue by Segment</div>
+          <div id="segmentChart"><div class="seg-note">Loading segments&hellip;</div></div>
+
           <div class="section-title">AI Analysis — In Simple Words</div>
           ${aiBox("Why this stock looks strong", (AI_WRITEUPS.stocks || {})[stock.display_symbol || stock.symbol])}
           ${aiBox("Why this industry looks strong", (AI_WRITEUPS.industries || {})[stock.parent])}
@@ -1425,7 +1443,7 @@
             renderStockChart(stock, btn.dataset.ivl);
           });
         });
-        setTimeout(() => renderStockChart(stock, "weekly"), 0);
+        setTimeout(() => { renderStockChart(stock, "weekly"); renderSegments(stock); }, 0);
       }
 
       // Lazily inject TradingView's open-source Lightweight Charts lib once.
@@ -1471,6 +1489,75 @@
         gaps.sort((a, b) => a - b);
         const medianGapDays = gaps[Math.floor(gaps.length / 2)];
         return medianGapDays >= 4 ? 30 : 150;
+      }
+
+      const escHtml = (x) => String(x == null ? "" : x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+      // ---- Interactive revenue-by-segment donut (data: state.data.segments) ----
+      const SEG_COLORS = ["#2563eb", "#f59e0b", "#16a34a", "#dc2626", "#7c3aed", "#0891b2", "#db2777", "#65a30d", "#ea580c", "#0d9488", "#9333ea", "#64748b"];
+      function _polar(cx, cy, r, deg) {
+        const a = (deg - 90) * Math.PI / 180;
+        return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+      }
+      function _donutSlice(cx, cy, R, r, a0, a1) {
+        const large = (a1 - a0) > 180 ? 1 : 0;
+        const [x1, y1] = _polar(cx, cy, R, a0), [x2, y2] = _polar(cx, cy, R, a1);
+        const [x3, y3] = _polar(cx, cy, r, a1), [x4, y4] = _polar(cx, cy, r, a0);
+        return `M${x1},${y1} A${R},${R} 0 ${large} 1 ${x2},${y2} L${x3},${y3} A${r},${r} 0 ${large} 0 ${x4},${y4} Z`;
+      }
+      const _clip = (s, n) => (s && s.length > n ? s.slice(0, n - 1) + "…" : s);
+
+      function renderSegments(stock) {
+        const box = el("segmentChart");
+        if (!box) return;
+        const info = (state.data.segments || {})[stock.symbol];
+        const segs = (info && info.segments) || [];
+        const names = (info && info.names) || [];
+        const hasSegData = state.data.segments && Object.keys(state.data.segments).length;
+        if (!segs.length) {
+          let msg;
+          if (info && info.gated) msg = `Segment revenue is premium-gated on the source${names.length ? ` — known segments: ${names.map(escHtml).join(", ")}` : ""}.`;
+          else if (names.length === 1) msg = `Single reportable business segment — ${escHtml(names[0])}.`;
+          else if (names.length > 1) msg = `Reported segments: ${names.map(escHtml).join(", ")} (revenue split not published).`;
+          else msg = hasSegData ? "Revenue segments not disclosed for this company." : "Segment data not loaded (needs the screener premium cookie).";
+          box.innerHTML = `<div class="seg-note">${msg}</div>`;
+          return;
+        }
+        if (segs.length === 1) {
+          box.innerHTML = `<div class="seg-note">Single reportable segment — ${escHtml(segs[0].name)} (100%).</div>`;
+          return;
+        }
+        const cx = 110, cy = 110, R = 104, r = 62;
+        let ang = 0;
+        const paths = [], legend = [];
+        segs.forEach((s, i) => {
+          const a0 = ang, a1 = ang + (s.pct / 100) * 360;
+          ang = a1;
+          const color = SEG_COLORS[i % SEG_COLORS.length];
+          paths.push(`<path d="${_donutSlice(cx, cy, R, r, a0, a1)}" fill="${color}" data-i="${i}" class="seg-slice"><title>${escHtml(s.name)} — ${s.pct}%</title></path>`);
+          legend.push(`<li data-i="${i}"><span class="seg-sw" style="background:${color}"></span><span class="seg-lname">${escHtml(s.name)}</span><span class="seg-lpct">${s.pct}%</span></li>`);
+        });
+        box.innerHTML = `
+          <div class="seg-wrap">
+            <svg viewBox="0 0 220 220" class="seg-svg" width="200" height="200" role="img" aria-label="Revenue by segment">
+              ${paths.join("")}
+              <text x="110" y="104" text-anchor="middle" class="seg-center-1" id="segCenterName">${escHtml(_clip(segs[0].name, 16))}</text>
+              <text x="110" y="128" text-anchor="middle" class="seg-center-2" id="segCenterPct">${segs[0].pct}%</text>
+            </svg>
+            <ul class="seg-legend">${legend.join("")}</ul>
+          </div>
+          <div class="seg-src">Revenue mix${info.period ? ` &middot; as of ${escHtml(info.period)}` : ""} &middot; source: screener.in</div>`;
+        const focus = (i) => {
+          box.querySelectorAll(".seg-slice").forEach((p) => { p.style.opacity = (i == null || +p.dataset.i === i) ? "1" : "0.32"; });
+          box.querySelectorAll(".seg-legend li").forEach((li) => li.classList.toggle("active", +li.dataset.i === i));
+          const s = i == null ? segs[0] : segs[i];
+          const nm = el("segCenterName"), pc = el("segCenterPct");
+          if (nm && pc) { nm.textContent = _clip(s.name, 16); pc.textContent = s.pct + "%"; }
+        };
+        box.querySelectorAll(".seg-slice, .seg-legend li").forEach((n) => {
+          n.addEventListener("mouseenter", () => focus(+n.dataset.i));
+          n.addEventListener("mouseleave", () => focus(null));
+        });
       }
 
       // Per-symbol chart files are lazy-loaded on drawer open and cached. Each is
