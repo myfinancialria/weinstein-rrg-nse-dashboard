@@ -528,6 +528,22 @@
     "roce": 13.2,
     "roe_pct": 10.5
   },
+  "GRCL": {
+    "_scraped": "2026-07-11",
+    "debt_to_equity": 35.1,
+    "dividend_yield_pct": 0.0,
+    "eps": 9.74,
+    "free_cash_flow_cr": -3.5,
+    "net_margin_pct": 13.4,
+    "operating_margin_pct": 21.06,
+    "pb_ratio": 17.99,
+    "pe_ratio": 63.3,
+    "promoter_or_insider_holding_pct": 74.03,
+    "qtr_profit_var_pct": 210.5,
+    "qtr_sales_var_pct": 79.6,
+    "roce": 39.5,
+    "roe_pct": 33.1
+  },
   "GRINDWELL": {
     "_scraped": "2026-07-11",
     "debt_to_equity": 2.4,

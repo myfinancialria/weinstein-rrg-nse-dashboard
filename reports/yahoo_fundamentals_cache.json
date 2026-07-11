@@ -1841,5 +1841,24 @@
     "pe_ratio": 29.967611,
     "pb_ratio": 5.17093,
     "peg_ratio": null
+  },
+  "GRCL.NS": {
+    "company_description": "",
+    "website": "",
+    "yahoo_sector": "",
+    "yahoo_industry": "",
+    "promoter_or_insider_holding_pct": null,
+    "eps": null,
+    "gross_margin_pct": null,
+    "operating_margin_pct": null,
+    "net_margin_pct": null,
+    "roe_pct": null,
+    "debt_to_equity": null,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": 74.888664,
+    "pb_ratio": 10.765941,
+    "peg_ratio": null
   }
 }
