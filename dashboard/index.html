@@ -125,14 +125,29 @@
       button { font-family: inherit; }
 
       /* ---------- tabs (segmented) ---------- */
-      .tabs { display: flex; gap: 6px; flex-wrap: wrap; padding: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-sm); }
+      /* Left icon rail: collapsed to icons, expands on hover to reveal labels. */
+      body { padding-left: 58px; }
+      .tabs {
+        position: fixed; left: 0; top: 0; bottom: 0; z-index: 80;
+        display: flex; flex-direction: column; gap: 4px; align-items: stretch;
+        width: 58px; padding: 14px 9px; overflow-x: hidden; overflow-y: auto;
+        background: var(--panel); border-right: 1px solid var(--line);
+        box-shadow: 2px 0 16px -12px rgba(15,23,42,.4);
+        transition: width .18s ease, box-shadow .18s ease;
+      }
+      .tabs:hover, .tabs:focus-within { width: 214px; box-shadow: 10px 0 30px -14px rgba(15,23,42,.45); }
       .tab-button {
-        width: auto; min-height: 0; padding: 9px 15px; border-radius: 10px; font-size: 13.5px; font-weight: 600;
+        display: flex; align-items: center; gap: 13px;
+        width: 100%; min-height: 0; white-space: nowrap; overflow: hidden;
+        padding: 10px 8px; border-radius: 10px; font-size: 13.5px; font-weight: 600;
         background: transparent; color: var(--muted); border: 1px solid transparent; cursor: pointer;
         transition: background .15s, color .15s;
       }
       .tab-button:hover { background: var(--soft); color: var(--ink); }
       .tab-button.active { background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: 0 6px 14px -8px rgba(15,23,42,.5); }
+      .tab-ico { flex: 0 0 26px; font-size: 18px; line-height: 1; text-align: center; }
+      .tab-txt { opacity: 0; transition: opacity .12s ease; }
+      .tabs:hover .tab-txt, .tabs:focus-within .tab-txt { opacity: 1; }
       .tab-view:not(.active) { display: none; }  /* :not() outranks .split{display:grid} so inactive Screener hides */
       .tab-view.active { display: block; animation: fade .25s ease; }
       @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
@@ -148,6 +163,9 @@
       .subsection { border-top: 1px solid var(--line); margin-top: 2px; }
       .subsection .table-wrap { max-height: 360px; }
       .section-title { margin: 18px 0 8px; font-weight: 750; font-size: 15px; }
+      .chart-ivl { display: inline-flex; gap: 2px; background: var(--soft); border-radius: 8px; padding: 2px; }
+      .ivl-btn { border: 0; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 6px; cursor: pointer; }
+      .ivl-btn.active { background: var(--panel); color: var(--ink); box-shadow: var(--shadow-sm); }
 
       /* ---------- tables ---------- */
       .table-wrap { max-height: 580px; overflow: auto; border-radius: 0 0 var(--radius) var(--radius); }
@@ -380,15 +398,15 @@
         </div>
       </section>
 
-      <section class="tabs">
-        <button class="tab-button active" data-tab="screener">Screener</button>
-        <button class="tab-button" data-tab="high52w-stocks">52W High Stocks</button>
-        <button class="tab-button" data-tab="market-blog">Market Blog</button>
-        <button class="tab-button" data-tab="backtest-daily">Daily Backtest</button>
-        <button class="tab-button" data-tab="backtest-weekly">Weekly Backtest</button>
-        <button class="tab-button" data-tab="backtest-52w">52W High Breakout</button>
-        <button class="tab-button" data-tab="chart-patterns">Chart Patterns</button>
-      </section>
+      <nav class="tabs" aria-label="Sections">
+        <button class="tab-button active" data-tab="screener" title="Screener"><span class="tab-ico" aria-hidden="true">📊</span><span class="tab-txt">Screener</span></button>
+        <button class="tab-button" data-tab="high52w-stocks" title="52W High Stocks"><span class="tab-ico" aria-hidden="true">🔝</span><span class="tab-txt">52W High Stocks</span></button>
+        <button class="tab-button" data-tab="market-blog" title="Market Blog"><span class="tab-ico" aria-hidden="true">📝</span><span class="tab-txt">Market Blog</span></button>
+        <button class="tab-button" data-tab="backtest-daily" title="Daily Backtest"><span class="tab-ico" aria-hidden="true">📅</span><span class="tab-txt">Daily Backtest</span></button>
+        <button class="tab-button" data-tab="backtest-weekly" title="Weekly Backtest"><span class="tab-ico" aria-hidden="true">🗓️</span><span class="tab-txt">Weekly Backtest</span></button>
+        <button class="tab-button" data-tab="backtest-52w" title="52W High Breakout"><span class="tab-ico" aria-hidden="true">💥</span><span class="tab-txt">52W High Breakout</span></button>
+        <button class="tab-button" data-tab="chart-patterns" title="Chart Patterns"><span class="tab-ico" aria-hidden="true">🕯️</span><span class="tab-txt">Chart Patterns</span></button>
+      </nav>
 
       <section class="split tab-view active" id="tab-screener">
         <div class="panel">
@@ -1334,11 +1352,17 @@
           <div class="section-title">Why It Is A Fundamental Pick</div>
           <div class="chips">${listChips(stock.fundamental_reasons, "good")}</div>
 
-          <div class="section-title">Price Chart<a class="tv-link" style="margin-left:10px;font-size:12px;font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a></div>
+          <div class="section-title" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">Price Chart
+            <span class="chart-ivl" role="group" aria-label="Chart interval">
+              <button type="button" class="ivl-btn active" data-ivl="weekly">Weekly</button>
+              <button type="button" class="ivl-btn" data-ivl="daily">Daily</button>
+            </span>
+            <a class="tv-link" style="margin-left:auto;font-size:12px;font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>
+          </div>
           <div class="chart-box" id="stockChart" style="height:460px">
             <div class="chart-message">Loading chart&hellip;</div>
           </div>
-          <div class="subtle" style="margin-top:6px;font-size:12px;">Weekly candles, up to ~20 years &middot; <b style="color:#f59e0b">orange line = 30-week MA</b> (Weinstein stage line). Hover for values, scroll to zoom, drag to pan. For intraday, live data &amp; more indicators, use <a class="tv-link" style="font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>.</div>
+          <div class="subtle" style="margin-top:6px;font-size:12px;"><b style="color:#f59e0b">Orange line = 30-week MA</b> (Weinstein stage line). Weekly &asymp; 20 years, Daily &asymp; 10 years. Hover for values, scroll to zoom, drag to pan. For intraday &amp; live data, use <a class="tv-link" style="font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>.</div>
 
           <div class="section-title">Returns</div>
           <div class="detail-grid">
@@ -1393,7 +1417,15 @@
         el("drawerBackdrop").classList.add("open");
         el("stockDrawer").classList.add("open");
         el("stockDrawer").setAttribute("aria-hidden", "false");
-        setTimeout(() => renderStockChart(stock), 0);
+        // Weekly/daily interval toggle — re-renders from the cached chart file.
+        el("drawerBody").querySelectorAll(".ivl-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const group = btn.parentElement;
+            group.querySelectorAll(".ivl-btn").forEach((b) => b.classList.toggle("active", b === btn));
+            renderStockChart(stock, btn.dataset.ivl);
+          });
+        });
+        setTimeout(() => renderStockChart(stock, "weekly"), 0);
       }
 
       // Lazily inject TradingView's open-source Lightweight Charts lib once.
@@ -1441,31 +1473,45 @@
         return medianGapDays >= 4 ? 30 : 150;
       }
 
-      // Per-symbol chart files (~20yr weekly OHLC) are lazy-loaded on drawer open
-      // and cached. chartFile() mirrors build_dashboard_data.chart_filename():
-      // drop .NS, replace anything outside [A-Za-z0-9_-] (e.g. the & in M&M).
+      // Per-symbol chart files are lazy-loaded on drawer open and cached. Each is
+      // {weekly:[~20yr],daily:[~10yr]} (older builds were a bare weekly array).
+      // chartFile() mirrors build_dashboard_data.chart_filename(): drop .NS,
+      // replace anything outside [A-Za-z0-9_-] (e.g. the & in M&M).
       const _chartCache = {};
       function chartFile(symbol) {
         return (symbol || "").replace(/\.NS$/i, "").replace(/[^A-Za-z0-9_-]/g, "_");
       }
+      function seriesFor(data, interval) {
+        if (Array.isArray(data)) return data;                       // legacy bare-array file
+        if (!data) return [];
+        if (data[interval] && data[interval].length) return data[interval];
+        if (data.weekly && data.weekly.length) return data.weekly;  // fall back to weekly
+        return data.daily || [];
+      }
+      function chartHasBars(data) {
+        if (Array.isArray(data)) return data.length > 0;
+        return !!(data && ((data.weekly && data.weekly.length) || (data.daily && data.daily.length)));
+      }
       function fetchChartBars(symbol) {
         if (_chartCache[symbol]) return _chartCache[symbol];
         const p = fetch(`./charts/${chartFile(symbol)}.json`)
-          .then((r) => (r.ok ? r.json() : []))
-          .catch(() => []);
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null);
         _chartCache[symbol] = p;
         // Don't cache misses/errors, so a later re-open can retry.
-        p.then((bars) => { if (!Array.isArray(bars) || !bars.length) delete _chartCache[symbol]; });
+        p.then((data) => { if (!chartHasBars(data)) delete _chartCache[symbol]; });
         return p;
       }
 
-      function renderStockChart(stock) {
+      function renderStockChart(stock, interval) {
+        interval = interval || "weekly";
         const container = el("stockChart");
         if (!container) return;
         container.innerHTML = `<div class="chart-message">Loading chart&hellip;</div>`;
-        Promise.all([fetchChartBars(stock.symbol), loadLightweightCharts()]).then(([bars, ok]) => {
+        Promise.all([fetchChartBars(stock.symbol), loadLightweightCharts()]).then(([data, ok]) => {
           // Drawer may have been closed or switched to another stock meanwhile.
           if (!document.body.contains(container) || el("stockChart") !== container) return;
+          const bars = seriesFor(data, interval);
           if (!Array.isArray(bars) || !bars.length) {
             container.innerHTML = `<div class="chart-message">No chart data available for ${stock.display_symbol || stock.symbol}.</div>`;
             return;

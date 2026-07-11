@@ -21,7 +21,8 @@ DATA_PATH = DASHBOARD_DIR / "dashboard_data.json"
 # Per-symbol lazy-loaded chart files (git-ignored; generated at build time and
 # shipped in the GitHub Pages artifact, not committed — see .gitignore).
 CHARTS_DIR = DASHBOARD_DIR / "charts"
-CHART_HISTORY_YEARS = 20
+CHART_WEEKLY_YEARS = 20  # weekly candles history
+CHART_DAILY_YEARS = 10   # daily candles history (interval toggle in the drawer)
 FUNDAMENTALS_CACHE = REPORTS_DIR / "yahoo_fundamentals_cache.json"
 BACKTEST_JSON = DASHBOARD_DIR / "backtest_results.json"
 BACKTEST_52W_JSON = DASHBOARD_DIR / "backtest_52w_high.json"
@@ -205,10 +206,11 @@ def chart_filename(symbol: str) -> str:
     return re.sub(r"[^A-Za-z0-9_-]", "_", base)
 
 
-def _weekly_bars(prices: pd.DataFrame, symbol: str, max_bars: int) -> list[dict]:
-    """Weekly (W-FRI) OHLC bars for one symbol, newest ``max_bars`` kept. Falls
-    back to weekly close-only when OHLC fields are missing; the frontend renders
-    candles when open/high/low are present and an area chart otherwise."""
+def _ohlc_bars(prices: pd.DataFrame, symbol: str, weekly: bool, max_bars: int) -> list[dict]:
+    """OHLC bars for one symbol, newest ``max_bars`` kept. ``weekly`` resamples to
+    W-FRI (Weinstein timeframe); otherwise raw daily bars. Falls back to
+    close-only when OHLC fields are missing; the frontend renders candles when
+    open/high/low are present and an area chart otherwise."""
     close = _symbol_series(prices, "Close", symbol)
     if close is None or close.empty:
         return []
@@ -216,20 +218,20 @@ def _weekly_bars(prices: pd.DataFrame, symbol: str, max_bars: int) -> list[dict]
     high = _symbol_series(prices, "High", symbol)
     low = _symbol_series(prices, "Low", symbol)
     if open_ is None or high is None or low is None:
-        weekly_close = close.resample("W-FRI").last().dropna().tail(max_bars)
+        series = close.resample("W-FRI").last().dropna() if weekly else close.dropna()
+        series = series.tail(max_bars)
         return [
             {"time": idx.strftime("%Y-%m-%d"), "close": round(float(value), 2)}
-            for idx, value in weekly_close.items()
+            for idx, value in series.items()
         ]
     frame = pd.concat({"open": open_, "high": high, "low": low, "close": close}, axis=1).dropna()
     if frame.empty:
         return []
-    weekly = (
-        frame.resample("W-FRI")
-        .agg({"open": "first", "high": "max", "low": "min", "close": "last"})
-        .dropna()
-        .tail(max_bars)
-    )
+    if weekly:
+        frame = frame.resample("W-FRI").agg(
+            {"open": "first", "high": "max", "low": "min", "close": "last"}
+        ).dropna()
+    frame = frame.tail(max_bars)
     return [
         {
             "time": idx.strftime("%Y-%m-%d"),
@@ -238,17 +240,20 @@ def _weekly_bars(prices: pd.DataFrame, symbol: str, max_bars: int) -> list[dict]
             "low": round(float(row["low"]), 2),
             "close": round(float(row["close"]), 2),
         }
-        for idx, row in weekly.iterrows()
+        for idx, row in frame.iterrows()
     ]
 
 
 def write_chart_files(
     symbols: list[str],
     out_dir: Path = CHARTS_DIR,
-    years: int = CHART_HISTORY_YEARS,
+    weekly_years: int = CHART_WEEKLY_YEARS,
+    daily_years: int = CHART_DAILY_YEARS,
 ) -> int:
-    """Write one compact weekly-OHLC JSON per symbol (~``years`` of history) that
-    the drawer lazy-loads on open — ``charts/<chart_filename(symbol)>.json``.
+    """Write one compact JSON per symbol that the drawer lazy-loads on open —
+    ``charts/<chart_filename(symbol)>.json`` — with both interval series:
+    ``{"weekly": [...~20yr...], "daily": [...~10yr...]}`` (the drawer has a
+    weekly/daily toggle).
 
     Uses a separate full-history (``period='max'``) pull so the shared 6-year
     universe pull that feeds return metrics and the 52-week-high scan stays
@@ -274,13 +279,17 @@ def write_chart_files(
     if prices is None or prices.empty:
         return 0
 
-    max_bars = years * 53  # 53 to cover 52 ISO weeks + partial boundary weeks
+    weekly_max = weekly_years * 53   # 53 covers 52 ISO weeks + partial boundary weeks
+    daily_max = daily_years * 260    # ~260 trading days/year
     written = 0
     for symbol in symbols:
-        bars = _weekly_bars(prices, symbol, max_bars)
+        payload = {
+            "weekly": _ohlc_bars(prices, symbol, weekly=True, max_bars=weekly_max),
+            "daily": _ohlc_bars(prices, symbol, weekly=False, max_bars=daily_max),
+        }
         path = out_dir / f"{chart_filename(symbol)}.json"
-        path.write_text(json.dumps(bars, separators=(",", ":")), encoding="utf-8")
-        if bars:
+        path.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
+        if payload["weekly"] or payload["daily"]:
             written += 1
     return written
 
