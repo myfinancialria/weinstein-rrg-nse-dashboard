@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-10 22:49:17 IST",
-  "title": "Pre-market Technical Blog - 10 Jul 2026",
+  "generated_at": "2026-07-11 11:30:42 IST",
+  "title": "Pre-market Technical Blog - 11 Jul 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
     "up": 48,
@@ -36,62 +36,62 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7565.48,
-      "change_pct": 0.29
+      "level": 7575.39,
+      "change_pct": 0.42
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52643.72,
-      "change_pct": 0.3
+      "level": 52637.01,
+      "change_pct": 0.29
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 26257.48,
-      "change_pct": 0.19
+      "level": 26281.61,
+      "change_pct": 0.29
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10497.29,
+      "level": 10497.3,
       "change_pct": 0.24
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 67743.85,
-      "change_pct": 1.38
+      "level": 68557.73,
+      "change_pct": 1.2
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24030.18,
-      "change_pct": -0.7
+      "level": 24175.12,
+      "change_pct": 0.6
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 4036.59,
-      "change_pct": 1.65
+      "level": 3996.16,
+      "change_pct": -1.0
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 95.32,
-      "change_pct": -0.57
+      "level": 95.37,
+      "change_pct": -0.51
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 75.62,
-      "change_pct": -0.89
+      "level": 76.01,
+      "change_pct": -0.38
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4113.7,
-      "change_pct": -0.41
+      "level": 4104.1,
+      "change_pct": -0.64
     }
   ],
   "pattern_notes": [
