@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from pathlib import Path
 
 from openpyxl import load_workbook
@@ -9,8 +10,17 @@ from openpyxl.utils import get_column_letter
 
 BASE_DIR = Path(__file__).resolve().parent
 REPORTS_DIR = BASE_DIR / "reports"
-INPUT = REPORTS_DIR / "stage2_rrg_leading_industries_best_stocks_2026-06-28.xlsx"
-OUTPUT = REPORTS_DIR / "stage2_rrg_leading_industries_best_stocks_products_2026-06-28.xlsx"
+
+
+def _latest_stage2_workbook() -> Path | None:
+    """Newest stage2 best-stocks workbook, excluding the *_products_* output
+    (the [0-9] guard matches the date stamp, not the 'products' suffix)."""
+    matches = sorted(REPORTS_DIR.glob("stage2_rrg_leading_industries_best_stocks_[0-9]*.xlsx"))
+    return matches[-1] if matches else None
+
+
+INPUT = _latest_stage2_workbook()
+OUTPUT = REPORTS_DIR / f"stage2_rrg_leading_industries_best_stocks_products_{date.today().isoformat()}.xlsx"
 
 
 PRODUCTS = {

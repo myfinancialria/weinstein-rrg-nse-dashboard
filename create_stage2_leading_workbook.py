@@ -11,9 +11,19 @@ from openpyxl.utils import get_column_letter
 
 BASE_DIR = Path(__file__).resolve().parent
 REPORTS_DIR = BASE_DIR / "reports"
-INDUSTRY_CSV = REPORTS_DIR / "screener_industry_weinstein_rrg_2026-06-28.csv"
-STOCK_CSV = REPORTS_DIR / "screener_industry_stock_rankings_2026-06-28.csv"
-OUTPUT = REPORTS_DIR / "stage2_rrg_leading_industries_best_stocks_2026-06-28.xlsx"
+
+
+def _latest(pattern: str) -> Path | None:
+    """Newest reports/<pattern> by ISO-date-stamped filename."""
+    matches = sorted(REPORTS_DIR.glob(pattern))
+    return matches[-1] if matches else None
+
+
+# Read the newest industry scan; write a workbook stamped with today's date so
+# the whole chain (scan -> workbook -> dashboard) advances daily.
+INDUSTRY_CSV = _latest("screener_industry_weinstein_rrg_*.csv")
+STOCK_CSV = _latest("screener_industry_stock_rankings_*.csv")
+OUTPUT = REPORTS_DIR / f"stage2_rrg_leading_industries_best_stocks_{date.today().isoformat()}.xlsx"
 
 
 def value_or_blank(value):

@@ -56,6 +56,19 @@ jobs:
           # the drawer's revenue-by-segment pie; absent = graceful no-op.
           SCREENER_SESSION_COOKIE: ${{ secrets.SCREENER_SESSION_COOKIE }}
         run: |
+          # Recompute Weinstein stage + RRG for every industry/stock from live
+          # prices (seeded from the committed industries_seed.csv), then rebuild
+          # the stage-2 leading + products workbooks. Runs on the daily schedule
+          # and manual dispatch — NOT on every code push (the Screener scrape is
+          # slow and rate-limit-prone). Best-effort: if Screener throttles it,
+          # the || keeps the last good reports and still refreshes prices/charts.
+          if [ "${{ github.event_name }}" != "push" ]; then
+            python analyze_screener_industries.py --workbook industries_seed.csv --config config.yaml --output-dir reports --sleep 1.5 --retries 5 --backoff 10 || echo "::warning::industry RRG/Weinstein scan failed (Screener rate-limit?) — using previous reports"
+            python create_stage2_leading_workbook.py || echo "::warning::stage2 leading workbook step failed"
+            python add_common_products_to_workbook.py || echo "::warning::products workbook step failed"
+          else
+            echo "push event — skipping the heavy industry scan; using the latest committed reports"
+          fi
           python build_dashboard_data.py
           python build_sector_report.py
           python generate_market_blog.py
