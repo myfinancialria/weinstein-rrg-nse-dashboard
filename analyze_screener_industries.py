@@ -186,7 +186,13 @@ def run(args: argparse.Namespace) -> tuple[Path, Path, Path]:
     output_dir = Path(args.output_dir).expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    industries = pd.read_excel(workbook_path, sheet_name="Industries")
+    # Accept either the Screener "Industries" workbook (.xlsx) or a committed
+    # CSV seed with the same columns (Screener Industry / Screener Industry URL /
+    # Sector / NSE Industry), so the scan can run unattended in CI.
+    if workbook_path.suffix.lower() == ".csv":
+        industries = pd.read_csv(workbook_path)
+    else:
+        industries = pd.read_excel(workbook_path, sheet_name="Industries")
     if args.limit:
         industries = industries.head(args.limit)
 

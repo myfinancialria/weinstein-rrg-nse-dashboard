@@ -125,14 +125,29 @@
       button { font-family: inherit; }
 
       /* ---------- tabs (segmented) ---------- */
-      .tabs { display: flex; gap: 6px; flex-wrap: wrap; padding: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-sm); }
+      /* Left icon rail: collapsed to icons, expands on hover to reveal labels. */
+      body { padding-left: 58px; }
+      .tabs {
+        position: fixed; left: 0; top: 0; bottom: 0; z-index: 80;
+        display: flex; flex-direction: column; gap: 4px; align-items: stretch;
+        width: 58px; padding: 14px 9px; overflow-x: hidden; overflow-y: auto;
+        background: var(--panel); border-right: 1px solid var(--line);
+        box-shadow: 2px 0 16px -12px rgba(15,23,42,.4);
+        transition: width .18s ease, box-shadow .18s ease;
+      }
+      .tabs:hover, .tabs:focus-within { width: 214px; box-shadow: 10px 0 30px -14px rgba(15,23,42,.45); }
       .tab-button {
-        width: auto; min-height: 0; padding: 9px 15px; border-radius: 10px; font-size: 13.5px; font-weight: 600;
+        display: flex; align-items: center; gap: 13px;
+        width: 100%; min-height: 0; white-space: nowrap; overflow: hidden;
+        padding: 10px 8px; border-radius: 10px; font-size: 13.5px; font-weight: 600;
         background: transparent; color: var(--muted); border: 1px solid transparent; cursor: pointer;
         transition: background .15s, color .15s;
       }
       .tab-button:hover { background: var(--soft); color: var(--ink); }
       .tab-button.active { background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: 0 6px 14px -8px rgba(15,23,42,.5); }
+      .tab-ico { flex: 0 0 26px; font-size: 18px; line-height: 1; text-align: center; }
+      .tab-txt { opacity: 0; transition: opacity .12s ease; }
+      .tabs:hover .tab-txt, .tabs:focus-within .tab-txt { opacity: 1; }
       .tab-view:not(.active) { display: none; }  /* :not() outranks .split{display:grid} so inactive Screener hides */
       .tab-view.active { display: block; animation: fade .25s ease; }
       @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
@@ -148,6 +163,24 @@
       .subsection { border-top: 1px solid var(--line); margin-top: 2px; }
       .subsection .table-wrap { max-height: 360px; }
       .section-title { margin: 18px 0 8px; font-weight: 750; font-size: 15px; }
+      .chart-ivl { display: inline-flex; gap: 2px; background: var(--soft); border-radius: 8px; padding: 2px; }
+      .ivl-btn { border: 0; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 6px; cursor: pointer; }
+      .ivl-btn.active { background: var(--panel); color: var(--ink); box-shadow: var(--shadow-sm); }
+
+      /* Revenue-by-segment donut */
+      .seg-wrap { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+      .seg-svg { flex: 0 0 auto; }
+      .seg-slice { cursor: pointer; transition: opacity .12s ease; stroke: var(--panel); stroke-width: 1.5; }
+      .seg-center-1 { font-size: 12px; font-weight: 600; fill: var(--muted); }
+      .seg-center-2 { font-size: 21px; font-weight: 800; fill: var(--ink); }
+      .seg-legend { list-style: none; margin: 0; padding: 0; flex: 1 1 190px; min-width: 170px; }
+      .seg-legend li { display: flex; align-items: center; gap: 9px; padding: 5px 6px; border-radius: 7px; cursor: pointer; font-size: 13px; }
+      .seg-legend li.active { background: var(--soft); }
+      .seg-sw { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 auto; }
+      .seg-lname { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .seg-lpct { margin-left: auto; font-weight: 700; color: var(--muted); }
+      .seg-note { color: var(--muted); font-size: 13px; padding: 8px 0; }
+      .seg-src { color: var(--faint); font-size: 11px; margin-top: 8px; }
 
       /* ---------- tables ---------- */
       .table-wrap { max-height: 580px; overflow: auto; border-radius: 0 0 var(--radius) var(--radius); }
@@ -197,6 +230,22 @@
       .chart-box canvas { width: 100%; height: 100%; display: block; }
       .chart-message { height: 100%; display: flex; align-items: center; justify-content: center; color: var(--muted); padding: 18px; text-align: center; }
 
+      /* Global search console */
+      .omnisearch { position: relative; margin: 0 0 18px; }
+      .omni-box { display: flex; align-items: center; gap: 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 2px 14px; box-shadow: var(--shadow-sm); }
+      .omni-box:focus-within { border-color: #1f6feb; box-shadow: 0 0 0 3px rgba(31,111,235,.12); }
+      .omni-icon { font-size: 16px; opacity: .7; }
+      #omniInput { flex: 1; border: 0; outline: 0; background: transparent; font-size: 15px; padding: 13px 0; color: var(--ink); }
+      .omni-results { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 60; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(15,23,42,.16); max-height: 60vh; overflow-y: auto; }
+      .omni-item { display: flex; align-items: baseline; gap: 10px; padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--line); }
+      .omni-item:last-child { border-bottom: 0; }
+      .omni-item.active, .omni-item:hover { background: #f1f5fb; }
+      .omni-name { font-weight: 600; color: var(--ink); }
+      .omni-sym { font-size: 12px; color: var(--muted); font-weight: 600; }
+      .omni-meta { font-size: 12px; color: var(--muted); margin-left: auto; text-align: right; max-width: 48%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .omni-empty { padding: 14px; color: var(--muted); font-size: 13px; }
+      .omni-item mark, .omni-meta mark { background: #fde68a; color: inherit; padding: 0 1px; border-radius: 2px; }
+
       /* ---------- drawer ---------- */
       .drawer-backdrop { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.4); z-index: 40; backdrop-filter: blur(2px); }
       .drawer-backdrop.open { display: block; }
@@ -212,6 +261,19 @@
       .detail-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--soft); }
       .detail-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; font-weight: 600; }
       .detail-card .value { margin-top: 5px; font-size: 16px; font-weight: 700; }
+      /* per-metric "vs industry" info button + popover */
+      .mi { margin-left: 5px; width: 15px; height: 15px; line-height: 13px; font-size: 10px; font-style: italic; font-weight: 700; font-family: Georgia, "Times New Roman", serif; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--muted); cursor: pointer; padding: 0; vertical-align: middle; }
+      .mi:hover { border-color: #1f6feb; color: #1f6feb; }
+      .mi-pop { position: fixed; z-index: 200; width: 264px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 40px rgba(15,23,42,.22); padding: 12px 14px; font-size: 12.5px; }
+      .mi-title { font-weight: 700; font-size: 13px; }
+      .mi-def { color: var(--muted); margin: 3px 0 10px; line-height: 1.35; }
+      .mi-row { display: flex; justify-content: space-between; font-size: 12px; margin-top: 7px; }
+      .mi-bar { height: 7px; border-radius: 4px; background: var(--soft); overflow: hidden; margin-top: 3px; }
+      .mi-bar i { display: block; height: 100%; border-radius: 4px; }
+      .mi-bar i.mi-good { background: #16a34a; } .mi-bar i.mi-bad { background: #dc2626; }
+      .mi-bar i.mi-mid { background: #64748b; } .mi-bar i.mi-ind { background: #94a3b8; }
+      .mi-verdict { margin-top: 10px; font-weight: 600; line-height: 1.35; }
+      .mi-verdict.mi-good { color: #16a34a; } .mi-verdict.mi-bad { color: #dc2626; } .mi-verdict.mi-mid { color: var(--muted); }
 
       /* ---------- swot / chips / prose ---------- */
       .chips { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -274,6 +336,15 @@
     </header>
 
     <main class="layout">
+      <section class="omnisearch" id="omnisearch">
+        <div class="omni-box">
+          <span class="omni-icon" aria-hidden="true">🔎</span>
+          <input id="omniInput" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="omniResults" aria-autocomplete="list"
+            placeholder="Search any NSE stock — company, symbol, industry, or product / service (e.g. “Bolero”, “Thums Up”, “paints”)…">
+        </div>
+        <div class="omni-results" id="omniResults" role="listbox" hidden></div>
+      </section>
+
       <section class="kpis">
         <div class="kpi"><div class="label">Industries Analyzed</div><div class="value" id="kpiIndustries">-</div></div>
         <div class="kpi"><div class="label">Stage 2 + Leading Industries</div><div class="value" id="kpiLeadingIndustries">-</div></div>
@@ -355,15 +426,15 @@
         </div>
       </section>
 
-      <section class="tabs">
-        <button class="tab-button active" data-tab="screener">Screener</button>
-        <button class="tab-button" data-tab="high52w-stocks">52W High Stocks</button>
-        <button class="tab-button" data-tab="market-blog">Market Blog</button>
-        <button class="tab-button" data-tab="backtest-daily">Daily Backtest</button>
-        <button class="tab-button" data-tab="backtest-weekly">Weekly Backtest</button>
-        <button class="tab-button" data-tab="backtest-52w">52W High Breakout</button>
-        <button class="tab-button" data-tab="chart-patterns">Chart Patterns</button>
-      </section>
+      <nav class="tabs" aria-label="Sections">
+        <button class="tab-button active" data-tab="screener" title="Screener"><span class="tab-ico" aria-hidden="true">📊</span><span class="tab-txt">Screener</span></button>
+        <button class="tab-button" data-tab="high52w-stocks" title="52W High Stocks"><span class="tab-ico" aria-hidden="true">🔝</span><span class="tab-txt">52W High Stocks</span></button>
+        <button class="tab-button" data-tab="market-blog" title="Market Blog"><span class="tab-ico" aria-hidden="true">📝</span><span class="tab-txt">Market Blog</span></button>
+        <button class="tab-button" data-tab="backtest-daily" title="Daily Backtest"><span class="tab-ico" aria-hidden="true">📅</span><span class="tab-txt">Daily Backtest</span></button>
+        <button class="tab-button" data-tab="backtest-weekly" title="Weekly Backtest"><span class="tab-ico" aria-hidden="true">🗓️</span><span class="tab-txt">Weekly Backtest</span></button>
+        <button class="tab-button" data-tab="backtest-52w" title="52W High Breakout"><span class="tab-ico" aria-hidden="true">💥</span><span class="tab-txt">52W High Breakout</span></button>
+        <button class="tab-button" data-tab="chart-patterns" title="Chart Patterns"><span class="tab-ico" aria-hidden="true">🕯️</span><span class="tab-txt">Chart Patterns</span></button>
+      </nav>
 
       <section class="split tab-view active" id="tab-screener">
         <div class="panel">
@@ -704,6 +775,7 @@
       </div>
       <div class="drawer-body" id="drawerBody"></div>
     </aside>
+    <div id="metricPop" class="mi-pop" hidden></div>
 
     <script>
       let AI_WRITEUPS = { industries: {}, stocks: {}, models: {} };
@@ -1275,11 +1347,14 @@
             ${detail("SL", fmt(stock.sl))}
             ${detail("Target", fmt(stock.target))}
             ${detail("Market Cap Cr", fmt(stock.market_cap_cr))}
-            ${detail("P/E", fmt(stock.pe_ratio || stock.pe))}
-            ${detail("ROCE %", fmt(stock.roce))}
-            ${detail("Promoter/Insider %", fmt(stock.promoter_or_insider_holding_pct))}
+            ${detailC("P/E", fmt(stock.pe_ratio || stock.pe), "pe_ratio")}
+            ${detailC("ROCE %", fmt(stock.roce), "roce")}
+            ${detailC("Promoter/Insider %", fmt(stock.promoter_or_insider_holding_pct), "promoter_or_insider_holding_pct")}
             ${detail("Fund Score", fmt(stock.fundamental_score))}
           </div>
+
+          <div class="section-title">Revenue by Segment</div>
+          <div id="segmentChart"><div class="seg-note">Loading segments&hellip;</div></div>
 
           <div class="section-title">AI Analysis — In Simple Words</div>
           ${aiBox("Why this stock looks strong", (AI_WRITEUPS.stocks || {})[stock.display_symbol || stock.symbol])}
@@ -1287,19 +1362,19 @@
 
           <div class="section-title">Fundamentals</div>
           <div class="detail-grid">
-            ${detail("EPS", fmt(stock.eps))}
+            ${detailC("EPS", fmt(stock.eps), "eps")}
             ${detail("Gross Margin", pct(stock.gross_margin_pct))}
-            ${detail("Operating Margin", pct(stock.operating_margin_pct))}
-            ${detail("Net Margin", pct(stock.net_margin_pct))}
-            ${detail("ROE", pct(stock.roe_pct))}
-            ${detail("Debt / Equity", fmt(stock.debt_to_equity))}
+            ${detailC("Operating Margin", pct(stock.operating_margin_pct), "operating_margin_pct")}
+            ${detailC("Net Margin", pct(stock.net_margin_pct), "net_margin_pct")}
+            ${detailC("ROE", pct(stock.roe_pct), "roe_pct")}
+            ${detailC("Debt / Equity", fmt(stock.debt_to_equity), "debt_to_equity")}
             ${detail("Current Ratio", fmt(stock.current_ratio))}
             ${detail("Quick Ratio", fmt(stock.quick_ratio))}
-            ${detail("FCF Cr", fmt(stock.free_cash_flow_cr))}
-            ${detail("P/E", fmt(stock.pe_ratio || stock.pe))}
-            ${detail("P/B", fmt(stock.pb_ratio))}
+            ${detailC("FCF Cr", fmt(stock.free_cash_flow_cr), "free_cash_flow_cr")}
+            ${detailC("P/E", fmt(stock.pe_ratio || stock.pe), "pe_ratio")}
+            ${detailC("P/B", fmt(stock.pb_ratio), "pb_ratio")}
             ${detail("PEG", fmt(stock.peg_ratio))}
-            ${detail("Dividend Yield", pct(stock.dividend_yield_pct))}
+            ${detailC("Dividend Yield", pct(stock.dividend_yield_pct), "dividend_yield_pct")}
             ${detail("Sales Qtr Cr", fmt(stock.sales_qtr_cr))}
             ${detail("NP Qtr Cr", fmt(stock.np_qtr_cr))}
             ${detail("Qtr Sales Growth", pct(stock.qtr_sales_var_pct))}
@@ -1309,11 +1384,17 @@
           <div class="section-title">Why It Is A Fundamental Pick</div>
           <div class="chips">${listChips(stock.fundamental_reasons, "good")}</div>
 
-          <div class="section-title">Price Chart<a class="tv-link" style="margin-left:10px;font-size:12px;font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a></div>
+          <div class="section-title" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">Price Chart
+            <span class="chart-ivl" role="group" aria-label="Chart interval">
+              <button type="button" class="ivl-btn active" data-ivl="weekly">Weekly</button>
+              <button type="button" class="ivl-btn" data-ivl="daily">Daily</button>
+            </span>
+            <a class="tv-link" style="margin-left:auto;font-size:12px;font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>
+          </div>
           <div class="chart-box" id="stockChart" style="height:460px">
             <div class="chart-message">Loading chart&hellip;</div>
           </div>
-          <div class="subtle" style="margin-top:6px;font-size:12px;">Weekly candles, ~3 years &middot; <b style="color:#f59e0b">orange line = 30-week MA</b> (Weinstein stage line). Hover for values, scroll to zoom, drag to pan. For intraday, live data &amp; more indicators, use <a class="tv-link" style="font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>.</div>
+          <div class="subtle" style="margin-top:6px;font-size:12px;"><b style="color:#f59e0b">Orange line = 30-week MA</b> (Weinstein stage line). Weekly &asymp; 20 years, Daily &asymp; 10 years. Hover for values, scroll to zoom, drag to pan. For intraday &amp; live data, use <a class="tv-link" style="font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>.</div>
 
           <div class="section-title">Returns</div>
           <div class="detail-grid">
@@ -1365,10 +1446,19 @@
           </div>
           ${thesis.policy_sources ? `<div class="prose" style="margin-top:8px"><b>Policy references:</b> ${asText(thesis.policy_sources)}</div>` : ""}
         `;
+        state.drawerStock = stock;
         el("drawerBackdrop").classList.add("open");
         el("stockDrawer").classList.add("open");
         el("stockDrawer").setAttribute("aria-hidden", "false");
-        setTimeout(() => renderStockChart(stock), 0);
+        // Weekly/daily interval toggle — re-renders from the cached chart file.
+        el("drawerBody").querySelectorAll(".ivl-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const group = btn.parentElement;
+            group.querySelectorAll(".ivl-btn").forEach((b) => b.classList.toggle("active", b === btn));
+            renderStockChart(stock, btn.dataset.ivl);
+          });
+        });
+        setTimeout(() => { renderStockChart(stock, "weekly"); renderSegments(stock); }, 0);
       }
 
       // Lazily inject TradingView's open-source Lightweight Charts lib once.
@@ -1416,18 +1506,118 @@
         return medianGapDays >= 4 ? 30 : 150;
       }
 
-      function renderStockChart(stock) {
-        const container = el("stockChart");
-        if (!container) return;
-        const bars = (state.data.chartData || {})[stock.symbol] || [];
-        if (!bars.length) {
-          container.innerHTML = `<div class="chart-message">No chart data available for ${stock.display_symbol || stock.symbol}.</div>`;
+      const escHtml = (x) => String(x == null ? "" : x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+      // ---- Interactive revenue-by-segment donut (data: state.data.segments) ----
+      const SEG_COLORS = ["#2563eb", "#f59e0b", "#16a34a", "#dc2626", "#7c3aed", "#0891b2", "#db2777", "#65a30d", "#ea580c", "#0d9488", "#9333ea", "#64748b"];
+      function _polar(cx, cy, r, deg) {
+        const a = (deg - 90) * Math.PI / 180;
+        return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+      }
+      function _donutSlice(cx, cy, R, r, a0, a1) {
+        const large = (a1 - a0) > 180 ? 1 : 0;
+        const [x1, y1] = _polar(cx, cy, R, a0), [x2, y2] = _polar(cx, cy, R, a1);
+        const [x3, y3] = _polar(cx, cy, r, a1), [x4, y4] = _polar(cx, cy, r, a0);
+        return `M${x1},${y1} A${R},${R} 0 ${large} 1 ${x2},${y2} L${x3},${y3} A${r},${r} 0 ${large} 0 ${x4},${y4} Z`;
+      }
+      const _clip = (s, n) => (s && s.length > n ? s.slice(0, n - 1) + "…" : s);
+
+      function renderSegments(stock) {
+        const box = el("segmentChart");
+        if (!box) return;
+        const info = (state.data.segments || {})[stock.symbol];
+        const segs = (info && info.segments) || [];
+        const names = (info && info.names) || [];
+        const hasSegData = state.data.segments && Object.keys(state.data.segments).length;
+        if (!segs.length) {
+          let msg;
+          if (info && info.gated) msg = `Segment revenue is premium-gated on the source${names.length ? ` — known segments: ${names.map(escHtml).join(", ")}` : ""}.`;
+          else if (names.length === 1) msg = `Single reportable business segment — ${escHtml(names[0])}.`;
+          else if (names.length > 1) msg = `Reported segments: ${names.map(escHtml).join(", ")} (revenue split not published).`;
+          else msg = hasSegData ? "Revenue segments not disclosed for this company." : "Segment data not loaded (needs the screener premium cookie).";
+          box.innerHTML = `<div class="seg-note">${msg}</div>`;
           return;
         }
+        if (segs.length === 1) {
+          box.innerHTML = `<div class="seg-note">Single reportable segment — ${escHtml(segs[0].name)} (100%).</div>`;
+          return;
+        }
+        const cx = 110, cy = 110, R = 104, r = 62;
+        let ang = 0;
+        const paths = [], legend = [];
+        segs.forEach((s, i) => {
+          const a0 = ang, a1 = ang + (s.pct / 100) * 360;
+          ang = a1;
+          const color = SEG_COLORS[i % SEG_COLORS.length];
+          paths.push(`<path d="${_donutSlice(cx, cy, R, r, a0, a1)}" fill="${color}" data-i="${i}" class="seg-slice"><title>${escHtml(s.name)} — ${s.pct}%</title></path>`);
+          legend.push(`<li data-i="${i}"><span class="seg-sw" style="background:${color}"></span><span class="seg-lname">${escHtml(s.name)}</span><span class="seg-lpct">${s.pct}%</span></li>`);
+        });
+        box.innerHTML = `
+          <div class="seg-wrap">
+            <svg viewBox="0 0 220 220" class="seg-svg" width="200" height="200" role="img" aria-label="Revenue by segment">
+              ${paths.join("")}
+              <text x="110" y="104" text-anchor="middle" class="seg-center-1" id="segCenterName">${escHtml(_clip(segs[0].name, 16))}</text>
+              <text x="110" y="128" text-anchor="middle" class="seg-center-2" id="segCenterPct">${segs[0].pct}%</text>
+            </svg>
+            <ul class="seg-legend">${legend.join("")}</ul>
+          </div>
+          <div class="seg-src">Revenue mix${info.period ? ` &middot; as of ${escHtml(info.period)}` : ""} &middot; source: screener.in</div>`;
+        const focus = (i) => {
+          box.querySelectorAll(".seg-slice").forEach((p) => { p.style.opacity = (i == null || +p.dataset.i === i) ? "1" : "0.32"; });
+          box.querySelectorAll(".seg-legend li").forEach((li) => li.classList.toggle("active", +li.dataset.i === i));
+          const s = i == null ? segs[0] : segs[i];
+          const nm = el("segCenterName"), pc = el("segCenterPct");
+          if (nm && pc) { nm.textContent = _clip(s.name, 16); pc.textContent = s.pct + "%"; }
+        };
+        box.querySelectorAll(".seg-slice, .seg-legend li").forEach((n) => {
+          n.addEventListener("mouseenter", () => focus(+n.dataset.i));
+          n.addEventListener("mouseleave", () => focus(null));
+        });
+      }
+
+      // Per-symbol chart files are lazy-loaded on drawer open and cached. Each is
+      // {weekly:[~20yr],daily:[~10yr]} (older builds were a bare weekly array).
+      // chartFile() mirrors build_dashboard_data.chart_filename(): drop .NS,
+      // replace anything outside [A-Za-z0-9_-] (e.g. the & in M&M).
+      const _chartCache = {};
+      function chartFile(symbol) {
+        return (symbol || "").replace(/\.NS$/i, "").replace(/[^A-Za-z0-9_-]/g, "_");
+      }
+      function seriesFor(data, interval) {
+        if (Array.isArray(data)) return data;                       // legacy bare-array file
+        if (!data) return [];
+        if (data[interval] && data[interval].length) return data[interval];
+        if (data.weekly && data.weekly.length) return data.weekly;  // fall back to weekly
+        return data.daily || [];
+      }
+      function chartHasBars(data) {
+        if (Array.isArray(data)) return data.length > 0;
+        return !!(data && ((data.weekly && data.weekly.length) || (data.daily && data.daily.length)));
+      }
+      function fetchChartBars(symbol) {
+        if (_chartCache[symbol]) return _chartCache[symbol];
+        const p = fetch(`./charts/${chartFile(symbol)}.json`)
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null);
+        _chartCache[symbol] = p;
+        // Don't cache misses/errors, so a later re-open can retry.
+        p.then((data) => { if (!chartHasBars(data)) delete _chartCache[symbol]; });
+        return p;
+      }
+
+      function renderStockChart(stock, interval) {
+        interval = interval || "weekly";
+        const container = el("stockChart");
+        if (!container) return;
         container.innerHTML = `<div class="chart-message">Loading chart&hellip;</div>`;
-        loadLightweightCharts().then((ok) => {
+        Promise.all([fetchChartBars(stock.symbol), loadLightweightCharts()]).then(([data, ok]) => {
           // Drawer may have been closed or switched to another stock meanwhile.
           if (!document.body.contains(container) || el("stockChart") !== container) return;
+          const bars = seriesFor(data, interval);
+          if (!Array.isArray(bars) || !bars.length) {
+            container.innerHTML = `<div class="chart-message">No chart data available for ${stock.display_symbol || stock.symbol}.</div>`;
+            return;
+          }
           if (!ok || !window.LightweightCharts) {
             renderLineChart(container, bars, stock.display_symbol || stock.symbol);
             return;
@@ -1553,6 +1743,104 @@
         return `<div class="detail-card"><div class="label">${label}</div><div class="value">${value}</div></div>`;
       }
 
+      // A detail card with a "vs industry" (i) button. `key` is a METRIC_META key.
+      function detailC(label, value, key) {
+        return `<div class="detail-card"><div class="label">${label}<button type="button" class="mi" data-mkey="${key}" aria-label="Compare ${label} to the industry">i</button></div><div class="value">${value}</div></div>`;
+      }
+
+      // ---- Per-metric "where does this stock stand vs its industry" ----
+      const METRIC_META = {
+        pe_ratio: { label: "P/E", def: "Price ÷ earnings per share. Lower is cheaper relative to profits.", higherBetter: false, unit: "x" },
+        pb_ratio: { label: "P/B", def: "Price ÷ book value. Lower is cheaper relative to net assets.", higherBetter: false, unit: "x" },
+        roe_pct: { label: "ROE", def: "Net profit ÷ shareholder equity. Higher = better return on owners' capital.", higherBetter: true, unit: "%" },
+        roce: { label: "ROCE", def: "Return on capital employed. Higher = more efficient use of all capital.", higherBetter: true, unit: "%" },
+        net_margin_pct: { label: "Net margin", def: "Net profit ÷ sales. Higher = more of each rupee of sales kept as profit.", higherBetter: true, unit: "%" },
+        operating_margin_pct: { label: "Operating margin", def: "Operating profit ÷ sales. Higher = stronger core operations.", higherBetter: true, unit: "%" },
+        debt_to_equity: { label: "Debt / Equity", def: "Total debt ÷ equity. Lower = less leverage and financial risk.", higherBetter: false, unit: "" },
+        dividend_yield_pct: { label: "Dividend yield", def: "Dividend ÷ price. Higher = more income per rupee invested.", higherBetter: true, unit: "%" },
+        eps: { label: "EPS", def: "Net profit earned per share.", higherBetter: true, unit: "" },
+        free_cash_flow_cr: { label: "Free cash flow", def: "Cash left after capex. Higher = more self-funded growth and payouts.", higherBetter: true, unit: "cr" },
+        promoter_or_insider_holding_pct: { label: "Promoter holding", def: "% of the company owned by promoters. Higher often signals owner commitment.", higherBetter: true, unit: "%" },
+      };
+      let INDUSTRY_STATS = {};
+      function _median(arr) {
+        if (!arr.length) return null;
+        const a = [...arr].sort((x, y) => x - y), m = Math.floor(a.length / 2);
+        return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
+      }
+      // Median of each metric within each industry (parent), computed once from all stocks.
+      function computeIndustryStats() {
+        const by = {};
+        (state.data.stocks || []).forEach((s) => {
+          const k = s.parent || "—";
+          (by[k] = by[k] || []).push(s);
+        });
+        INDUSTRY_STATS = {};
+        for (const [ind, list] of Object.entries(by)) {
+          const st = {};
+          for (const key of Object.keys(METRIC_META)) {
+            const vals = list.map((s) => Number(s[key])).filter(Number.isFinite);
+            st[key] = { median: _median(vals), n: vals.length };
+          }
+          INDUSTRY_STATS[ind] = st;
+        }
+      }
+      function _fmtMetric(v, meta) {
+        if (!Number.isFinite(v)) return "-";
+        if (meta.unit === "%") return v.toFixed(1) + "%";
+        if (meta.unit === "x") return v.toFixed(1) + "×";
+        if (meta.unit === "cr") return "₹" + Math.round(v).toLocaleString("en-IN") + " cr";
+        return v.toFixed(2);
+      }
+      function metricPopHtml(key, stock) {
+        const meta = METRIC_META[key];
+        if (!meta) return "";
+        const val = Number(stock[key]);
+        const ind = stock.parent || "—";
+        const st = (INDUSTRY_STATS[ind] || {})[key] || {};
+        let body;
+        if (Number.isFinite(val) && st.median != null && st.n >= 3) {
+          const med = st.median, diff = val - med;
+          const near = med !== 0 ? Math.abs(diff / Math.abs(med)) < 0.08 : Math.abs(diff) < 1e-9;
+          const higher = diff > 0;
+          const good = near ? null : (meta.higherBetter ? higher : !higher);
+          const cls = near ? "mi-mid" : (good ? "mi-good" : "mi-bad");
+          const verdict = near
+            ? "In line with the industry"
+            : `${higher ? "Above" : "Below"} the industry median — ${good ? "stronger than peers" : "weaker than peers"}`;
+          const mx = (Math.max(Math.abs(val), Math.abs(med)) * 1.25) || 1;
+          const cw = Math.max(2, Math.min(100, Math.abs(val) / mx * 100));
+          const mw = Math.max(2, Math.min(100, Math.abs(med) / mx * 100));
+          body = `<div class="mi-row"><span>This stock</span><b>${_fmtMetric(val, meta)}</b></div>`
+            + `<div class="mi-bar"><i class="${cls}" style="width:${cw}%"></i></div>`
+            + `<div class="mi-row"><span>Industry median</span><b>${_fmtMetric(med, meta)}</b></div>`
+            + `<div class="mi-bar"><i class="mi-ind" style="width:${mw}%"></i></div>`
+            + `<div class="mi-verdict ${cls}">${verdict} &middot; ${st.n} peers in ${escapeHtml(ind)}</div>`;
+        } else {
+          body = `<div class="mi-verdict mi-mid">Not enough industry peers to compare${Number.isFinite(val) ? "" : " (no value for this stock)"}.</div>`;
+        }
+        return `<div class="mi-title">${meta.label}</div><div class="mi-def">${meta.def}</div>${body}`;
+      }
+      function showMetricPop(btn, key) {
+        const pop = el("metricPop");
+        if (!pop || !state.drawerStock) return;
+        pop.innerHTML = metricPopHtml(key, state.drawerStock);
+        pop.hidden = false;
+        const r = btn.getBoundingClientRect(), w = 264;
+        pop.style.left = Math.max(10, Math.min(r.left - 8, window.innerWidth - w - 10)) + "px";
+        pop.style.top = (r.bottom + 6) + "px";
+      }
+      function hideMetricPop() {
+        const p = el("metricPop");
+        if (p) p.hidden = true;
+      }
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".mi");
+        if (btn) { e.stopPropagation(); showMetricPop(btn, btn.dataset.mkey); return; }
+        if (!e.target.closest("#metricPop")) hideMetricPop();
+      });
+      window.addEventListener("scroll", hideMetricPop, true);
+
       function escapeHtml(s) {
         return String(s == null ? "" : s).replace(/[&<>"]/g, (c) =>
           ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -1602,6 +1890,7 @@
       }
 
       function closeDrawer() {
+        hideMetricPop();
         el("drawerBackdrop").classList.remove("open");
         el("stockDrawer").classList.remove("open");
         el("stockDrawer").setAttribute("aria-hidden", "true");
@@ -1652,11 +1941,127 @@
       el("drawerClose").addEventListener("click", closeDrawer);
       el("drawerBackdrop").addEventListener("click", closeDrawer);
 
+      // ---- Global search console: type a company, symbol, industry, OR a
+      // product/service and jump straight to that company's drawer. Searches the
+      // full analysed universe (state.data.stocks), not just the visible table. ----
+      (function () {
+        const input = el("omniInput");
+        const results = el("omniResults");
+        const box = el("omnisearch");
+        if (!input || !results || !box) return;
+        let items = [];
+        let active = -1;
+
+        const escapeHtml = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+        function universe() {
+          const seen = new Set();
+          const out = [];
+          (((state.data || {}).stocks) || []).forEach((s) => {
+            if (s && s.symbol && !seen.has(s.symbol)) { seen.add(s.symbol); out.push(s); }
+          });
+          return out;
+        }
+
+        // Ranked match across symbol/name (highest), then industry, then
+        // product/service — so a product query still resolves to the company.
+        function scoreStock(s, q) {
+          const sym = (s.display_symbol || s.symbol || "").toLowerCase();
+          const name = (s.name || "").toLowerCase();
+          const ind = (s.parent || "").toLowerCase();
+          const prod = (s.common_product_business || "").toLowerCase();
+          if (sym.startsWith(q)) return 100;
+          if (name.startsWith(q)) return 90;
+          if (sym.includes(q)) return 70;
+          if (name.includes(q)) return 60;
+          if (ind.includes(q)) return 40;
+          if (prod.includes(q)) return 30;
+          return 0;
+        }
+
+        function search(q) {
+          return universe()
+            .map((s) => ({ s, score: scoreStock(s, q) }))
+            .filter((r) => r.score > 0)
+            .sort((a, b) => b.score - a.score || (a.s.name || "").localeCompare(b.s.name || ""))
+            .slice(0, 10)
+            .map((r) => r.s);
+        }
+
+        function highlight(text, q) {
+          const t = String(text || "");
+          const i = t.toLowerCase().indexOf(q);
+          if (i < 0) return escapeHtml(t);
+          return escapeHtml(t.slice(0, i)) + "<mark>" + escapeHtml(t.slice(i, i + q.length)) + "</mark>" + escapeHtml(t.slice(i + q.length));
+        }
+
+        function open() { results.hidden = false; input.setAttribute("aria-expanded", "true"); }
+        function close() { results.hidden = true; input.setAttribute("aria-expanded", "false"); active = -1; }
+
+        function render() {
+          const q = input.value.trim().toLowerCase();
+          if (!q) { close(); return; }
+          items = search(q);
+          active = -1;
+          if (!items.length) {
+            results.innerHTML = `<div class="omni-empty">No stock matches “${escapeHtml(q)}”. Try a company, symbol, industry, or product name.</div>`;
+            open();
+            return;
+          }
+          results.innerHTML = items.map((s, i) => {
+            const sym = s.display_symbol || (s.symbol || "").replace(/\.NS$/i, "");
+            const prod = s.common_product_business || "";
+            // When the hit is only in the product/service text, surface that snippet.
+            const inProd = prod.toLowerCase().includes(q)
+              && !(s.name || "").toLowerCase().includes(q)
+              && !sym.toLowerCase().includes(q);
+            const meta = inProd ? highlight(prod, q) : escapeHtml(s.parent || "");
+            return `<div class="omni-item" role="option" data-i="${i}">`
+              + `<span class="omni-name">${highlight(s.name || sym, q)}</span>`
+              + `<span class="omni-sym">${highlight(sym, q)}</span>`
+              + `<span class="omni-meta">${meta}</span>`
+              + `</div>`;
+          }).join("");
+          open();
+        }
+
+        function setActive(i) {
+          const nodes = Array.from(results.querySelectorAll(".omni-item"));
+          nodes.forEach((n, k) => n.classList.toggle("active", k === i));
+          if (nodes[i]) nodes[i].scrollIntoView({ block: "nearest" });
+          active = i;
+        }
+
+        function choose(i) {
+          const s = items[i];
+          if (!s) return;
+          close();
+          input.value = "";
+          openStockDrawer(s);
+        }
+
+        input.addEventListener("input", render);
+        input.addEventListener("focus", () => { if (input.value.trim()) render(); });
+        input.addEventListener("keydown", (e) => {
+          if (results.hidden) return;
+          if (e.key === "ArrowDown") { e.preventDefault(); setActive(Math.min(active + 1, items.length - 1)); }
+          else if (e.key === "ArrowUp") { e.preventDefault(); setActive(Math.max(active - 1, 0)); }
+          else if (e.key === "Enter") { e.preventDefault(); choose(active >= 0 ? active : 0); }
+          else if (e.key === "Escape") { close(); }
+        });
+        results.addEventListener("click", (e) => {
+          const item = e.target.closest(".omni-item");
+          if (item) choose(Number(item.dataset.i));
+        });
+        document.addEventListener("click", (e) => { if (!box.contains(e.target)) close(); });
+      })();
+
       fetch("./dashboard_data.json")
         .then((response) => response.json())
         .then((data) => {
           state.data = data;
           buildSymbolIndex();
+          computeIndustryStats();
           renderKpis();
           renderIndustryOptions();
           render();

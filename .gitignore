@@ -14,3 +14,13 @@ __pycache__/
 # Keep dashboard JSON committed for GitHub Pages, but do not commit ad-hoc local archives.
 *.tmp
 *.bak
+
+# Per-symbol chart files: generated at build time by build_dashboard_data.py and
+# shipped in the Pages artifact (upload-pages-artifact uploads dashboard/), but
+# NOT committed — all ~344 change daily, which would bloat git history.
+dashboard/charts/
+
+# Tickertape universe cache (~1.8MB, refreshed every couple days). Cheap to
+# rebuild (~12 bulk requests); the enriched values are baked into
+# dashboard_data.json, so no need to commit this.
+reports/tickertape_fundamentals_cache.json

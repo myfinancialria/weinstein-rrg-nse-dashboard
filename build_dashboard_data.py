@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
@@ -11,19 +12,36 @@ import pandas as pd
 import yfinance as yf
 
 from screener_fundamentals import add_screener_fundamentals
+from screener_segments import fetch_segments_map
+from tickertape_fundamentals import add_tickertape_fundamentals
 
 
 BASE_DIR = Path(__file__).resolve().parent
 REPORTS_DIR = BASE_DIR / "reports"
 DASHBOARD_DIR = BASE_DIR / "dashboard"
 DATA_PATH = DASHBOARD_DIR / "dashboard_data.json"
+# Per-symbol lazy-loaded chart files (git-ignored; generated at build time and
+# shipped in the GitHub Pages artifact, not committed — see .gitignore).
+CHARTS_DIR = DASHBOARD_DIR / "charts"
+CHART_WEEKLY_YEARS = 20  # weekly candles history
+CHART_DAILY_YEARS = 10   # daily candles history (interval toggle in the drawer)
 FUNDAMENTALS_CACHE = REPORTS_DIR / "yahoo_fundamentals_cache.json"
 BACKTEST_JSON = DASHBOARD_DIR / "backtest_results.json"
 BACKTEST_52W_JSON = DASHBOARD_DIR / "backtest_52w_high.json"
 
-INDUSTRY_CSV = REPORTS_DIR / "screener_industry_weinstein_rrg_2026-06-28.csv"
-STOCK_CSV = REPORTS_DIR / "screener_industry_stock_rankings_2026-06-28.csv"
-PRODUCT_XLSX = REPORTS_DIR / "stage2_rrg_leading_industries_best_stocks_products_2026-06-28.xlsx"
+def _latest_report(pattern: str) -> Path | None:
+    """Newest reports/<pattern> by date-stamped filename (ISO dates sort
+    lexicographically), so the dashboard always picks up the most recent
+    industry/Weinstein/RRG scan instead of a hardcoded date."""
+    matches = sorted(REPORTS_DIR.glob(pattern))
+    return matches[-1] if matches else None
+
+
+# The industry-scan outputs (Weinstein stage + RRG quadrant + stock rankings)
+# are date-stamped; read the newest so a daily re-scan flows through.
+INDUSTRY_CSV = _latest_report("screener_industry_weinstein_rrg_*.csv")
+STOCK_CSV = _latest_report("screener_industry_stock_rankings_*.csv")
+PRODUCT_XLSX = _latest_report("stage2_rrg_leading_industries_best_stocks_products_*.xlsx")
 
 
 def clean_value(value):
@@ -191,60 +209,101 @@ def add_52w_high_flag(stocks: pd.DataFrame, info: dict[str, dict]) -> pd.DataFra
     return stocks
 
 
-def build_chart_data(symbols: list[str], prices: pd.DataFrame | None = None) -> dict[str, list[dict]]:
-    """Compact weekly OHLC series (~3 years, last 160 bars) per symbol for the
-    drawer candlestick chart, reusing the shared daily price pull when given.
+def chart_filename(symbol: str) -> str:
+    """URL/filesystem-safe basename for a symbol's chart file: drop the ``.NS``
+    suffix and replace anything outside ``[A-Za-z0-9_-]`` (e.g. the ``&`` in
+    ``M&M.NS``). The frontend derives the same name from ``stock.symbol``, so the
+    two must stay in lock-step."""
+    base = re.sub(r"\.NS$", "", symbol, flags=re.IGNORECASE)
+    return re.sub(r"[^A-Za-z0-9_-]", "_", base)
 
-    Resampled to weekly (W-FRI) because Weinstein stage analysis is a
-    weekly-chart method — the drawer overlays a 30-week MA on these bars. Falls
-    back to weekly close-only for any symbol missing OHLC fields; the frontend
-    chart renders candles when open/high/low are present and an area otherwise."""
-    if not symbols:
-        return {}
-    if prices is None:
-        prices = download_universe_prices(symbols)
-    if prices is None or prices.empty:
-        return {}
 
-    chart_data: dict[str, list[dict]] = {}
-    for symbol in symbols:
-        close = _symbol_series(prices, "Close", symbol)
-        if close is None or close.empty:
-            chart_data[symbol] = []
-            continue
-        open_ = _symbol_series(prices, "Open", symbol)
-        high = _symbol_series(prices, "High", symbol)
-        low = _symbol_series(prices, "Low", symbol)
-        if open_ is None or high is None or low is None:
-            weekly_close = close.resample("W-FRI").last().dropna().tail(160)
-            chart_data[symbol] = [
-                {"time": idx.strftime("%Y-%m-%d"), "close": round(float(value), 2)}
-                for idx, value in weekly_close.items()
-            ]
-            continue
-        frame = pd.concat(
-            {"open": open_, "high": high, "low": low, "close": close}, axis=1
-        ).dropna()
-        if frame.empty:
-            chart_data[symbol] = []
-            continue
-        weekly = (
-            frame.resample("W-FRI")
-            .agg({"open": "first", "high": "max", "low": "min", "close": "last"})
-            .dropna()
-            .tail(160)
-        )
-        chart_data[symbol] = [
-            {
-                "time": idx.strftime("%Y-%m-%d"),
-                "open": round(float(row["open"]), 2),
-                "high": round(float(row["high"]), 2),
-                "low": round(float(row["low"]), 2),
-                "close": round(float(row["close"]), 2),
-            }
-            for idx, row in weekly.iterrows()
+def _ohlc_bars(prices: pd.DataFrame, symbol: str, weekly: bool, max_bars: int) -> list[dict]:
+    """OHLC bars for one symbol, newest ``max_bars`` kept. ``weekly`` resamples to
+    W-FRI (Weinstein timeframe); otherwise raw daily bars. Falls back to
+    close-only when OHLC fields are missing; the frontend renders candles when
+    open/high/low are present and an area chart otherwise."""
+    close = _symbol_series(prices, "Close", symbol)
+    if close is None or close.empty:
+        return []
+    open_ = _symbol_series(prices, "Open", symbol)
+    high = _symbol_series(prices, "High", symbol)
+    low = _symbol_series(prices, "Low", symbol)
+    if open_ is None or high is None or low is None:
+        series = close.resample("W-FRI").last().dropna() if weekly else close.dropna()
+        series = series.tail(max_bars)
+        return [
+            {"time": idx.strftime("%Y-%m-%d"), "close": round(float(value), 2)}
+            for idx, value in series.items()
         ]
-    return chart_data
+    frame = pd.concat({"open": open_, "high": high, "low": low, "close": close}, axis=1).dropna()
+    if frame.empty:
+        return []
+    if weekly:
+        frame = frame.resample("W-FRI").agg(
+            {"open": "first", "high": "max", "low": "min", "close": "last"}
+        ).dropna()
+    frame = frame.tail(max_bars)
+    return [
+        {
+            "time": idx.strftime("%Y-%m-%d"),
+            "open": round(float(row["open"]), 2),
+            "high": round(float(row["high"]), 2),
+            "low": round(float(row["low"]), 2),
+            "close": round(float(row["close"]), 2),
+        }
+        for idx, row in frame.iterrows()
+    ]
+
+
+def write_chart_files(
+    symbols: list[str],
+    out_dir: Path = CHARTS_DIR,
+    weekly_years: int = CHART_WEEKLY_YEARS,
+    daily_years: int = CHART_DAILY_YEARS,
+) -> int:
+    """Write one compact JSON per symbol that the drawer lazy-loads on open —
+    ``charts/<chart_filename(symbol)>.json`` — with both interval series:
+    ``{"weekly": [...~20yr...], "daily": [...~10yr...]}`` (the drawer has a
+    weekly/daily toggle).
+
+    Uses a separate full-history (``period='max'``) pull so the shared 6-year
+    universe pull that feeds return metrics and the 52-week-high scan stays
+    light. These files are git-ignored: generated at build time and shipped in
+    the Pages artifact, never committed (they would change daily). Returns the
+    number of symbols with data."""
+    symbols = sorted({s for s in symbols if s})
+    if not symbols:
+        return 0
+    out_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        prices = yf.download(
+            symbols,
+            period="max",
+            interval="1d",
+            auto_adjust=False,
+            progress=False,
+            threads=True,
+            group_by="column",
+        )
+    except Exception:
+        prices = None
+    if prices is None or prices.empty:
+        return 0
+
+    weekly_max = weekly_years * 53   # 53 covers 52 ISO weeks + partial boundary weeks
+    daily_max = daily_years * 260    # ~260 trading days/year
+    written = 0
+    for symbol in symbols:
+        payload = {
+            "weekly": _ohlc_bars(prices, symbol, weekly=True, max_bars=weekly_max),
+            "daily": _ohlc_bars(prices, symbol, weekly=False, max_bars=daily_max),
+        }
+        path = out_dir / f"{chart_filename(symbol)}.json"
+        path.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
+        if payload["weekly"] or payload["daily"]:
+            written += 1
+    return written
 
 
 def add_yahoo_fundamentals(stocks: pd.DataFrame) -> pd.DataFrame:
@@ -916,6 +975,12 @@ def main() -> None:
     high52_info = compute_52w_high(universe_prices, universe_symbols)
     stocks = add_52w_high_flag(stocks, high52_info)
 
+    # Tickertape (public API) fundamentals for the WHOLE universe so every stock
+    # — not just the leading/breakout picks — carries P/E, P/B, ROE, ROCE,
+    # margins, EPS, FCF, promoter holding, debt/equity and market cap. This
+    # powers the per-metric "vs industry median" comparison in the drawer.
+    stocks = add_tickertape_fundamentals(stocks)
+
     leading_industries = industries[
         (industries["stage"] == "stage_2")
         & (industries["rrg_quadrant"] == "leading")
@@ -925,6 +990,8 @@ def main() -> None:
     # screener.in fills the gaps Yahoo leaves (ROE/ROCE/margins/debt/FCF/
     # promoter holding/quarterly growth) so the per-stock SWOT is complete.
     leading_stocks = add_screener_fundamentals(leading_stocks)
+    # (Tickertape values are already on the base `stocks` and inherited by this
+    # copy; Yahoo+screener above only fill the extra description/SWOT gaps.)
     leading_stocks = add_fundamental_scores(leading_stocks)
     leading_stocks = add_stock_notes(leading_stocks)
 
@@ -942,9 +1009,23 @@ def main() -> None:
     )
 
     stocks = add_stock_notes(stocks)
-    # Charts for the full universe so any screener, breakout or backtest stock
-    # opens with a price chart in the drawer.
-    chart_data = build_chart_data(universe_symbols, prices=universe_prices)
+    # Per-symbol chart files (~20yr weekly OHLC each) for the full universe so
+    # any screener, breakout or backtest stock opens with a price chart in the
+    # drawer. Written to dashboard/charts/ and lazy-loaded by the frontend on
+    # drawer open, keeping dashboard_data.json small.
+    chart_symbols_written = write_chart_files(universe_symbols)
+    print(f"chart files written: {chart_symbols_written}/{len(universe_symbols)} -> {CHARTS_DIR}")
+
+    # Product/business segment revenue breakups (screener.in) for the drawer pie.
+    # Premium-gated: populated only when SCREENER_SESSION_COOKIE is set; otherwise
+    # a graceful no-op and the drawer shows a "not disclosed" fallback.
+    seg_display = (
+        stocks["display_symbol"] if "display_symbol" in stocks.columns else stocks["symbol"]
+    )
+    segments_map = fetch_segments_map(
+        stocks["symbol"].fillna("").tolist(),
+        seg_display.fillna("").tolist(),
+    )
     fundamental_picks = (
         leading_stocks.sort_values(["parent", "fundamental_score", "market_cap_cr"], ascending=[True, False, False])
         .groupby("parent", group_keys=False)
@@ -987,7 +1068,12 @@ def main() -> None:
         "breakout52wStocks": clean_records(breakout_stocks),
         "fundamentalPicks": clean_records(fundamental_picks),
         "industryTheses": INDUSTRY_THESES,
-        "chartData": chart_data,
+        # chartData moved to per-symbol files under dashboard/charts/ (lazy-loaded
+        # on drawer open). Kept as an empty object for backward compatibility.
+        "chartData": {},
+        # {symbol: {segments:[{name,value,pct}], names:[...], gated, period}} for
+        # the drawer revenue-breakup pie. Empty unless SCREENER_SESSION_COOKIE set.
+        "segments": segments_map,
         "backtest": backtest,
         "backtest52w": backtest_52w,
     }
