@@ -28,9 +28,19 @@ FUNDAMENTALS_CACHE = REPORTS_DIR / "yahoo_fundamentals_cache.json"
 BACKTEST_JSON = DASHBOARD_DIR / "backtest_results.json"
 BACKTEST_52W_JSON = DASHBOARD_DIR / "backtest_52w_high.json"
 
-INDUSTRY_CSV = REPORTS_DIR / "screener_industry_weinstein_rrg_2026-06-28.csv"
-STOCK_CSV = REPORTS_DIR / "screener_industry_stock_rankings_2026-06-28.csv"
-PRODUCT_XLSX = REPORTS_DIR / "stage2_rrg_leading_industries_best_stocks_products_2026-06-28.xlsx"
+def _latest_report(pattern: str) -> Path | None:
+    """Newest reports/<pattern> by date-stamped filename (ISO dates sort
+    lexicographically), so the dashboard always picks up the most recent
+    industry/Weinstein/RRG scan instead of a hardcoded date."""
+    matches = sorted(REPORTS_DIR.glob(pattern))
+    return matches[-1] if matches else None
+
+
+# The industry-scan outputs (Weinstein stage + RRG quadrant + stock rankings)
+# are date-stamped; read the newest so a daily re-scan flows through.
+INDUSTRY_CSV = _latest_report("screener_industry_weinstein_rrg_*.csv")
+STOCK_CSV = _latest_report("screener_industry_stock_rankings_*.csv")
+PRODUCT_XLSX = _latest_report("stage2_rrg_leading_industries_best_stocks_products_*.xlsx")
 
 
 def clean_value(value):

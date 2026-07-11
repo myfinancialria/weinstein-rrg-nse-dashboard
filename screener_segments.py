@@ -125,26 +125,39 @@ def parse_segments(html: str) -> dict:
     if not html or BeautifulSoup is None:
         return empty
     soup = BeautifulSoup(html, "html.parser")
-    tbody = soup.select_one('tbody[data-segment-line="Sales"]')
+    # The revenue segment line is "Sales" for most companies but "Revenue" for
+    # banks/NBFCs; fall back to the first segment-line tbody either way.
+    tbody = (
+        soup.select_one('tbody[data-segment-line="Sales"]')
+        or soup.select_one('tbody[data-segment-line="Revenue"]')
+        or soup.select_one("tbody[data-segment-line]")
+    )
     if tbody is None:
         return empty
+    line_label = (tbody.get("data-segment-line") or "").strip().lower()
     gated = "upgrade to premium" in tbody.get_text(" ", strip=True).lower()
     thead = soup.select_one("table.data-table thead")
     periods = [th.get_text(strip=True) for th in thead.find_all("th")][1:] if thead else []
     period = periods[-1] if periods else ""
 
+    # screener's standard data-table row: <td class="text">Label</td><td>v1</td>…
+    # Read each segment row's own cells (recursive=False avoids the nested
+    # name-table screener renders in the gated/paywalled layout).
+    # Keep single-cell rows too: the gated layout nests segment NAMES in
+    # value-less rows (premium fills the value cells). So we still surface names
+    # for the gated fallback, and read values wherever they exist.
     rows = []  # (name, latest_value_or_None)
     for tr in tbody.find_all("tr"):
-        cells = tr.find_all("td", recursive=False)  # only THIS row's own cells
+        cells = tr.find_all("td", recursive=False)
         if not cells:
             continue
-        first = cells[0]
-        if "text" not in (first.get("class") or []):
-            continue  # wrapper/spacer rows
-        name = first.get_text(strip=True)
-        if not name or name.lower() == "sales" or "strong" in (tr.get("class") or []):
-            continue  # the "Sales" group-header/total row
-        vals = [_to_float(td.get_text(strip=True)) for td in cells[1:]]
+        label_cell = cells[0]
+        if "text" not in (label_cell.get("class") or []):
+            continue  # wrapper/spacer rows (e.g. the gated colspan row)
+        name = label_cell.get_text(strip=True).replace("\xa0", " ").rstrip("+").strip()
+        if not name or name.lower() == line_label or "strong" in (tr.get("class") or []):
+            continue  # the "Sales"/"Revenue" group-total header row
+        vals = [_to_float(c.get_text(strip=True)) for c in cells[1:]]
         latest = next((v for v in reversed(vals) if v is not None), None)
         rows.append((name, latest))
 
