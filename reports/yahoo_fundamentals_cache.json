@@ -2810,5 +2810,24 @@
     "pe_ratio": null,
     "pb_ratio": 3.791325,
     "peg_ratio": null
+  },
+  "VELS.NS": {
+    "company_description": "",
+    "website": "",
+    "yahoo_sector": "",
+    "yahoo_industry": "",
+    "promoter_or_insider_holding_pct": null,
+    "eps": null,
+    "gross_margin_pct": null,
+    "operating_margin_pct": null,
+    "net_margin_pct": null,
+    "roe_pct": null,
+    "debt_to_equity": null,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": 1.5696887,
+    "pb_ratio": 1.334407,
+    "peg_ratio": null
   }
 }

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-15 22:26:17 IST",
-  "title": "Pre-market Technical Blog - 15 Jul 2026",
+  "generated_at": "2026-07-16 22:23:58 IST",
+  "title": "Pre-market Technical Blog - 16 Jul 2026",
   "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
     "up": 42,
@@ -8,23 +8,23 @@
     "sideways": 9
   },
   "nifty": {
-    "close": 24078.5,
-    "change_5d_pct": 0.82,
-    "change_20d_pct": 0.37,
-    "ma20": 24087.91,
-    "ma50": 23830.59,
-    "ma200": 24829.79,
-    "rsi14": 51.53
+    "close": 24072.75,
+    "change_5d_pct": 0.46,
+    "change_20d_pct": -0.05,
+    "ma20": 24087.26,
+    "ma50": 23831.39,
+    "ma200": 24823.51,
+    "rsi14": 50.46
   },
   "cpr": {
-    "pivot": 24103.13,
-    "bc": 24090.82,
-    "tc": 24115.45,
-    "r1": 24195.72,
-    "r2": 24312.93,
-    "s1": 23985.92,
-    "s2": 23893.33,
-    "width_pct": 0.102
+    "pivot": 24103.08,
+    "bc": 24087.92,
+    "tc": 24118.25,
+    "r1": 24156.17,
+    "r2": 24239.58,
+    "s1": 24019.67,
+    "s2": 23966.58,
+    "width_pct": 0.126
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7537.88,
-      "change_pct": -0.08
+      "level": 7551.11,
+      "change_pct": -0.28
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52510.11,
-      "change_pct": 0.0
+      "level": 52658.23,
+      "change_pct": -0.0
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 26092.34,
-      "change_pct": -0.06
+      "level": 26038.19,
+      "change_pct": -0.88
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10515.92,
-      "change_pct": -0.13
+      "level": 10572.24,
+      "change_pct": 0.54
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 67743.5,
-      "change_pct": 0.74
+      "level": 68751.51,
+      "change_pct": 1.49
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24340.73,
-      "change_pct": 0.52
+      "level": 24681.1,
+      "change_pct": 1.4
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3967.13,
-      "change_pct": 1.36
+      "level": 3955.58,
+      "change_pct": -0.29
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 96.25,
-      "change_pct": -0.06
+      "level": 96.33,
+      "change_pct": -0.09
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
       "level": 84.79,
-      "change_pct": 0.07
+      "change_pct": -0.19
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4034.1,
-      "change_pct": -0.66
+      "level": 3995.0,
+      "change_pct": -1.21
     }
   ],
   "pattern_notes": [
     "Nifty is below 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 0.82%, while last 20-session return is 0.37%.",
-    "CPR width is 0.102%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24115.45 and R1 24195.72; weakness increases below BC 24090.82 and S1 23985.92."
+    "Last 5-session return is 0.46%, while last 20-session return is -0.05%.",
+    "CPR width is 0.126%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24118.25 and R1 24156.17; weakness increases below BC 24087.92 and S1 24019.67."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24115.45, buyers have better control and the first upside zones are 24195.72 and 24312.93. Below CPR bottom 24090.82, sellers gain control and downside zones are 23985.92 and 23893.33. A sustained move around pivot 24103.13 can mean a range day."
+      "body": "Above CPR top 24118.25, buyers have better control and the first upside zones are 24156.17 and 24239.58. Below CPR bottom 24087.92, sellers gain control and downside zones are 24019.67 and 23966.58. A sustained move around pivot 24103.08 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -121,33 +121,43 @@
   "leading_industries": [
     {
       "name": "2/3 Wheelers",
-      "rs_ratio": 102.62,
-      "rs_momentum": 102.03
+      "rs_ratio": 102.08,
+      "rs_momentum": 100.81
+    },
+    {
+      "name": "Abrasives & Bearings",
+      "rs_ratio": 101.05,
+      "rs_momentum": 100.23
     },
     {
       "name": "Logistics Solution Provider",
-      "rs_ratio": 101.12,
-      "rs_momentum": 101.12
+      "rs_ratio": 101.16,
+      "rs_momentum": 100.59
     },
     {
       "name": "Lubricants",
-      "rs_ratio": 101.28,
-      "rs_momentum": 102.13
+      "rs_ratio": 101.19,
+      "rs_momentum": 100.7
     },
     {
       "name": "Media & Entertainment",
-      "rs_ratio": 100.84,
-      "rs_momentum": 101.89
+      "rs_ratio": 101.71,
+      "rs_momentum": 102.55
     },
     {
       "name": "Other Bank",
-      "rs_ratio": 102.41,
-      "rs_momentum": 101.21
+      "rs_ratio": 102.03,
+      "rs_momentum": 100.42
     },
     {
       "name": "Rubber",
-      "rs_ratio": 102.26,
-      "rs_momentum": 102.24
+      "rs_ratio": 102.54,
+      "rs_momentum": 102.84
+    },
+    {
+      "name": "Telecom - Infrastructure",
+      "rs_ratio": 100.95,
+      "rs_momentum": 100.92
     }
   ],
   "fundamental_picks": [
@@ -182,32 +192,25 @@
       "score": 47.24
     },
     {
-      "name": "Transport Corp.",
-      "symbol": "TCI",
-      "industry": "Logistics Solution Provider",
-      "score": 75.59
+      "name": "SKF India Indus.",
+      "symbol": "SKFINDUS",
+      "industry": "Abrasives & Bearings",
+      "score": 82.15
     },
     {
-      "name": "Gateway Distri",
-      "symbol": "GATEWAY",
-      "industry": "Logistics Solution Provider",
-      "score": 71.38
+      "name": "Timken India",
+      "symbol": "TIMKEN",
+      "industry": "Abrasives & Bearings",
+      "score": 77.08
     },
     {
-      "name": "Container Corpn.",
-      "symbol": "CONCOR",
-      "industry": "Logistics Solution Provider",
-      "score": 60.81
+      "name": "Grindwell Norton",
+      "symbol": "GRINDWELL",
+      "industry": "Abrasives & Bearings",
+      "score": 72.86
     }
   ],
   "recent_nifty": [
-    {
-      "date": "2026-07-08",
-      "open": 24259.55,
-      "high": 24300.0,
-      "low": 23805.2,
-      "close": 23882.05
-    },
     {
       "date": "2026-07-09",
       "open": 23928.95,
@@ -242,6 +245,13 @@
       "high": 24220.35,
       "low": 24010.55,
       "close": 24078.5
+    },
+    {
+      "date": "2026-07-16",
+      "open": 24142.1,
+      "high": 24186.5,
+      "low": 24050.0,
+      "close": 24072.75
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
