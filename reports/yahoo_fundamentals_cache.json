@@ -2829,5 +2829,24 @@
     "pe_ratio": 1.5696887,
     "pb_ratio": 1.334407,
     "peg_ratio": null
+  },
+  "SIGNPOST.NS": {
+    "company_description": "Signpost India Limited, together with its subsidiaries, provides advertising services in India.  Its portfolio of media assets comprises street DOOH billboards; digital bus queue shelters; hybrid mobility solutions, such as e-bikes; traffic surveillance booths; street accessible libraries; skywalks, bus panels, airports, metro stations, and smart mobile vans; and kiosks and public electric bicycle sharing. The company also sells space for advertising in print media; and provides public relations services. The company also offers general and outdoor advertising in various ways, including indoor outdoors, newspapers, souvenirs, hoardings, buses, railways, bus shelters, and airports. Signpost India Limited was incorporated in 2008 and is based in Mumbai, India.",
+    "website": "https://www.signpostindia.com",
+    "yahoo_sector": "Communication Services",
+    "yahoo_industry": "Advertising Agencies",
+    "promoter_or_insider_holding_pct": 74.19,
+    "eps": 13.15,
+    "gross_margin_pct": 32.79,
+    "operating_margin_pct": 19.54,
+    "net_margin_pct": 12.17,
+    "roe_pct": 27.3,
+    "debt_to_equity": 69.752,
+    "current_ratio": 1.257,
+    "quick_ratio": 1.116,
+    "free_cash_flow_cr": -79.06,
+    "pe_ratio": 24.859316,
+    "pb_ratio": 6.0550494,
+    "peg_ratio": null
   }
 }
