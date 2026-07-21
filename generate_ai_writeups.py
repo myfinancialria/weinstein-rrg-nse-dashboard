@@ -59,6 +59,7 @@ SCOPE = os.getenv("AI_WRITEUP_SCOPE", "leading")
 # AI_REQUEST_INTERVAL once credits raise the limit.
 MAX_WORKERS = int(os.getenv("AI_WRITEUP_WORKERS", "1"))
 REQUEST_INTERVAL = float(os.getenv("AI_REQUEST_INTERVAL", "4.0"))  # ~15/min < 16/min cap
+BUDGET_SECS = float(os.getenv("AI_WRITEUP_BUDGET_SECS", "600"))    # cap the step so it can't hang the run
 
 # Bump to force every write-up to regenerate (e.g. after a prompt change).
 PROMPT_VERSION = "v1"
@@ -282,31 +283,35 @@ def main() -> int:
         todo = []
 
     if todo:
-        def run(w):
+        # Serial + wall-clock budget: free models are paced ~15/min, so we bound
+        # the step so it NEVER hangs the pipeline (which would otherwise stall
+        # every nightly run). Cache is saved as we go and persists across runs,
+        # so whatever isn't finished this run is picked up by the next one.
+        def _save():
+            CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+            CACHE_PATH.write_text(json.dumps(cache, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        deadline = time.monotonic() + BUDGET_SECS
+        done = ok = 0
+        for w in todo:
+            if time.monotonic() > deadline:
+                print(f"  time budget ({BUDGET_SECS:.0f}s) reached — {ok} generated this run, "
+                      f"{len(todo) - done} left for the next run.")
+                break
             kind, name, key_id, facts, ck = w
+            done += 1
             try:
                 text = generate_one(kind, name, facts)
-                return ck, text, None
-            except Exception as exc:  # noqa: BLE001
-                return ck, None, str(exc)
-
-        done = 0
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
-            futs = {ex.submit(run, w): w for w in todo}
-            for fut in as_completed(futs):
-                ck, text, err = fut.result()
-                done += 1
-                w = futs[fut]
                 if text:
                     cache[ck] = text
-                    if done % 10 == 0 or done == len(todo):
-                        CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
-                        CACHE_PATH.write_text(json.dumps(cache, ensure_ascii=False, indent=2), encoding="utf-8")
-                        print(f"  {done}/{len(todo)} generated (cache saved)")
-                else:
-                    print(f"  ! failed: {w[1]} — {err}")
-        CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
-        CACHE_PATH.write_text(json.dumps(cache, ensure_ascii=False, indent=2), encoding="utf-8")
+                    ok += 1
+                    if ok % 5 == 0:
+                        _save()
+                        print(f"  {ok} generated (cache saved)")
+            except Exception as exc:  # noqa: BLE001
+                print(f"  ! failed: {name} — {exc}")
+        _save()
+        print(f"  AI write-ups this run: {ok} generated, {len(work) - len([w for w in work if w[4] in cache])} still to do.")
 
     # Assemble output from cache
     out = {
