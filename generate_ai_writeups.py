@@ -53,7 +53,12 @@ QWEN_MODEL = os.getenv("QWEN_MODEL", "google/gemma-4-31b-it:free")
 LLAMA_MODEL = os.getenv("LLAMA_MODEL", "")
 MERGE_MODEL = os.getenv("MERGE_MODEL", QWEN_MODEL)
 SCOPE = os.getenv("AI_WRITEUP_SCOPE", "leading")
-MAX_WORKERS = int(os.getenv("AI_WRITEUP_WORKERS", "4"))
+# Free OpenRouter models are limited to ~16 requests/MINUTE. Serialize (1 worker)
+# and pace each request so we stay under that and finish all items in one run
+# instead of getting 429-throttled. Bump AI_WRITEUP_WORKERS / lower
+# AI_REQUEST_INTERVAL once credits raise the limit.
+MAX_WORKERS = int(os.getenv("AI_WRITEUP_WORKERS", "1"))
+REQUEST_INTERVAL = float(os.getenv("AI_REQUEST_INTERVAL", "4.0"))  # ~15/min < 16/min cap
 
 # Bump to force every write-up to regenerate (e.g. after a prompt change).
 PROMPT_VERSION = "v1"
@@ -124,26 +129,34 @@ def cache_key(kind: str, facts: dict) -> str:
 
 
 def _chat(model: str, system: str, user: str, timeout: int = 90) -> str:
-    resp = requests.post(
-        f"{BASE_URL}/chat/completions",
-        headers={
-            "Authorization": f"Bearer {API_KEY}",
-            "Content-Type": "application/json",
-            # OpenRouter-recommended attribution headers (harmless on other providers)
-            "HTTP-Referer": "https://myfinancialria.github.io/weinstein-rrg-nse-dashboard/",
-            "X-Title": "Weinstein RRG Dashboard",
-        },
-        json={
-            "model": model,
-            "temperature": 0.4,
-            "max_tokens": 500,
-            "messages": [
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-        },
-        timeout=timeout,
-    )
+    # Pace each call to stay under the free-tier per-minute cap; on a 429 wait
+    # out the minute window and retry rather than failing the item.
+    for _attempt in range(4):
+        time.sleep(REQUEST_INTERVAL)
+        resp = requests.post(
+            f"{BASE_URL}/chat/completions",
+            headers={
+                "Authorization": f"Bearer {API_KEY}",
+                "Content-Type": "application/json",
+                # OpenRouter-recommended attribution headers (harmless on other providers)
+                "HTTP-Referer": "https://myfinancialria.github.io/weinstein-rrg-nse-dashboard/",
+                "X-Title": "Weinstein RRG Dashboard",
+            },
+            json={
+                "model": model,
+                "temperature": 0.4,
+                "max_tokens": 500,
+                "messages": [
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user},
+                ],
+            },
+            timeout=timeout,
+        )
+        if resp.status_code == 429:
+            time.sleep(62)  # free per-minute window resets each minute
+            continue
+        break
     if resp.status_code >= 400:
         # surface the provider's reason (helps diagnose 400s in CI logs)
         raise RuntimeError(f"HTTP {resp.status_code}: {resp.text[:300]}")
