@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-20 22:29:38 IST",
-  "title": "Pre-market Technical Blog - 20 Jul 2026",
+  "generated_at": "2026-07-21 22:30:12 IST",
+  "title": "Pre-market Technical Blog - 21 Jul 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 49,
-    "down": 42,
+    "up": 59,
+    "down": 32,
     "sideways": 9
   },
   "nifty": {
-    "close": 24238.5,
-    "change_5d_pct": 0.11,
-    "change_20d_pct": 0.94,
-    "ma20": 24106.85,
-    "ma50": 23829.7,
-    "ma200": 24814.52,
-    "rsi14": 59.36
+    "close": 24187.7,
+    "change_5d_pct": 0.56,
+    "change_20d_pct": 0.35,
+    "ma20": 24111.09,
+    "ma50": 23829.93,
+    "ma200": 24810.17,
+    "rsi14": 54.78
   },
   "cpr": {
-    "pivot": 24213.48,
-    "bc": 24200.97,
-    "tc": 24225.99,
-    "r1": 24291.12,
-    "r2": 24343.73,
-    "s1": 24160.87,
-    "s2": 24083.23,
-    "width_pct": 0.103
+    "pivot": 24195.18,
+    "bc": 24191.44,
+    "tc": 24198.92,
+    "r1": 24254.72,
+    "r2": 24321.73,
+    "s1": 24128.17,
+    "s2": 24068.63,
+    "width_pct": 0.031
   },
   "gift_nifty": {
     "level": null,
@@ -36,26 +36,26 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7474.65,
-      "change_pct": 0.23
+      "level": 7512.37,
+      "change_pct": 0.93
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51974.84,
-      "change_pct": -0.33
+      "level": 52350.18,
+      "change_pct": 0.99
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 25657.32,
-      "change_pct": 0.54
+      "level": 25861.31,
+      "change_pct": 1.38
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10524.76,
-      "change_pct": -0.71
+      "level": 10585.91,
+      "change_pct": 0.58
     },
     {
       "name": "Nikkei 225",
@@ -66,39 +66,39 @@
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24562.24,
-      "change_pct": -1.78
+      "level": 25143.05,
+      "change_pct": 2.36
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3764.16,
-      "change_pct": -3.05
+      "level": 3796.28,
+      "change_pct": 0.85
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 96.43,
-      "change_pct": -0.22
+      "level": 96.22,
+      "change_pct": -0.06
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 88.21,
-      "change_pct": 0.12
+      "level": 91.32,
+      "change_pct": 2.35
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4013.2,
-      "change_pct": 0.01
+      "level": 4076.6,
+      "change_pct": 1.65
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 0.11%, while last 20-session return is 0.94%.",
-    "CPR width is 0.103%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24225.99 and R1 24291.12; weakness increases below BC 24200.97 and S1 24160.87."
+    "Last 5-session return is 0.56%, while last 20-session return is 0.35%.",
+    "CPR width is 0.031%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24198.92 and R1 24254.72; weakness increases below BC 24191.44 and S1 24128.17."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24225.99, buyers have better control and the first upside zones are 24291.12 and 24343.73. Below CPR bottom 24200.97, sellers gain control and downside zones are 24160.87 and 24083.23. A sustained move around pivot 24213.48 can mean a range day."
+      "body": "Above CPR top 24198.92, buyers have better control and the first upside zones are 24254.72 and 24321.73. Below CPR bottom 24191.44, sellers gain control and downside zones are 24128.17 and 24068.63. A sustained move around pivot 24195.18 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -121,33 +121,43 @@
   "leading_industries": [
     {
       "name": "2/3 Wheelers",
-      "rs_ratio": 102.11,
-      "rs_momentum": 102.47
+      "rs_ratio": 102.28,
+      "rs_momentum": 102.4
     },
     {
       "name": "Auto Components & Equipments",
-      "rs_ratio": 101.22,
-      "rs_momentum": 102.35
+      "rs_ratio": 101.61,
+      "rs_momentum": 104.23
+    },
+    {
+      "name": "Logistics Solution Provider",
+      "rs_ratio": 101.04,
+      "rs_momentum": 101.04
+    },
+    {
+      "name": "Lubricants",
+      "rs_ratio": 101.38,
+      "rs_momentum": 100.49
     },
     {
       "name": "Media & Entertainment",
-      "rs_ratio": 101.42,
-      "rs_momentum": 102.7
+      "rs_ratio": 101.89,
+      "rs_momentum": 103.76
     },
     {
       "name": "Other Bank",
-      "rs_ratio": 101.8,
-      "rs_momentum": 101.09
+      "rs_ratio": 102.26,
+      "rs_momentum": 101.92
+    },
+    {
+      "name": "Other Industrial Products",
+      "rs_ratio": 101.28,
+      "rs_momentum": 102.41
     },
     {
       "name": "Real Estate Investment Trusts (REITs)",
-      "rs_ratio": 101.63,
-      "rs_momentum": 100.85
-    },
-    {
-      "name": "Rubber",
-      "rs_ratio": 102.56,
-      "rs_momentum": 103.16
+      "rs_ratio": 101.76,
+      "rs_momentum": 100.93
     }
   ],
   "fundamental_picks": [
@@ -167,19 +177,19 @@
       "name": "Bajaj Auto",
       "symbol": "BAJAJ-AUTO",
       "industry": "2/3 Wheelers",
-      "score": 86.5
+      "score": 86.49
+    },
+    {
+      "name": "TVS Motor Co.",
+      "symbol": "TVSMOTOR",
+      "industry": "2/3 Wheelers",
+      "score": 53.05
     },
     {
       "name": "Delta Auto.",
       "symbol": "DELTIC",
       "industry": "2/3 Wheelers",
       "score": 51.01
-    },
-    {
-      "name": "TVS Motor Co.",
-      "symbol": "TVSMOTOR",
-      "industry": "2/3 Wheelers",
-      "score": 47.24
     },
     {
       "name": "Schaeffler India",
@@ -201,13 +211,6 @@
     }
   ],
   "recent_nifty": [
-    {
-      "date": "2026-07-13",
-      "open": 24039.4,
-      "high": 24259.8,
-      "low": 24000.2,
-      "close": 24211.0
-    },
     {
       "date": "2026-07-14",
       "open": 24068.0,
@@ -242,6 +245,13 @@
       "high": 24266.1,
       "low": 24135.85,
       "close": 24238.5
+    },
+    {
+      "date": "2026-07-21",
+      "open": 24216.05,
+      "high": 24262.2,
+      "low": 24135.65,
+      "close": 24187.7
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
