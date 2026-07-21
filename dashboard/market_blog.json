@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-21 23:15:17 IST",
-  "title": "Pre-market Technical Blog - 21 Jul 2026",
+  "generated_at": "2026-07-22 00:08:42 IST",
+  "title": "Pre-market Technical Blog - 22 Jul 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
     "up": 59,
@@ -8,23 +8,23 @@
     "sideways": 9
   },
   "nifty": {
-    "close": 24187.7,
-    "change_5d_pct": 0.56,
-    "change_20d_pct": 0.35,
-    "ma20": 24111.09,
-    "ma50": 23829.93,
-    "ma200": 24810.17,
-    "rsi14": 54.78
+    "close": 24238.5,
+    "change_5d_pct": 0.11,
+    "change_20d_pct": 0.94,
+    "ma20": 24106.85,
+    "ma50": 23829.7,
+    "ma200": 24814.52,
+    "rsi14": 59.36
   },
   "cpr": {
-    "pivot": 24195.18,
-    "bc": 24191.44,
-    "tc": 24198.92,
-    "r1": 24254.72,
-    "r2": 24321.73,
-    "s1": 24128.17,
-    "s2": 24068.63,
-    "width_pct": 0.031
+    "pivot": 24213.48,
+    "bc": 24200.97,
+    "tc": 24225.99,
+    "r1": 24291.12,
+    "r2": 24343.73,
+    "s1": 24160.87,
+    "s2": 24083.23,
+    "width_pct": 0.103
   },
   "gift_nifty": {
     "level": null,
@@ -36,20 +36,20 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7512.53,
-      "change_pct": 0.93
+      "level": 7507.27,
+      "change_pct": 0.86
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52276.93,
-      "change_pct": 0.84
+      "level": 52210.69,
+      "change_pct": 0.72
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 25865.02,
-      "change_pct": 1.4
+      "level": 25849.87,
+      "change_pct": 1.34
     },
     {
       "name": "FTSE 100",
@@ -78,27 +78,27 @@
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 96.22,
+      "level": 96.23,
       "change_pct": -0.06
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 91.19,
-      "change_pct": 2.21
+      "level": 91.04,
+      "change_pct": 2.04
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4074.5,
-      "change_pct": 1.6
+      "level": 4089.1,
+      "change_pct": 1.96
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 0.56%, while last 20-session return is 0.35%.",
-    "CPR width is 0.031%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24198.92 and R1 24254.72; weakness increases below BC 24191.44 and S1 24128.17."
+    "Last 5-session return is 0.11%, while last 20-session return is 0.94%.",
+    "CPR width is 0.103%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24225.99 and R1 24291.12; weakness increases below BC 24200.97 and S1 24160.87."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24198.92, buyers have better control and the first upside zones are 24254.72 and 24321.73. Below CPR bottom 24191.44, sellers gain control and downside zones are 24128.17 and 24068.63. A sustained move around pivot 24195.18 can mean a range day."
+      "body": "Above CPR top 24225.99, buyers have better control and the first upside zones are 24291.12 and 24343.73. Below CPR bottom 24200.97, sellers gain control and downside zones are 24160.87 and 24083.23. A sustained move around pivot 24213.48 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -121,43 +121,33 @@
   "leading_industries": [
     {
       "name": "2/3 Wheelers",
-      "rs_ratio": 102.28,
-      "rs_momentum": 102.4
+      "rs_ratio": 102.19,
+      "rs_momentum": 102.69
     },
     {
       "name": "Auto Components & Equipments",
-      "rs_ratio": 101.61,
-      "rs_momentum": 104.23
-    },
-    {
-      "name": "Logistics Solution Provider",
-      "rs_ratio": 101.04,
-      "rs_momentum": 101.04
-    },
-    {
-      "name": "Lubricants",
-      "rs_ratio": 101.38,
-      "rs_momentum": 100.49
+      "rs_ratio": 101.22,
+      "rs_momentum": 102.33
     },
     {
       "name": "Media & Entertainment",
-      "rs_ratio": 101.89,
-      "rs_momentum": 103.76
+      "rs_ratio": 101.45,
+      "rs_momentum": 102.71
     },
     {
       "name": "Other Bank",
-      "rs_ratio": 102.26,
-      "rs_momentum": 101.92
-    },
-    {
-      "name": "Other Industrial Products",
-      "rs_ratio": 101.28,
-      "rs_momentum": 102.41
+      "rs_ratio": 101.81,
+      "rs_momentum": 101.1
     },
     {
       "name": "Real Estate Investment Trusts (REITs)",
-      "rs_ratio": 101.76,
-      "rs_momentum": 100.93
+      "rs_ratio": 101.72,
+      "rs_momentum": 101.19
+    },
+    {
+      "name": "Rubber",
+      "rs_ratio": 102.37,
+      "rs_momentum": 102.87
     }
   ],
   "fundamental_picks": [
@@ -212,6 +202,13 @@
   ],
   "recent_nifty": [
     {
+      "date": "2026-07-13",
+      "open": 24039.4,
+      "high": 24259.8,
+      "low": 24000.2,
+      "close": 24211.0
+    },
+    {
       "date": "2026-07-14",
       "open": 24068.0,
       "high": 24157.1,
@@ -245,13 +242,6 @@
       "high": 24266.1,
       "low": 24135.85,
       "close": 24238.5
-    },
-    {
-      "date": "2026-07-21",
-      "open": 24216.05,
-      "high": 24262.2,
-      "low": 24135.65,
-      "close": 24187.7
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
