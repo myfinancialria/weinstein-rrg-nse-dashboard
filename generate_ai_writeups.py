@@ -44,8 +44,13 @@ CACHE_PATH = HERE / "reports" / "ai_writeups_cache.json"
 
 BASE_URL = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1").rstrip("/")
 API_KEY = os.getenv("OPENROUTER_API_KEY", "")
-QWEN_MODEL = os.getenv("QWEN_MODEL", "qwen/qwen-2.5-72b-instruct")
-LLAMA_MODEL = os.getenv("LLAMA_MODEL", "meta-llama/llama-3.3-70b-instruct")
+# Free OpenRouter models — the account has no credits, so the paid Qwen/Llama
+# models return HTTP 402. Default to ONE free model per item (LLAMA blank => no
+# second draft, no merge) to stretch the free daily request cap. If credits are
+# added later, set QWEN_MODEL/LLAMA_MODEL/MERGE_MODEL env vars to restore the
+# two-draft-then-merge flow with stronger models.
+QWEN_MODEL = os.getenv("QWEN_MODEL", "google/gemma-4-31b-it:free")
+LLAMA_MODEL = os.getenv("LLAMA_MODEL", "")
 MERGE_MODEL = os.getenv("MERGE_MODEL", QWEN_MODEL)
 SCOPE = os.getenv("AI_WRITEUP_SCOPE", "leading")
 MAX_WORKERS = int(os.getenv("AI_WRITEUP_WORKERS", "4"))
@@ -199,7 +204,9 @@ def _safe_chat(model: str, system: str, user: str) -> str:
 def generate_one(kind: str, name: str, facts: dict) -> str:
     prompt = draft_prompt(kind, facts)
     draft_q = _safe_chat(QWEN_MODEL, SYSTEM, prompt)
-    draft_l = _safe_chat(LLAMA_MODEL, SYSTEM, prompt)
+    # Second draft only when a second model is configured (blank = single-model,
+    # 1 API call per item — best for the free daily cap).
+    draft_l = _safe_chat(LLAMA_MODEL, SYSTEM, prompt) if LLAMA_MODEL else ""
     if not draft_q and not draft_l:
         raise RuntimeError("both Qwen and Llama drafts failed")
     if not draft_q:

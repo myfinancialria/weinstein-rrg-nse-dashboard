@@ -85,7 +85,11 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update daily dashboard data"
-          file_pattern: dashboard/*.json dashboard/sector-leadership.html reports/*.json
+          # Commit the dated scan CSVs too, so the newest Weinstein/RRG
+          # classification persists — otherwise a push-triggered rebuild (which
+          # skips the scan) would re-read the last committed CSV and revert the
+          # industry stages/quadrants to that older date.
+          file_pattern: dashboard/*.json dashboard/sector-leadership.html reports/*.json reports/*.csv
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
