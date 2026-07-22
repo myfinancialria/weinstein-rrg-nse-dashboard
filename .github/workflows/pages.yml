@@ -73,12 +73,22 @@ jobs:
           python build_sector_report.py
           python generate_market_blog.py
 
-      # Plain-English "why it's strong" write-ups via Qwen + Llama (OpenRouter).
-      # Cached in reports/ai_writeups_cache.json, so only new/changed items cost tokens.
-      # If OPENROUTER_API_KEY is not set, this is a no-op (writes cached results only).
-      - name: Generate AI write-ups (Qwen + Llama)
+      # Plain-English "why it's strong" write-ups via free LLM providers, tried
+      # in order (Gemini -> Groq -> OpenRouter) with per-day caps + failover.
+      # Cached in reports/ai_writeups_cache.json + usage in reports/ai_usage.json,
+      # so a day's free quota is respected across runs and only new items cost.
+      # A no-op (cache-only) if none of the provider keys are set.
+      - name: Generate AI write-ups (free LLM providers)
         env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          # Optional overrides (order, models, per-day caps) via repo variables:
+          AI_PROVIDER_ORDER: ${{ vars.AI_PROVIDER_ORDER }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          GROQ_MODEL: ${{ vars.GROQ_MODEL }}
+          GEMINI_DAILY_CAP: ${{ vars.GEMINI_DAILY_CAP }}
+          GROQ_DAILY_CAP: ${{ vars.GROQ_DAILY_CAP }}
         run: python generate_ai_writeups.py
 
       - name: Commit refreshed dashboard data
