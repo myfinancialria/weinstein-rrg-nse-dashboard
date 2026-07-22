@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-22 04:43:19 IST",
+  "generated_at": "2026-07-22 11:31:10 IST",
   "title": "Pre-market Technical Blog - 22 Jul 2026",
-  "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
+  "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 58,
-    "down": 33,
+    "up": 36,
+    "down": 55,
     "sideways": 9
   },
   "nifty": {
-    "close": 24238.5,
-    "change_5d_pct": 0.11,
-    "change_20d_pct": 0.94,
-    "ma20": 24106.85,
-    "ma50": 23829.7,
-    "ma200": 24814.52,
-    "rsi14": 59.36
+    "close": 24040.05,
+    "change_5d_pct": -0.16,
+    "change_20d_pct": 0.91,
+    "ma20": 24121.89,
+    "ma50": 23834.41,
+    "ma200": 24805.92,
+    "rsi14": 46.39
   },
   "cpr": {
-    "pivot": 24213.48,
-    "bc": 24200.97,
-    "tc": 24225.99,
-    "r1": 24291.12,
-    "r2": 24343.73,
-    "s1": 24160.87,
-    "s2": 24083.23,
-    "width_pct": 0.103
+    "pivot": 24060.02,
+    "bc": 24050.03,
+    "tc": 24070.0,
+    "r1": 24146.33,
+    "r2": 24252.62,
+    "s1": 23953.73,
+    "s2": 23867.42,
+    "width_pct": 0.083
   },
   "gift_nifty": {
     "level": null,
@@ -54,51 +54,51 @@
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10524.8,
-      "change_pct": -0.71
+      "level": 10585.9,
+      "change_pct": 0.58
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 64141.12,
-      "change_pct": -4.03
+      "level": 66178.83,
+      "change_pct": -0.08
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 25143.05,
-      "change_pct": 2.36
+      "level": 24830.88,
+      "change_pct": -1.2
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3796.28,
-      "change_pct": 0.85
+      "level": 3866.43,
+      "change_pct": 0.05
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 96.22,
-      "change_pct": -0.27
+      "level": 96.47,
+      "change_pct": -0.02
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 91.6,
-      "change_pct": 2.67
+      "level": 91.87,
+      "change_pct": 0.94
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4084.5,
-      "change_pct": 1.85
+      "level": 4136.8,
+      "change_pct": 1.61
     }
   ],
   "pattern_notes": [
-    "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 0.11%, while last 20-session return is 0.94%.",
-    "CPR width is 0.103%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24225.99 and R1 24291.12; weakness increases below BC 24200.97 and S1 24160.87."
+    "Nifty is below 20 DMA, above 50 DMA, and below 200 DMA.",
+    "Last 5-session return is -0.16%, while last 20-session return is 0.91%.",
+    "CPR width is 0.083%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24070.0 and R1 24146.33; weakness increases below BC 24050.03 and S1 23953.73."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24225.99, buyers have better control and the first upside zones are 24291.12 and 24343.73. Below CPR bottom 24200.97, sellers gain control and downside zones are 24160.87 and 24083.23. A sustained move around pivot 24213.48 can mean a range day."
+      "body": "Above CPR top 24070.0, buyers have better control and the first upside zones are 24146.33 and 24252.62. Below CPR bottom 24050.03, sellers gain control and downside zones are 23953.73 and 23867.42. A sustained move around pivot 24060.02 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -121,33 +121,43 @@
   "leading_industries": [
     {
       "name": "2/3 Wheelers",
-      "rs_ratio": 102.19,
-      "rs_momentum": 102.69
+      "rs_ratio": 102.59,
+      "rs_momentum": 100.2
     },
     {
       "name": "Auto Components & Equipments",
-      "rs_ratio": 101.22,
-      "rs_momentum": 102.33
+      "rs_ratio": 101.74,
+      "rs_momentum": 102.19
+    },
+    {
+      "name": "Logistics Solution Provider",
+      "rs_ratio": 101.37,
+      "rs_momentum": 103.51
+    },
+    {
+      "name": "Lubricants",
+      "rs_ratio": 101.52,
+      "rs_momentum": 101.47
     },
     {
       "name": "Media & Entertainment",
-      "rs_ratio": 101.45,
-      "rs_momentum": 102.71
+      "rs_ratio": 102.05,
+      "rs_momentum": 104.89
     },
     {
       "name": "Other Bank",
-      "rs_ratio": 101.81,
-      "rs_momentum": 101.1
+      "rs_ratio": 101.93,
+      "rs_momentum": 102.45
     },
     {
-      "name": "Real Estate Investment Trusts (REITs)",
-      "rs_ratio": 101.72,
-      "rs_momentum": 101.19
+      "name": "Other Industrial Products",
+      "rs_ratio": 101.33,
+      "rs_momentum": 102.35
     },
     {
       "name": "Rubber",
-      "rs_ratio": 102.37,
-      "rs_momentum": 102.87
+      "rs_ratio": 102.06,
+      "rs_momentum": 102.25
     }
   ],
   "fundamental_picks": [
@@ -202,20 +212,6 @@
   ],
   "recent_nifty": [
     {
-      "date": "2026-07-13",
-      "open": 24039.4,
-      "high": 24259.8,
-      "low": 24000.2,
-      "close": 24211.0
-    },
-    {
-      "date": "2026-07-14",
-      "open": 24068.0,
-      "high": 24157.1,
-      "low": 24023.7,
-      "close": 24052.05
-    },
-    {
       "date": "2026-07-15",
       "open": 24085.85,
       "high": 24220.35,
@@ -242,6 +238,20 @@
       "high": 24266.1,
       "low": 24135.85,
       "close": 24238.5
+    },
+    {
+      "date": "2026-07-21",
+      "open": 24216.05,
+      "high": 24262.2,
+      "low": 24135.65,
+      "close": 24187.7
+    },
+    {
+      "date": "2026-07-22",
+      "open": 24150.45,
+      "high": 24166.3,
+      "low": 23973.7,
+      "close": 24040.05
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
