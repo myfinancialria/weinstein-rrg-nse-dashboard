@@ -76,6 +76,22 @@
     "roce": 29.6,
     "roe_pct": 32.4
   },
+  "ANTELOPUS": {
+    "_scraped": "2026-07-22",
+    "debt_to_equity": 0.6,
+    "dividend_yield_pct": 0.0,
+    "eps": 25.48,
+    "free_cash_flow_cr": -98.0,
+    "net_margin_pct": 32.3,
+    "operating_margin_pct": 57.0,
+    "pb_ratio": 4.74,
+    "pe_ratio": 34.6,
+    "promoter_or_insider_holding_pct": 69.94,
+    "qtr_profit_var_pct": 153.3,
+    "qtr_sales_var_pct": 64.5,
+    "roce": 21.2,
+    "roe_pct": 15.9
+  },
   "APCOTEXIND": {
     "_scraped": "2026-07-21",
     "debt_to_equity": 16.2,
@@ -772,6 +788,22 @@
     "roce": 10.8,
     "roe_pct": 11.5
   },
+  "GNRL": {
+    "_scraped": "2026-07-22",
+    "debt_to_equity": 6.4,
+    "dividend_yield_pct": 0.0,
+    "eps": 0.64,
+    "free_cash_flow_cr": -2.1,
+    "net_margin_pct": 32.4,
+    "operating_margin_pct": 35.77,
+    "pb_ratio": 7.04,
+    "pe_ratio": 148.0,
+    "promoter_or_insider_holding_pct": 1.93,
+    "qtr_profit_var_pct": 166.0,
+    "qtr_sales_var_pct": 158.7,
+    "roce": 7.25,
+    "roe_pct": 5.47
+  },
   "GRCL": {
     "_scraped": "2026-07-20",
     "debt_to_equity": 35.1,
@@ -1004,6 +1036,21 @@
     "qtr_sales_var_pct": 127.7,
     "roce": 10.9,
     "roe_pct": 6.95
+  },
+  "HINDOILEXP": {
+    "_scraped": "2026-07-22",
+    "debt_to_equity": 3.6,
+    "dividend_yield_pct": 0.0,
+    "eps": 4.75,
+    "free_cash_flow_cr": 3.0,
+    "net_margin_pct": 24.0,
+    "operating_margin_pct": 41.0,
+    "pb_ratio": 1.56,
+    "pe_ratio": 68.7,
+    "qtr_profit_var_pct": -84.8,
+    "qtr_sales_var_pct": -574.5,
+    "roce": 3.41,
+    "roe_pct": 2.34
   },
   "HMAAGRO": {
     "_scraped": "2026-07-11",
@@ -1346,6 +1393,22 @@
     "roce": 5.83,
     "roe_pct": 2.69
   },
+  "OIL": {
+    "_scraped": "2026-07-22",
+    "debt_to_equity": 64.6,
+    "dividend_yield_pct": 2.55,
+    "eps": 40.7,
+    "free_cash_flow_cr": 2126.0,
+    "net_margin_pct": 22.2,
+    "operating_margin_pct": 31.0,
+    "pb_ratio": 1.26,
+    "pe_ratio": 11.1,
+    "promoter_or_insider_holding_pct": 56.66,
+    "qtr_profit_var_pct": 61.9,
+    "qtr_sales_var_pct": 5.5,
+    "roce": 11.6,
+    "roe_pct": 12.3
+  },
   "OLAELEC": {
     "_scraped": "2026-07-21",
     "debt_to_equity": 82.5,
@@ -1360,6 +1423,22 @@
     "qtr_sales_var_pct": -56.6,
     "roce": -19.6,
     "roe_pct": -43.2
+  },
+  "ONGC": {
+    "_scraped": "2026-07-22",
+    "debt_to_equity": 46.9,
+    "dividend_yield_pct": 4.86,
+    "eps": 32.93,
+    "free_cash_flow_cr": 59510.0,
+    "net_margin_pct": 7.5,
+    "operating_margin_pct": 16.0,
+    "pb_ratio": 0.85,
+    "pe_ratio": 7.58,
+    "promoter_or_insider_holding_pct": 58.89,
+    "qtr_profit_var_pct": 52.6,
+    "qtr_sales_var_pct": 3.6,
+    "roce": 14.2,
+    "roe_pct": 11.7
   },
   "PACEDIGITK": {
     "_scraped": "2026-07-16",
@@ -1470,6 +1549,22 @@
     "qtr_sales_var_pct": 26.9,
     "roce": 33.2,
     "roe_pct": 23.0
+  },
+  "PRABHA": {
+    "_scraped": "2026-07-22",
+    "debt_to_equity": 37.6,
+    "dividend_yield_pct": 0.0,
+    "eps": 0.03,
+    "free_cash_flow_cr": -47.9,
+    "net_margin_pct": 10.0,
+    "operating_margin_pct": -10.97,
+    "pb_ratio": 6.11,
+    "pe_ratio": 3419.0,
+    "promoter_or_insider_holding_pct": 74.94,
+    "qtr_profit_var_pct": 110.6,
+    "qtr_sales_var_pct": 41.2,
+    "roce": 0.1,
+    "roe_pct": 0.13
   },
   "PRECWIRE": {
     "_scraped": "2026-07-11",
@@ -2219,6 +2314,15 @@
     "promoter_or_insider_holding_pct": 64.87,
     "roce": 41.4,
     "roe_pct": 41.8
+  },
+  "VOGL": {
+    "_scraped": "2026-07-22",
+    "dividend_yield_pct": 0.0,
+    "eps": -81.53,
+    "free_cash_flow_cr": -176.0,
+    "net_margin_pct": -52.2,
+    "operating_margin_pct": -28.0,
+    "promoter_or_insider_holding_pct": 56.38
   },
   "VRLLOG": {
     "_scraped": "2026-07-21",

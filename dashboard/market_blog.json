@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-22 11:31:10 IST",
+  "generated_at": "2026-07-22 22:30:21 IST",
   "title": "Pre-market Technical Blog - 22 Jul 2026",
   "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
@@ -8,23 +8,23 @@
     "sideways": 9
   },
   "nifty": {
-    "close": 24040.05,
-    "change_5d_pct": -0.16,
-    "change_20d_pct": 0.91,
-    "ma20": 24121.89,
-    "ma50": 23834.41,
-    "ma200": 24805.92,
-    "rsi14": 46.39
+    "close": 23996.25,
+    "change_5d_pct": -0.34,
+    "change_20d_pct": 0.72,
+    "ma20": 24119.7,
+    "ma50": 23833.54,
+    "ma200": 24805.7,
+    "rsi14": 45.33
   },
   "cpr": {
-    "pivot": 24060.02,
-    "bc": 24050.03,
-    "tc": 24070.0,
-    "r1": 24146.33,
-    "r2": 24252.62,
-    "s1": 23953.73,
-    "s2": 23867.42,
-    "width_pct": 0.083
+    "pivot": 24041.32,
+    "bc": 24018.78,
+    "tc": 24063.85,
+    "r1": 24121.23,
+    "r2": 24246.22,
+    "s1": 23916.33,
+    "s2": 23836.42,
+    "width_pct": 0.188
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7509.2,
-      "change_pct": 0.89
+      "level": 7523.4,
+      "change_pct": 0.19
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52224.64,
-      "change_pct": 0.74
+      "level": 52398.26,
+      "change_pct": 0.33
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 25837.21,
-      "change_pct": 1.29
+      "level": 25819.4,
+      "change_pct": -0.07
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10585.9,
-      "change_pct": 0.58
+      "level": 10716.97,
+      "change_pct": 1.24
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 66178.83,
-      "change_pct": -0.08
+      "level": 66232.19,
+      "change_pct": 3.26
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24830.88,
-      "change_pct": -1.2
+      "level": 25132.29,
+      "change_pct": -0.04
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3866.43,
-      "change_pct": 0.05
+      "level": 3864.37,
+      "change_pct": 1.79
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 96.47,
-      "change_pct": -0.02
+      "level": 96.56,
+      "change_pct": 0.07
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 91.87,
-      "change_pct": 0.94
+      "level": 93.26,
+      "change_pct": 2.47
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4136.8,
-      "change_pct": 1.61
+      "level": 4152.4,
+      "change_pct": 2.0
     }
   ],
   "pattern_notes": [
     "Nifty is below 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is -0.16%, while last 20-session return is 0.91%.",
-    "CPR width is 0.083%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24070.0 and R1 24146.33; weakness increases below BC 24050.03 and S1 23953.73."
+    "Last 5-session return is -0.34%, while last 20-session return is 0.72%.",
+    "CPR width is 0.188%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24063.85 and R1 24121.23; weakness increases below BC 24018.78 and S1 23916.33."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24070.0, buyers have better control and the first upside zones are 24146.33 and 24252.62. Below CPR bottom 24050.03, sellers gain control and downside zones are 23953.73 and 23867.42. A sustained move around pivot 24060.02 can mean a range day."
+      "body": "Above CPR top 24063.85, buyers have better control and the first upside zones are 24121.23 and 24246.22. Below CPR bottom 24018.78, sellers gain control and downside zones are 23916.33 and 23836.42. A sustained move around pivot 24041.32 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -120,77 +120,47 @@
   ],
   "leading_industries": [
     {
-      "name": "2/3 Wheelers",
-      "rs_ratio": 102.59,
-      "rs_momentum": 100.2
-    },
-    {
       "name": "Auto Components & Equipments",
-      "rs_ratio": 101.74,
-      "rs_momentum": 102.19
+      "rs_ratio": 101.72,
+      "rs_momentum": 102.15
     },
     {
       "name": "Logistics Solution Provider",
-      "rs_ratio": 101.37,
-      "rs_momentum": 103.51
+      "rs_ratio": 101.04,
+      "rs_momentum": 102.58
     },
     {
       "name": "Lubricants",
-      "rs_ratio": 101.52,
-      "rs_momentum": 101.47
+      "rs_ratio": 101.56,
+      "rs_momentum": 101.59
     },
     {
       "name": "Media & Entertainment",
-      "rs_ratio": 102.05,
-      "rs_momentum": 104.89
+      "rs_ratio": 101.37,
+      "rs_momentum": 103.83
+    },
+    {
+      "name": "Oil Exploration & Production",
+      "rs_ratio": 100.01,
+      "rs_momentum": 101.84
     },
     {
       "name": "Other Bank",
-      "rs_ratio": 101.93,
-      "rs_momentum": 102.45
+      "rs_ratio": 101.78,
+      "rs_momentum": 102.03
     },
     {
       "name": "Other Industrial Products",
-      "rs_ratio": 101.33,
-      "rs_momentum": 102.35
+      "rs_ratio": 101.0,
+      "rs_momentum": 101.58
     },
     {
       "name": "Rubber",
-      "rs_ratio": 102.06,
-      "rs_momentum": 102.25
+      "rs_ratio": 102.12,
+      "rs_momentum": 102.4
     }
   ],
   "fundamental_picks": [
-    {
-      "name": "Hero Motocorp",
-      "symbol": "HEROMOTOCO",
-      "industry": "2/3 Wheelers",
-      "score": 93.72
-    },
-    {
-      "name": "Eicher Motors",
-      "symbol": "EICHERMOT",
-      "industry": "2/3 Wheelers",
-      "score": 89.54
-    },
-    {
-      "name": "Bajaj Auto",
-      "symbol": "BAJAJ-AUTO",
-      "industry": "2/3 Wheelers",
-      "score": 86.49
-    },
-    {
-      "name": "TVS Motor Co.",
-      "symbol": "TVSMOTOR",
-      "industry": "2/3 Wheelers",
-      "score": 53.05
-    },
-    {
-      "name": "Delta Auto.",
-      "symbol": "DELTIC",
-      "industry": "2/3 Wheelers",
-      "score": 51.01
-    },
     {
       "name": "Schaeffler India",
       "symbol": "SCHAEFFLER",
@@ -208,6 +178,36 @@
       "symbol": "UNOMINDA",
       "industry": "Auto Components & Equipments",
       "score": 68.06
+    },
+    {
+      "name": "Bosch",
+      "symbol": "BOSCHLTD",
+      "industry": "Auto Components & Equipments",
+      "score": 67.55
+    },
+    {
+      "name": "ZF Commercial",
+      "symbol": "ZFCVINDIA",
+      "industry": "Auto Components & Equipments",
+      "score": 67.34
+    },
+    {
+      "name": "Transport Corp.",
+      "symbol": "TCI",
+      "industry": "Logistics Solution Provider",
+      "score": 75.59
+    },
+    {
+      "name": "Gateway Distri",
+      "symbol": "GATEWAY",
+      "industry": "Logistics Solution Provider",
+      "score": 71.38
+    },
+    {
+      "name": "Container Corpn.",
+      "symbol": "CONCOR",
+      "industry": "Logistics Solution Provider",
+      "score": 60.81
     }
   ],
   "recent_nifty": [
@@ -250,8 +250,8 @@
       "date": "2026-07-22",
       "open": 24150.45,
       "high": 24166.3,
-      "low": 23973.7,
-      "close": 24040.05
+      "low": 23961.4,
+      "close": 23996.25
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
