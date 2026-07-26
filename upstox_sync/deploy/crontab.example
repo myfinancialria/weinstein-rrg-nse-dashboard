@@ -8,7 +8,8 @@
 0 20 * * 1-6 cd /home/ubuntu/weinstein-rrg-nse-dashboard && PYTHON=/usr/bin/python3 upstox_sync/deploy/run_sync.sh >> upstox_sync/deploy/cron.log 2>&1
 #
 # The Upstox token expires ~03:30 IST daily and Upstox has no headless login.
-# Refresh it before 20:00 with:
+# EASIEST: share the token another VM job already refreshes — put this in .env and
+# skip login here entirely:
+#   UPSTOX_ENV_FILE=/home/ubuntu/nifty-paper-trader/.env
+# Otherwise refresh it here before 20:00 with:
 #   cd /home/ubuntu/weinstein-rrg-nse-dashboard && python3 -m upstox_sync login <redirect-url>
-# (or automate token refresh with your preferred method / share the token that the
-#  paper-trader / stock360 job already refreshes on this same VM).
