@@ -1,0 +1,14 @@
+# Upstox sync for the Weinstein/RRG dashboard — Oracle VM cron (times IST; set the
+# VM/crontab TZ to Asia/Kolkata). Runs BEFORE the repo's GitHub Actions build
+# (21:00 IST weekdays) so the build reads fresh Upstox ratios.
+#
+#   crontab -e   and paste the line below (edit the path to your checkout).
+#
+# 20:00 IST, Mon–Sat: options + FII/DII every run; fundamentals refresh on Sat.
+0 20 * * 1-6 cd /home/ubuntu/weinstein-rrg-nse-dashboard && PYTHON=/usr/bin/python3 upstox_sync/deploy/run_sync.sh >> upstox_sync/deploy/cron.log 2>&1
+#
+# The Upstox token expires ~03:30 IST daily and Upstox has no headless login.
+# Refresh it before 20:00 with:
+#   cd /home/ubuntu/weinstein-rrg-nse-dashboard && python3 -m upstox_sync login <redirect-url>
+# (or automate token refresh with your preferred method / share the token that the
+#  paper-trader / stock360 job already refreshes on this same VM).

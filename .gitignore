@@ -24,3 +24,7 @@ dashboard/charts/
 # rebuild (~12 bulk requests); the enriched values are baked into
 # dashboard_data.json, so no need to commit this.
 reports/tickertape_fundamentals_cache.json
+
+# Upstox instrument-master cache (downloaded daily by upstox_sync). The useful
+# output — dashboard/upstox_data.json — IS committed; this raw master is not.
+reports/upstox_cache/

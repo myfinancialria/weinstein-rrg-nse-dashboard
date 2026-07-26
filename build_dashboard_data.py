@@ -1059,6 +1059,20 @@ def main() -> None:
         except json.JSONDecodeError:
             pass
 
+    # --- Override headline ratios with Upstox fundamentals (VM-committed) ---
+    # Upstox is authoritative for the ratios it exposes; a missing upstox_data.json
+    # (e.g. before the VM's first commit) makes this a silent no-op.
+    try:
+        from upstox_sync.merge import apply_upstox_ratios_df, load_fundamentals
+        _funds = load_fundamentals(DASHBOARD_DIR / "upstox_data.json")
+        if _funds:
+            _n = 0
+            for _df in (stocks, leading_stocks, breakout_stocks, fundamental_picks):
+                _n = max(_n, apply_upstox_ratios_df(_df, _funds))
+            print(f"[upstox] overrode headline ratios for {_n} stocks from upstox_data.json")
+    except Exception as _e:  # never let the Upstox merge break the core build
+        print(f"[upstox] ratio override skipped: {_e}")
+
     payload = {
         "metrics": metrics,
         "industries": clean_records(industries),
