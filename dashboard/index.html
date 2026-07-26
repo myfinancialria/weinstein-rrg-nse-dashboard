@@ -313,6 +313,32 @@
         .swot-grid { grid-template-columns: 1fr; }
         .tabs { flex-wrap: nowrap; overflow-x: auto; }
       }
+      /* ---- Upstox drawer sections ---- */
+      .ux-card { background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin: 8px 0; }
+      .ux-h { font-size: 12px; font-weight: 700; letter-spacing: .03em; color: var(--ink); margin-bottom: 6px; }
+      .ux-pos { color: var(--green); } .ux-neg { color: #dc2626; }
+      .ux-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+      .ux-table th { color: var(--muted); font-weight: 600; font-size: 11px; text-align: left; padding: 3px 6px; border-bottom: 1px solid var(--line); }
+      .ux-table td { padding: 4px 6px; border-bottom: 1px solid var(--line-soft); color: var(--ink); }
+      .ux-table td:first-child { color: var(--muted); text-transform: capitalize; }
+      .ux-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+      .ux-stat { flex: 1; min-width: 62px; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; padding: 7px 6px; text-align: center; }
+      .ux-sv { font-size: 15px; font-weight: 700; color: var(--ink); }
+      .ux-sl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; margin-top: 2px; }
+      .ux-oi td { border-bottom: 1px solid var(--line-soft); }
+      .ux-oc, .ux-op { width: 42%; } .ux-oc { text-align: right; }
+      .ux-b { display: inline-block; height: 9px; border-radius: 3px; vertical-align: middle; }
+      .ux-call { background: #ef4444; } .ux-put { background: var(--green); }
+      .ux-hold { display: flex; flex-direction: column; gap: 5px; }
+      .ux-hbar { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+      .ux-hn { width: 120px; color: var(--muted); text-transform: capitalize; }
+      .ux-htrack { flex: 1; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+      .ux-htrack > span { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
+      .ux-hv { width: 66px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+      .ux-act { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
+      .ux-rats { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 14px; }
+      .ux-rat { display: flex; gap: 6px; align-items: baseline; font-size: 12.5px; padding: 2px 0; }
+      .ux-rat > span:first-child { color: var(--muted); min-width: 74px; }
     </style>
   </head>
   <body>
@@ -1381,6 +1407,9 @@
             ${detail("Qtr Profit Growth", pct(stock.qtr_profit_var_pct))}
           </div>
 
+          <div class="section-title">Upstox &mdash; Options, Financials &amp; Institutional Flows</div>
+          <div id="upstoxSections"><div class="seg-note">Loading Upstox data&hellip;</div></div>
+
           <div class="section-title">Why It Is A Fundamental Pick</div>
           <div class="chips">${listChips(stock.fundamental_reasons, "good")}</div>
 
@@ -1458,7 +1487,143 @@
             renderStockChart(stock, btn.dataset.ivl);
           });
         });
-        setTimeout(() => { renderStockChart(stock, "weekly"); renderSegments(stock); }, 0);
+        setTimeout(() => { renderStockChart(stock, "weekly"); renderSegments(stock); renderUpstox(stock); }, 0);
+      }
+
+      // ---------------- Upstox drawer sections (lazy) ----------------
+      // Fundamentals (statements/holdings/actions/peers), per-stock options
+      // (PCR/max-pain/OI) and market-wide FII/DII, all from ./upstox_data.json —
+      // refreshed daily by the VM sync job. One fetch, cached for the session.
+      let UPSTOX_PROMISE = null;
+      function loadUpstox() {
+        if (!UPSTOX_PROMISE) {
+          UPSTOX_PROMISE = fetch("./upstox_data.json?_=" + (state.data && state.data.metrics ? "" : Date.now()))
+            .then((r) => (r.ok ? r.json() : null)).catch(() => null);
+        }
+        return UPSTOX_PROMISE;
+      }
+      function uxNum(v, d) { return v === null || v === undefined ? "—" : Number(v).toLocaleString("en-IN", { maximumFractionDigits: d || 0 }); }
+      function uxCr(v) { if (v === null || v === undefined) return "—"; const a = Math.abs(v); return a >= 100000 ? (v / 100000).toFixed(2) + "L Cr" : uxNum(v) + " Cr"; }
+      function uxNet(v) { if (v === null || v === undefined) return "—"; return `<span class="${v >= 0 ? "ux-pos" : "ux-neg"}">${v >= 0 ? "+" : ""}${uxNum(v)}</span>`; }
+      function upstoxKey(stock) { return (stock.display_symbol || stock.symbol || "").replace(/\.NS$/i, "").toUpperCase(); }
+
+      function uxFlows(fd, date) {
+        if (!fd || !fd.segments) return "";
+        const s = fd.segments;
+        const cash = s["NSE_EQ|CASH"] || {};
+        const line = (label, o) => o ? `<tr><td>${label}</td><td style="text-align:right">${uxNet(o.net)}</td><td class="subtle" style="text-align:right">${uxNum(o.buy)} / ${uxNum(o.sell)}</td></tr>` : "";
+        const rows = [
+          line("<b>FII — Cash</b>", cash.fii),
+          line("<b>DII — Cash</b>", cash.dii),
+          line("FII — Index Futures", (s["NSE_FO|INDEX_FUTURES"] || {}).fii),
+          line("FII — Stock Futures", (s["NSE_FO|STOCK_FUTURES"] || {}).fii),
+          line("FII — Index Options", (s["NSE_FO|INDEX_OPTIONS"] || {}).fii),
+          line("FII — Stock Options", (s["NSE_FO|STOCK_OPTIONS"] || {}).fii),
+        ].join("");
+        return `<div class="ux-card"><div class="ux-h">Institutional Flows &mdash; market-wide, latest session (&#8377; Cr)</div>
+          <table class="ux-table"><thead><tr><th>Segment</th><th style="text-align:right">Net</th><th style="text-align:right">Buy / Sell</th></tr></thead><tbody>${rows}</tbody></table>
+          <div class="subtle" style="margin-top:4px;font-size:11px">FII/DII are market-wide (not per-stock). Source: Upstox market-information API.</div></div>`;
+      }
+
+      function uxOptions(o, name) {
+        if (!o) return "";
+        const pcr = o.pcr, spot = o.spot, mp = o.max_pain;
+        const pcrTone = pcr == null ? "" : (pcr > 1.1 ? "ux-pos" : pcr < 0.7 ? "ux-neg" : "");
+        // OI-by-strike: show a band of strikes around max-pain with call/put bars.
+        let bars = "";
+        const strikes = (o.oi_by_strike || []).filter((x) => x.strike != null);
+        if (strikes.length) {
+          const maxOI = Math.max(1, ...strikes.flatMap((x) => [x.call_oi || 0, x.put_oi || 0]));
+          const near = mp ? strikes.slice().sort((a, b) => Math.abs(a.strike - mp) - Math.abs(b.strike - mp)).slice(0, 9).sort((a, b) => a.strike - b.strike) : strikes.slice(0, 9);
+          bars = `<table class="ux-table ux-oi"><thead><tr><th style="text-align:right">Call OI</th><th style="text-align:center">Strike</th><th>Put OI</th></tr></thead><tbody>` +
+            near.map((x) => {
+              const cw = ((x.call_oi || 0) / maxOI * 100).toFixed(0), pw = ((x.put_oi || 0) / maxOI * 100).toFixed(0);
+              const isMp = mp && Math.abs(x.strike - mp) < 1e-6;
+              return `<tr><td class="ux-oc"><span class="ux-b ux-call" style="width:${cw}%"></span></td>
+                <td style="text-align:center;${isMp ? "font-weight:700;color:#f59e0b" : ""}">${uxNum(x.strike)}${isMp ? " •" : ""}</td>
+                <td class="ux-op"><span class="ux-b ux-put" style="width:${pw}%"></span></td></tr>`;
+            }).join("") + `</tbody></table>`;
+        }
+        return `<div class="ux-card"><div class="ux-h">Options &mdash; ${name || "current month"} (exp ${o.expiry || "—"})</div>
+          <div class="ux-stats">
+            <div class="ux-stat"><div class="ux-sv ${pcrTone}">${pcr == null ? "—" : pcr.toFixed(2)}</div><div class="ux-sl">PCR</div></div>
+            <div class="ux-stat"><div class="ux-sv">${uxNum(mp)}</div><div class="ux-sl">Max Pain</div></div>
+            <div class="ux-stat"><div class="ux-sv">${uxNum(spot)}</div><div class="ux-sl">Spot</div></div>
+            <div class="ux-stat"><div class="ux-sv">${uxNum(o.total_calls)}</div><div class="ux-sl">Call OI</div></div>
+            <div class="ux-stat"><div class="ux-sv">${uxNum(o.total_puts)}</div><div class="ux-sl">Put OI</div></div>
+          </div>${bars}
+          <div class="subtle" style="margin-top:4px;font-size:11px">PCR&gt;1 = more puts (support-heavy); &lt;0.7 = call-heavy. Max-pain &#8226; marked.</div></div>`;
+      }
+
+      function uxStmt(title, rows, cats, units) {
+        if (!rows || !rows.length) return "";
+        const periods = (rows[0].history || []).slice(0, 4).map((h) => h.period);
+        const body = rows.filter((r) => !cats || cats.includes(r.category)).map((r) => {
+          const cells = (r.history || []).slice(0, 4).map((h) => {
+            const ch = h.change ? `<br><span class="subtle ${String(h.change).trim().startsWith("-") ? "ux-neg" : "ux-pos"}" style="font-size:10px">${h.change}</span>` : "";
+            return `<td style="text-align:right">${uxCr(h.value)}${ch}</td>`;
+          }).join("");
+          return `<tr><td>${(r.category || "").replace(/_/g, " ")}</td>${cells}</tr>`;
+        }).join("");
+        return `<div class="ux-h" style="margin-top:8px">${title} <span class="subtle" style="font-weight:400">&#8377; ${units || "crore"}</span></div>
+          <table class="ux-table"><thead><tr><th></th>${periods.map((p) => `<th style="text-align:right">${p}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table>`;
+      }
+
+      function uxHoldings(list) {
+        if (!list || !list.length) return "";
+        const bars = list.map((c) => {
+          const l = (c.history || [])[0] || {};
+          const v = l.value;
+          return `<div class="ux-hbar"><span class="ux-hn">${(c.category || "").replace(/_/g, " ")}</span>
+            <span class="ux-htrack"><span style="width:${Math.min(100, v || 0)}%"></span></span>
+            <span class="ux-hv">${v == null ? "—" : v.toFixed(2) + "%"}</span></div>`;
+        }).join("");
+        return `<div class="ux-h" style="margin-top:8px">Shareholding &mdash; latest</div><div class="ux-hold">${bars}</div>`;
+      }
+
+      function uxActions(list) {
+        if (!list || !list.length) return "";
+        const items = list.slice(0, 6).map((a) => {
+          const ex = (a.event_details || []).find((d) => /ex/i.test(d.name || ""));
+          const amt = a.amount ? `&#8377;${a.amount}` : (a.ratio || "");
+          return `<div class="ux-act"><span><b>${a.name || ""}</b> ${ex ? "· ex " + ex.value : (a.expiry_date ? "· " + a.expiry_date : "")}</span><span class="subtle">${amt}</span></div>`;
+        }).join("");
+        return `<div class="ux-h" style="margin-top:8px">Corporate Actions</div>${items}`;
+      }
+
+      function uxFund(f) {
+        if (!f) return `<div class="seg-note">No Upstox fundamentals for this symbol.</div>`;
+        const p = f.profile || {};
+        const inc = f.income_statement || {}, bal = f.balance_sheet || {}, cf = f.cash_flow || {};
+        const ratios = (f.ratios_full || []).map((r) => `<div class="ux-rat"><span>${r.name}</span><b>${r.company_value}</b><span class="subtle">${r.sector_value != null ? "/ " + r.sector_value + " sec" : ""}</span></div>`).join("");
+        const balRows = (bal.history || []).slice(0, 4);
+        const balTable = balRows.length ? `<div class="ux-h" style="margin-top:8px">Balance Sheet <span class="subtle" style="font-weight:400">&#8377; ${bal.units_in || "crore"}</span></div>
+          <table class="ux-table"><thead><tr><th></th>${balRows.map((x) => `<th style="text-align:right">${x.period}</th>`).join("")}</tr></thead><tbody>
+          <tr><td>total asset</td>${balRows.map((x) => `<td style="text-align:right">${uxCr(x.total_asset)}</td>`).join("")}</tr>
+          <tr><td>total liability</td>${balRows.map((x) => `<td style="text-align:right">${uxCr(x.total_liability)}</td>`).join("")}</tr></tbody></table>` : "";
+        const peers = (f.competitors || []).map((c) => `<span class="chip">${c.name || c.instrument_key}</span>`).join("");
+        return `<div class="ux-card">
+            ${p.company_profile ? `<div class="prose" style="font-size:12.5px;margin-bottom:8px">${p.company_profile}</div>` : ""}
+            ${ratios ? `<div class="ux-h">Key Ratios &mdash; vs sector</div><div class="ux-rats">${ratios}</div>` : ""}
+            ${uxStmt("Income Statement", inc.income_statement, null, inc.units_in)}
+            ${balTable}
+            ${uxStmt("Cash Flow", cf.cash_flow, null, cf.units_in)}
+            ${uxHoldings(f.share_holdings)}
+            ${uxActions(f.corporate_actions)}
+            ${peers ? `<div class="ux-h" style="margin-top:8px">Peers</div><div class="chips">${peers}</div>` : ""}
+          </div>`;
+      }
+
+      function renderUpstox(stock) {
+        const box = el("upstoxSections");
+        if (!box) return;
+        loadUpstox().then((d) => {
+          if (!d) { box.innerHTML = `<div class="seg-note">Upstox data not published yet.</div>`; return; }
+          const key = upstoxKey(stock);
+          const f = (d.fundamentals || {})[key];
+          const o = (d.options || {})[key];
+          box.innerHTML = uxOptions(o, "current month") + uxFund(f) + uxFlows(d.fii_dii, d.options_date);
+        }).catch(() => { box.innerHTML = `<div class="seg-note">Upstox data failed to load.</div>`; });
       }
 
       // Lazily inject TradingView's open-source Lightweight Charts lib once.
