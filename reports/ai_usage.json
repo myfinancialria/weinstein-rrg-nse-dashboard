@@ -1,7 +1,8 @@
 {
-  "date": "2026-07-24",
+  "date": "2026-07-26",
   "used": {
     "gemini": 1400,
-    "groq": 67
+    "groq": 72,
+    "openrouter": 1
   }
 }
