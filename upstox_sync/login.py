@@ -1,4 +1,12 @@
-"""Upstox OAuth: exchange a one-time code for the daily access token → .env."""
+"""Upstox OAuth: exchange a one-time code for the daily access token → .env.
+
+Token sourcing (so the daily token can be maintained in ONE place):
+    1. Local repo .env  — app creds, and optionally an UPSTOX_ENV_FILE pointer.
+    2. UPSTOX_ENV_FILE   — a shared .env (e.g. the paper-trader / stock360 one that
+       already refreshes an Upstox token on the VM); its UPSTOX_* values override
+       the local ones, so the freshly-refreshed token there wins here.
+    3. OS environment    — UPSTOX_* vars override everything (lets cron export a token).
+"""
 from __future__ import annotations
 
 import os
@@ -13,15 +21,29 @@ AUTHORIZE_URL = "https://api.upstox.com/v2/login/authorization/dialog"
 ENV_PATH = Path(__file__).resolve().parents[1] / ".env"
 
 
-def read_env() -> dict[str, str]:
+def _parse_env_file(path) -> dict[str, str]:
     data: dict[str, str] = {}
-    if ENV_PATH.exists():
-        for line in ENV_PATH.read_text().splitlines():
+    p = Path(path).expanduser()
+    if p.exists():
+        for line in p.read_text().splitlines():
             line = line.strip()
             if not line or line.startswith("#") or "=" not in line:
                 continue
             k, _, v = line.partition("=")
             data[k.strip()] = v.strip()
+    return data
+
+
+def read_env() -> dict[str, str]:
+    # 1. local repo .env (app creds + optional UPSTOX_ENV_FILE pointer)
+    data = _parse_env_file(ENV_PATH)
+    # 2. shared env file — its non-empty UPSTOX_* values override local (fresh token wins)
+    shared_path = os.environ.get("UPSTOX_ENV_FILE") or data.get("UPSTOX_ENV_FILE")
+    if shared_path:
+        for k, v in _parse_env_file(shared_path).items():
+            if k.startswith("UPSTOX_") and v:
+                data[k] = v
+    # 3. OS environment wins (cron may export a fresh token)
     for k in os.environ:
         if k.startswith("UPSTOX_"):
             data[k] = os.environ[k]
