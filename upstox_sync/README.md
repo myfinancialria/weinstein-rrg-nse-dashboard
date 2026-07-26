@@ -50,8 +50,13 @@ otherwise — saving ~2,400 calls/day.
 
 ```bash
 pip install -r requirements.txt          # requests already pinned
-cp .env.example .env                      # add UPSTOX_API_KEY / SECRET / REDIRECT_URI
+cp .env.example .env
 
+# Token, ONE of:
+#  (a) share an existing token — if another job on this VM already refreshes an
+#      Upstox token, point at its .env and you're done (no login for this repo):
+#        echo 'UPSTOX_ENV_FILE=/home/ubuntu/nifty-paper-trader/.env' >> .env
+#  (b) or manage it here — add UPSTOX_API_KEY/SECRET/REDIRECT_URI to .env, then:
 python -m upstox_sync login url            # daily token (expires ~03:30 IST)
 python -m upstox_sync login "<redirect-url>"
 
@@ -60,6 +65,13 @@ python -m upstox_sync one RELIANCE.NS      # build one symbol, print (test)
 python -m upstox_sync sync                 # options + FII/DII (+ fundamentals if stale)
 python -m upstox_sync sync --fundamentals  # force full fundamentals refresh
 ```
+
+### One-place token (`UPSTOX_ENV_FILE`)
+
+`read_env()` resolves UPSTOX_* in this order: local `.env` → the file named by
+`UPSTOX_ENV_FILE` (its non-empty UPSTOX_* override local, so the fresh token wins) →
+OS environment (wins). Set `UPSTOX_ENV_FILE` to the `.env` that another VM job already
+keeps a live token in, and this repo needs **no** `login` and no token upkeep of its own.
 
 Deploy: `upstox_sync/deploy/run_sync.sh` (commit + push) on cron — see
 `upstox_sync/deploy/crontab.example` (20:00 IST, Mon–Sat; Saturday forces
