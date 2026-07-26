@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-07-26 23:14:42 IST",
+  "generated_at": "2026-07-26 23:52:53 IST",
   "title": "Pre-market Technical Blog - 26 Jul 2026",
   "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 27,
-    "down": 64,
+    "up": 31,
+    "down": 60,
     "sideways": 9
   },
   "nifty": {
-    "close": 23767.45,
-    "change_5d_pct": -2.33,
-    "change_20d_pct": -1.2,
-    "ma20": 24097.66,
-    "ma50": 23850.43,
-    "ma200": 24797.44,
-    "rsi14": 32.53
+    "close": 23869.6,
+    "change_5d_pct": -0.84,
+    "change_20d_pct": -0.63,
+    "ma20": 24112.09,
+    "ma50": 23843.34,
+    "ma200": 24801.77,
+    "rsi14": 39.73
   },
   "cpr": {
-    "pivot": 23732.45,
-    "bc": 23714.95,
-    "tc": 23749.95,
-    "r1": 23858.6,
-    "r2": 23949.75,
-    "s1": 23641.3,
-    "s2": 23515.15,
-    "width_pct": 0.147
+    "pivot": 23889.18,
+    "bc": 23879.39,
+    "tc": 23898.97,
+    "r1": 23971.17,
+    "r2": 24072.73,
+    "s1": 23787.62,
+    "s2": 23705.63,
+    "width_pct": 0.082
   },
   "gift_nifty": {
     "level": null,
@@ -36,44 +36,44 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7411.98,
-      "change_pct": 0.05
+      "level": 7408.3,
+      "change_pct": -1.21
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51947.25,
-      "change_pct": 0.46
+      "level": 51711.65,
+      "change_pct": -0.97
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 24975.82,
-      "change_pct": -0.64
+      "level": 25137.69,
+      "change_pct": -2.15
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10736.2,
-      "change_pct": 0.91
+      "level": 10639.2,
+      "change_pct": -0.73
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 64611.15,
-      "change_pct": -2.73
+      "level": 66422.6,
+      "change_pct": 0.46
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24963.23,
-      "change_pct": -0.98
+      "level": 25210.81,
+      "change_pct": 1.28
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3814.2,
-      "change_pct": -1.61
+      "level": 3876.78,
+      "change_pct": 0.25
     },
     {
       "name": "USD/INR",
@@ -95,10 +95,10 @@
     }
   ],
   "pattern_notes": [
-    "Nifty is below 20 DMA, below 50 DMA, and below 200 DMA.",
-    "Last 5-session return is -2.33%, while last 20-session return is -1.2%.",
-    "CPR width is 0.147%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 23749.95 and R1 23858.6; weakness increases below BC 23714.95 and S1 23641.3."
+    "Nifty is below 20 DMA, above 50 DMA, and below 200 DMA.",
+    "Last 5-session return is -0.84%, while last 20-session return is -0.63%.",
+    "CPR width is 0.082%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 23898.97 and R1 23971.17; weakness increases below BC 23879.39 and S1 23787.62."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 23749.95, buyers have better control and the first upside zones are 23858.6 and 23949.75. Below CPR bottom 23714.95, sellers gain control and downside zones are 23641.3 and 23515.15. A sustained move around pivot 23732.45 can mean a range day."
+      "body": "Above CPR top 23898.97, buyers have better control and the first upside zones are 23971.17 and 24072.73. Below CPR bottom 23879.39, sellers gain control and downside zones are 23787.62 and 23705.63. A sustained move around pivot 23889.18 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -212,6 +212,13 @@
   ],
   "recent_nifty": [
     {
+      "date": "2026-07-16",
+      "open": 24142.1,
+      "high": 24186.5,
+      "low": 24050.0,
+      "close": 24072.75
+    },
+    {
       "date": "2026-07-17",
       "open": 24127.6,
       "high": 24367.3,
@@ -245,13 +252,6 @@
       "high": 23990.75,
       "low": 23807.2,
       "close": 23869.6
-    },
-    {
-      "date": "2026-07-24",
-      "open": 23666.35,
-      "high": 23823.6,
-      "low": 23606.3,
-      "close": 23767.45
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
