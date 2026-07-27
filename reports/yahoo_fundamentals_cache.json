@@ -3266,5 +3266,24 @@
     "pe_ratio": 10.386128,
     "pb_ratio": 1.1723944,
     "peg_ratio": null
+  },
+  "CONFIPET.NS": {
+    "company_description": "Confidence Petroleum India Limited manufactures and sells liquefied petroleum gas (LPG) cylinders in India. It operates in Cylinder and LPG divisions. The company is involved in the production and marketing of LPG and compressed natural gas cylinders. It also engages in the LPG marketing and bottling business, as well as logistic business. The company sells its products under the GO GAS brand. The company was formerly known as Devarsa Gas-Chem Ltd. and changed its name to Confidence Petroleum India Limited in February 2006. The company was founded in 1993 and is based in Nagpur, India.",
+    "website": "https://www.confidencegroup.co",
+    "yahoo_sector": "Energy",
+    "yahoo_industry": "Oil & Gas Refining & Marketing",
+    "promoter_or_insider_holding_pct": 68.94,
+    "eps": 2.8,
+    "gross_margin_pct": 15.88,
+    "operating_margin_pct": 4.13,
+    "net_margin_pct": 1.97,
+    "roe_pct": 6.46,
+    "debt_to_equity": 49.394,
+    "current_ratio": 2.161,
+    "quick_ratio": 0.687,
+    "free_cash_flow_cr": 200.7,
+    "pe_ratio": 28.942858,
+    "pb_ratio": 1.9053888,
+    "peg_ratio": null
   }
 }

@@ -503,6 +503,22 @@
     "roce": 12.4,
     "roe_pct": 9.81
   },
+  "CONFIPET": {
+    "_scraped": "2026-07-27",
+    "debt_to_equity": 53.7,
+    "dividend_yield_pct": 0.12,
+    "eps": 2.8,
+    "free_cash_flow_cr": 285.0,
+    "net_margin_pct": 2.1,
+    "operating_margin_pct": 7.0,
+    "pb_ratio": 1.9,
+    "pe_ratio": 29.1,
+    "promoter_or_insider_holding_pct": 57.38,
+    "qtr_profit_var_pct": 25.9,
+    "qtr_sales_var_pct": 31.5,
+    "roce": 9.23,
+    "roe_pct": 6.76
+  },
   "CRAMC": {
     "_scraped": "2026-07-11",
     "debt_to_equity": 2.4,
