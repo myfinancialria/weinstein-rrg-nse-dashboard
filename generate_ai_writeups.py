@@ -79,6 +79,13 @@ _PROVIDER_DEFS = {
         "daily_cap": int(_env("GROQ_DAILY_CAP", "900")),     # free tier ~1000 RPD
         "interval": float(_env("GROQ_INTERVAL", "2.2")),     # ~27/min < 30 RPM
     },
+    "mistral": {
+        "base_url": _env("MISTRAL_BASE_URL", "https://api.mistral.ai/v1"),
+        "key": os.getenv("MISTRAL_API_KEY", ""),
+        "model": _env("MISTRAL_MODEL", "mistral-small-latest"),  # free-tier quality model
+        "daily_cap": int(_env("MISTRAL_DAILY_CAP", "800")),  # free "Experiment" tier is generous
+        "interval": float(_env("MISTRAL_INTERVAL", "1.2")),  # free tier ~1 req/s
+    },
     "openrouter": {
         "base_url": _env("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
         "key": os.getenv("OPENROUTER_API_KEY", ""),
@@ -86,20 +93,39 @@ _PROVIDER_DEFS = {
         "daily_cap": int(_env("OPENROUTER_DAILY_CAP", "40")),  # $0-account free tier is tiny
         "interval": float(_env("OPENROUTER_INTERVAL", "4.0")),
     },
+    "grok": {
+        "base_url": _env("GROK_BASE_URL", "https://api.x.ai/v1"),
+        "key": os.getenv("GROK_API_KEY", ""),
+        "model": _env("GROK_MODEL", "grok-3-mini"),  # cheapest xAI model
+        # xAI has NO perpetual free tier: this cap only spends the promotional
+        # data-sharing credits. Keep it LOW and LAST so it can't run up a bill.
+        "daily_cap": int(_env("GROK_DAILY_CAP", "50")),
+        "interval": float(_env("GROK_INTERVAL", "1.5")),
+    },
 }
-PROVIDER_ORDER = [n.strip() for n in _env("AI_PROVIDER_ORDER", "gemini,groq,openrouter").split(",") if n.strip()]
+# Order matters: truly-free tiers first (Gemini, Groq, Mistral), then the tiny/
+# credit-limited spillover providers (OpenRouter, Grok). Each is used only after
+# the ones before it hit their per-day cap.
+PROVIDER_ORDER = [n.strip() for n in _env("AI_PROVIDER_ORDER", "gemini,groq,mistral,openrouter,grok").split(",") if n.strip()]
 PROVIDERS = [dict(_PROVIDER_DEFS[n], name=n) for n in PROVIDER_ORDER
              if n in _PROVIDER_DEFS and _PROVIDER_DEFS[n]["key"]]
 
 # Bump to force every write-up to regenerate (e.g. after a prompt change).
-PROMPT_VERSION = "v1"
+PROMPT_VERSION = "v2"
 
 SYSTEM = (
-    "You are a plain-English equity educator writing for a complete beginner in India. "
-    "Use short, simple sentences. Avoid jargon; if you must use a term, explain it in a few words. "
-    "Be concrete and specific to the facts given. Focus on why it looks strong or good, but stay honest "
-    "and mention one key risk briefly. Do NOT give buy/sell/hold advice or price targets. "
-    "Never invent numbers that are not provided."
+    "You are a seasoned Indian equity research writer explaining a company or sector to a "
+    "smart beginner. Write in clear, professional plain English — the tone of a good analyst "
+    "note, not marketing copy and not a textbook. "
+    "Rules: "
+    "(1) Short, direct sentences. One idea per sentence. "
+    "(2) No jargon unless you immediately explain it in a few plain words. "
+    "(3) Be specific and grounded — use the actual facts and numbers given, and say what each "
+    "number means (e.g. 'ROCE of 22% means it earns good returns on the money it uses'). "
+    "(4) Stay honest and balanced: explain why it looks strong, then give one real risk. "
+    "(5) Never exaggerate, never hype, never use words like 'guaranteed', 'must-buy', or 'sure'. "
+    "(6) No buy/sell/hold advice, no price targets, no invented numbers. "
+    "Sound trustworthy and calm, like you are helping a friend understand, not selling to them."
 )
 
 
@@ -248,6 +274,13 @@ def generate_one(kind: str, name: str, facts: dict, usage: dict):
             else:
                 print(f"    ({p['name']} per-minute 429 — switching to next provider)")
             continue
+        if resp.status_code in (402, 403):
+            # Out of credits / billing gate (e.g. xAI Grok after promo credits, or
+            # OpenRouter with $0). Mark done-for-today so we stop hammering it.
+            used[p["name"]] = p["daily_cap"]
+            _save_usage(usage)
+            print(f"    ({p['name']} HTTP {resp.status_code} (out of credits/billing) — done for today, switching)")
+            continue
         print(f"    ({p['name']} HTTP {resp.status_code}: {resp.text[:150]}); trying next provider")
     if not any_available:
         raise AllProvidersExhausted()
@@ -257,12 +290,15 @@ def generate_one(kind: str, name: str, facts: dict, usage: dict):
 def draft_prompt(kind: str, facts: dict) -> str:
     label = "sector/industry" if kind == "industry" else "company (stock)"
     ask = (
-        "In very simple language a beginner can follow, explain why this "
+        "In simple, professional language a beginner can follow, explain why this "
         f"{label} looks strong or attractive right now. "
         "Write 4-6 short sentences OR 4-6 short bullet points. "
-        "Cover the main points that apply: what it does / the demand for it, "
-        "its trend and strength versus the market, its financial health, growth, "
-        "and any government or policy support. End with one short honest risk. "
+        "Start with the single most important reason it stands out. Then cover the "
+        "points that apply: what it does and the demand for it, its price trend and "
+        "strength versus the overall market, its financial health and growth (explain "
+        "what the key numbers mean), and any government or policy tailwind. "
+        "Finish with one short, honest risk in its own sentence. "
+        "Keep it factual and calm — no hype, no advice, no price targets. "
         "Use only the facts below.\n\nFACTS (JSON):\n"
     )
     return ask + json.dumps(facts, ensure_ascii=False, indent=2)
