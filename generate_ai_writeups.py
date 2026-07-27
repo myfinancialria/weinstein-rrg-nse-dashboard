@@ -93,6 +93,15 @@ _PROVIDER_DEFS = {
         "daily_cap": int(_env("OPENROUTER_DAILY_CAP", "40")),  # $0-account free tier is tiny
         "interval": float(_env("OPENROUTER_INTERVAL", "4.0")),
     },
+    "deepseek": {
+        "base_url": _env("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+        "key": os.getenv("DEEPSEEK_API_KEY", ""),
+        "model": _env("DEEPSEEK_MODEL", "deepseek-chat"),
+        # DeepSeek has NO perpetual free tier: pay-as-you-go (cheap). This cap only
+        # spends trial/prepaid credits. Keep it LOW so it can't run up a bill.
+        "daily_cap": int(_env("DEEPSEEK_DAILY_CAP", "50")),
+        "interval": float(_env("DEEPSEEK_INTERVAL", "1.5")),
+    },
     "grok": {
         "base_url": _env("GROK_BASE_URL", "https://api.x.ai/v1"),
         "key": os.getenv("GROK_API_KEY", ""),
@@ -104,9 +113,9 @@ _PROVIDER_DEFS = {
     },
 }
 # Order matters: truly-free tiers first (Gemini, Groq, Mistral), then the tiny/
-# credit-limited spillover providers (OpenRouter, Grok). Each is used only after
-# the ones before it hit their per-day cap.
-PROVIDER_ORDER = [n.strip() for n in _env("AI_PROVIDER_ORDER", "gemini,groq,mistral,openrouter,grok").split(",") if n.strip()]
+# credit-limited spillover providers (OpenRouter, DeepSeek, Grok). Each is used
+# only after the ones before it hit their per-day cap.
+PROVIDER_ORDER = [n.strip() for n in _env("AI_PROVIDER_ORDER", "gemini,groq,mistral,openrouter,deepseek,grok").split(",") if n.strip()]
 PROVIDERS = [dict(_PROVIDER_DEFS[n], name=n) for n in PROVIDER_ORDER
              if n in _PROVIDER_DEFS and _PROVIDER_DEFS[n]["key"]]
 

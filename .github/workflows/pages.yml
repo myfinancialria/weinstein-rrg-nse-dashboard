@@ -74,8 +74,8 @@ jobs:
           python generate_market_blog.py
 
       # Plain-English "why it's strong" write-ups via free LLM providers, tried
-      # in order (Gemini -> Groq -> Mistral -> OpenRouter -> Grok) with per-day
-      # caps + failover; free tiers first, credit-limited spillover last.
+      # in order (Gemini -> Groq -> Mistral -> OpenRouter -> DeepSeek -> Grok)
+      # with per-day caps + failover; free tiers first, credit-limited spillover last.
       # Cached in reports/ai_writeups_cache.json + usage in reports/ai_usage.json,
       # so a day's free quota is respected across runs and only new items cost.
       # A no-op (cache-only) if none of the provider keys are set.
@@ -85,16 +85,19 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           GROK_API_KEY: ${{ secrets.GROK_API_KEY }}
           # Optional overrides (order, models, per-day caps) via repo variables:
           AI_PROVIDER_ORDER: ${{ vars.AI_PROVIDER_ORDER }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
           GROQ_MODEL: ${{ vars.GROQ_MODEL }}
           MISTRAL_MODEL: ${{ vars.MISTRAL_MODEL }}
+          DEEPSEEK_MODEL: ${{ vars.DEEPSEEK_MODEL }}
           GROK_MODEL: ${{ vars.GROK_MODEL }}
           GEMINI_DAILY_CAP: ${{ vars.GEMINI_DAILY_CAP }}
           GROQ_DAILY_CAP: ${{ vars.GROQ_DAILY_CAP }}
           MISTRAL_DAILY_CAP: ${{ vars.MISTRAL_DAILY_CAP }}
+          DEEPSEEK_DAILY_CAP: ${{ vars.DEEPSEEK_DAILY_CAP }}
           GROK_DAILY_CAP: ${{ vars.GROK_DAILY_CAP }}
         run: python generate_ai_writeups.py
 
