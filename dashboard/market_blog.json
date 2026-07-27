@@ -1,20 +1,20 @@
 {
-  "generated_at": "2026-07-27 18:45:05 IST",
+  "generated_at": "2026-07-27 22:52:10 IST",
   "title": "Pre-market Technical Blog - 27 Jul 2026",
   "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 37,
-    "down": 54,
+    "up": 36,
+    "down": 55,
     "sideways": 9
   },
   "nifty": {
     "close": 23995.95,
-    "change_5d_pct": -1.0,
-    "change_20d_pct": 0.21,
-    "ma20": 24100.15,
-    "ma50": 23856.56,
-    "ma200": 24794.36,
-    "rsi14": 40.38
+    "change_5d_pct": -1.39,
+    "change_20d_pct": -0.25,
+    "ma20": 24109.09,
+    "ma50": 23855.0,
+    "ma200": 24798.58,
+    "rsi14": 38.69
   },
   "cpr": {
     "pivot": 23966.37,
@@ -36,44 +36,44 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7411.98,
-      "change_pct": 0.05
+      "level": 7387.88,
+      "change_pct": -0.28
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51947.25,
-      "change_pct": 0.46
+      "level": 52039.81,
+      "change_pct": 0.63
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 24975.82,
-      "change_pct": -0.64
+      "level": 24818.61,
+      "change_pct": -1.27
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10780.58,
-      "change_pct": 0.41
+      "level": 10781.75,
+      "change_pct": 1.34
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 64931.19,
-      "change_pct": 0.5
+      "level": 66422.6,
+      "change_pct": 0.46
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 25207.18,
-      "change_pct": 0.98
+      "level": 25210.81,
+      "change_pct": 1.28
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3858.25,
-      "change_pct": 1.15
+      "level": 3876.78,
+      "change_pct": 0.25
     },
     {
       "name": "USD/INR",
@@ -84,19 +84,19 @@
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 90.66,
-      "change_pct": -6.32
+      "level": 89.14,
+      "change_pct": -7.89
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4086.6,
-      "change_pct": 0.47
+      "level": 4072.9,
+      "change_pct": 0.13
     }
   ],
   "pattern_notes": [
     "Nifty is below 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is -1.0%, while last 20-session return is 0.21%.",
+    "Last 5-session return is -1.39%, while last 20-session return is -0.25%.",
     "CPR width is 0.123%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
     "Immediate bullish confirmation improves above TC 23981.16 and R1 24041.18; weakness increases below BC 23951.58 and S1 23921.13."
   ],
@@ -121,43 +121,43 @@
   "leading_industries": [
     {
       "name": "Abrasives & Bearings",
-      "rs_ratio": 101.32,
-      "rs_momentum": 102.91
+      "rs_ratio": 100.75,
+      "rs_momentum": 102.33
     },
     {
       "name": "Auto Components & Equipments",
-      "rs_ratio": 101.64,
-      "rs_momentum": 101.64
+      "rs_ratio": 101.81,
+      "rs_momentum": 102.11
     },
     {
       "name": "Logistics Solution Provider",
-      "rs_ratio": 101.39,
-      "rs_momentum": 100.95
+      "rs_ratio": 102.36,
+      "rs_momentum": 102.53
     },
     {
       "name": "Lubricants",
-      "rs_ratio": 102.68,
-      "rs_momentum": 101.87
+      "rs_ratio": 102.24,
+      "rs_momentum": 101.32
     },
     {
       "name": "Media & Entertainment",
-      "rs_ratio": 101.93,
-      "rs_momentum": 104.07
+      "rs_ratio": 101.62,
+      "rs_momentum": 103.54
     },
     {
       "name": "Oil Equipment & Services",
-      "rs_ratio": 100.38,
-      "rs_momentum": 104.13
-    },
-    {
-      "name": "Oil Exploration & Production",
-      "rs_ratio": 100.18,
-      "rs_momentum": 102.97
+      "rs_ratio": 101.27,
+      "rs_momentum": 104.02
     },
     {
       "name": "Plastic Products - Industrial",
-      "rs_ratio": 100.35,
-      "rs_momentum": 101.67
+      "rs_ratio": 100.39,
+      "rs_momentum": 101.63
+    },
+    {
+      "name": "Rubber",
+      "rs_ratio": 101.98,
+      "rs_momentum": 101.35
     }
   ],
   "fundamental_picks": [
@@ -212,6 +212,13 @@
   ],
   "recent_nifty": [
     {
+      "date": "2026-07-17",
+      "open": 24127.6,
+      "high": 24367.3,
+      "low": 24099.05,
+      "close": 24334.3
+    },
+    {
       "date": "2026-07-20",
       "open": 24190.05,
       "high": 24266.1,
@@ -238,13 +245,6 @@
       "high": 23990.75,
       "low": 23807.2,
       "close": 23869.6
-    },
-    {
-      "date": "2026-07-24",
-      "open": 23666.35,
-      "high": 23823.6,
-      "low": 23606.3,
-      "close": 23767.45
     },
     {
       "date": "2026-07-27",

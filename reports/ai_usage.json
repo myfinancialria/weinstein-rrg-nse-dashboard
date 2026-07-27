@@ -2,7 +2,7 @@
   "date": "2026-07-27",
   "used": {
     "gemini": 1400,
-    "groq": 107,
-    "mistral": 18
+    "groq": 900,
+    "mistral": 79
   }
 }
