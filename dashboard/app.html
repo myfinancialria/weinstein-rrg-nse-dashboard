@@ -1,0 +1,2271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NSE Weinstein + RRG Dashboard</title>
+    <style>
+      :root {
+        --bg: #f4f6f8;
+        --panel: #ffffff;
+        --ink: #0f172a;
+        --muted: #64748b;
+        --faint: #94a3b8;
+        --line: #e9edf2;
+        --line-soft: #f1f4f8;
+        --soft: #f7f9fb;
+        --accent: #0e7c86;
+        --accent-ink: #0b6169;
+        --accent-soft: #e6f4f5;
+        --blue: #2563eb;
+        --green: #16a34a;
+        --teal: #0891b2;
+        --amber: #d97706;
+        --red: #dc2626;
+        --shadow-sm: 0 1px 2px rgba(15,23,42,.04);
+        --shadow: 0 1px 2px rgba(15,23,42,.05), 0 12px 28px -20px rgba(15,23,42,.22);
+        --radius: 14px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 15px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: "cv02","cv03","cv04","ss01";
+      }
+      .tnum, td, th, .value { font-variant-numeric: tabular-nums; }
+
+      /* ---------- header ---------- */
+      header {
+        background: color-mix(in srgb, var(--panel) 82%, transparent);
+        backdrop-filter: saturate(180%) blur(12px);
+        border-bottom: 1px solid var(--line);
+        padding: 14px 26px;
+        position: sticky;
+        top: 0;
+        z-index: 30;
+      }
+      .title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .brand .mark {
+        width: 40px; height: 40px; border-radius: 11px; flex: none;
+        background: linear-gradient(135deg, var(--accent), var(--accent-ink));
+        color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 18px;
+        box-shadow: 0 6px 16px -8px var(--accent);
+      }
+      h1 { font-size: 19px; line-height: 1.2; margin: 0; letter-spacing: -.02em; font-weight: 800; }
+      .subtle { color: var(--muted); font-size: 13px; margin-top: 3px; }
+      .hdr-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+      .btn {
+        display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+        font-weight: 600; font-size: 13.5px; padding: 9px 15px; border-radius: 10px;
+        border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+        transition: transform .15s ease, box-shadow .15s, background .15s, border-color .15s;
+        width: auto; min-height: 0; white-space: nowrap;
+      }
+      .btn:hover { border-color: var(--faint); transform: translateY(-1px); }
+      .btn.accent { background: var(--accent-soft); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 24%, transparent); }
+      .btn.dark { background: var(--ink); color: #fff; border-color: var(--ink); }
+      .btn.dark:hover { background: #1e293b; }
+
+      /* ---------- layout ---------- */
+      .layout { padding: 20px 26px 40px; display: grid; grid-template-columns: 1fr; gap: 16px; max-width: 1600px; margin: 0 auto; }
+      /* let grid items shrink so wide tables scroll inside .table-wrap instead of stretching the page */
+      .layout > *, .split > *, .blog-layout > * { min-width: 0; }
+
+      /* ---------- KPIs ---------- */
+      .kpis { display: grid; grid-template-columns: repeat(4, minmax(160px, 1fr)); gap: 14px; }
+      .kpi {
+        background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+        padding: 16px 18px; position: relative; overflow: hidden; box-shadow: var(--shadow-sm);
+      }
+      .kpi::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 3px; background: var(--accent); opacity: .85; }
+      .kpi .label { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; padding-left: 8px; }
+      .kpi .value { margin-top: 8px; font-weight: 800; font-size: 28px; letter-spacing: -.02em; padding-left: 8px; }
+
+      /* ---------- panels ---------- */
+      .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+      .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding: 14px 16px; }
+      .panel-title { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+
+      /* ---------- explainer legend ---------- */
+      .legend { overflow: hidden; }
+      .legend[hidden] { display: none; }
+      .legend .legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; padding: 16px; }
+      .legend-card { border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px; background: var(--soft); }
+      .legend-card h4 { margin: 0 0 6px; font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 7px; }
+      .legend-card p { margin: 0; font-size: 12.8px; color: var(--muted); line-height: 1.5; }
+      .legend-card .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px; }
+
+      /* ---------- filters ---------- */
+      .toolbar { display: grid; grid-template-columns: 1.6fr repeat(4, minmax(130px, .7fr)); gap: 10px; padding: 14px; }
+      .filter-bar { display: flex; align-items: center; justify-content: space-between; padding: 0 14px 12px; }
+      .advanced-toolbar { display: grid; grid-template-columns: repeat(6, minmax(120px, 1fr)); gap: 10px; padding: 0 14px 14px; }
+      .advanced-toolbar[hidden] { display: none; }
+      input, select {
+        width: 100%; min-height: 40px; border: 1px solid var(--line); border-radius: 10px;
+        background: var(--panel); color: var(--ink); padding: 9px 12px; font-size: 14px;
+        transition: border-color .15s, box-shadow .15s; font-family: inherit;
+      }
+      input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+      input[type="search"] { background-image: none; }
+      select { cursor: pointer; }
+      button { font-family: inherit; }
+
+      /* ---------- tabs (segmented) ---------- */
+      /* Left icon rail: collapsed to icons, expands on hover to reveal labels. */
+      body { padding-left: 58px; }
+      .tabs {
+        position: fixed; left: 0; top: 0; bottom: 0; z-index: 80;
+        display: flex; flex-direction: column; gap: 4px; align-items: stretch;
+        width: 58px; padding: 14px 9px; overflow-x: hidden; overflow-y: auto;
+        background: var(--panel); border-right: 1px solid var(--line);
+        box-shadow: 2px 0 16px -12px rgba(15,23,42,.4);
+        transition: width .18s ease, box-shadow .18s ease;
+      }
+      .tabs:hover, .tabs:focus-within { width: 214px; box-shadow: 10px 0 30px -14px rgba(15,23,42,.45); }
+      .tab-button {
+        display: flex; align-items: center; gap: 13px;
+        width: 100%; min-height: 0; white-space: nowrap; overflow: hidden;
+        padding: 10px 8px; border-radius: 10px; font-size: 13.5px; font-weight: 600;
+        background: transparent; color: var(--muted); border: 1px solid transparent; cursor: pointer;
+        transition: background .15s, color .15s;
+      }
+      .tab-button:hover { background: var(--soft); color: var(--ink); }
+      .tab-button.active { background: var(--ink); color: #fff; border-color: var(--ink); box-shadow: 0 6px 14px -8px rgba(15,23,42,.5); }
+      .tab-ico { flex: 0 0 26px; font-size: 18px; line-height: 1; text-align: center; }
+      .tab-txt { opacity: 0; transition: opacity .12s ease; }
+      .tabs:hover .tab-txt, .tabs:focus-within .tab-txt { opacity: 1; }
+      .tab-view:not(.active) { display: none; }  /* :not() outranks .split{display:grid} so inactive Screener hides */
+      .tab-view.active { display: block; animation: fade .25s ease; }
+      @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+      /* ---------- split & sections ---------- */
+      .split { display: grid; grid-template-columns: 0.92fr 1.35fr; gap: 16px; }
+      .blog-layout { display: grid; grid-template-columns: 1.2fr .8fr; gap: 16px; }
+      .blog-body { padding: 16px; }
+      .blog-section { border-top: 1px solid var(--line); padding: 14px 0; }
+      .blog-section:first-child { border-top: 0; padding-top: 0; }
+      .blog-section h2 { margin: 0 0 8px; font-size: 18px; }
+      .probability-grid { display: grid; grid-template-columns: repeat(3, minmax(100px, 1fr)); gap: 10px; margin-top: 12px; }
+      .subsection { border-top: 1px solid var(--line); margin-top: 2px; }
+      .subsection .table-wrap { max-height: 360px; }
+      .section-title { margin: 18px 0 8px; font-weight: 750; font-size: 15px; }
+      .chart-ivl { display: inline-flex; gap: 2px; background: var(--soft); border-radius: 8px; padding: 2px; }
+      .ivl-btn { border: 0; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 6px; cursor: pointer; }
+      .ivl-btn.active { background: var(--panel); color: var(--ink); box-shadow: var(--shadow-sm); }
+
+      /* Revenue-by-segment donut */
+      .seg-wrap { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+      .seg-svg { flex: 0 0 auto; }
+      .seg-slice { cursor: pointer; transition: opacity .12s ease; stroke: var(--panel); stroke-width: 1.5; }
+      .seg-center-1 { font-size: 12px; font-weight: 600; fill: var(--muted); }
+      .seg-center-2 { font-size: 21px; font-weight: 800; fill: var(--ink); }
+      .seg-legend { list-style: none; margin: 0; padding: 0; flex: 1 1 190px; min-width: 170px; }
+      .seg-legend li { display: flex; align-items: center; gap: 9px; padding: 5px 6px; border-radius: 7px; cursor: pointer; font-size: 13px; }
+      .seg-legend li.active { background: var(--soft); }
+      .seg-sw { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 auto; }
+      .seg-lname { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .seg-lpct { margin-left: auto; font-weight: 700; color: var(--muted); }
+      .seg-note { color: var(--muted); font-size: 13px; padding: 8px 0; }
+      .seg-src { color: var(--faint); font-size: 11px; margin-top: 8px; }
+
+      /* ---------- tables ---------- */
+      .table-wrap { max-height: 580px; overflow: auto; border-radius: 0 0 var(--radius) var(--radius); }
+      table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+      th, td { padding: 11px 12px; text-align: left; vertical-align: middle; white-space: nowrap; }
+      td { border-bottom: 1px solid var(--line-soft); }
+      th {
+        background: var(--soft); position: sticky; top: 0; z-index: 1; font-size: 11.5px; font-weight: 700;
+        color: var(--muted); text-transform: uppercase; letter-spacing: .03em; border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      .sort-button {
+        width: auto; min-height: 0; padding: 0; border: 0; background: transparent; color: inherit;
+        font: inherit; font-weight: 700; text-align: left; white-space: nowrap; cursor: pointer;
+        text-transform: uppercase; letter-spacing: .03em; font-size: 11.5px;
+      }
+      .sort-button::after { content: " ↕"; color: var(--faint); font-weight: 500; }
+      .sort-button.active.asc::after { content: " ↑"; color: var(--accent); }
+      .sort-button.active.desc::after { content: " ↓"; color: var(--accent); }
+      tbody tr { transition: background .12s; }
+      tr:hover td { background: var(--accent-soft); }
+      .truncate { max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+      .product-cell { min-width: 280px; max-width: 420px; white-space: normal; line-height: 1.4; color: var(--muted); font-size: 13px; }
+      .clickable-row { cursor: pointer; }
+      .link-symbol { color: var(--accent-ink); font-weight: 700; cursor: pointer; text-decoration: none; }
+      .link-symbol:hover { text-decoration: underline; text-underline-offset: 2px; }
+      .chart-link, .tv-link { color: var(--blue); font-weight: 600; text-decoration: none; }
+      .chart-link:hover, .tv-link:hover { text-decoration: underline; }
+
+      /* ---------- pills / badges ---------- */
+      .pill {
+        display: inline-flex; align-items: center; gap: 5px; min-height: 22px; border-radius: 999px;
+        padding: 2px 10px; font-size: 11.5px; font-weight: 700; border: 1px solid transparent; letter-spacing: .01em;
+      }
+      .leading   { background: #e8f7ef; color: var(--green); border-color: #c7ead6; }
+      .improving { background: #e3f5f9; color: var(--teal);  border-color: #bce4ec; }
+      .weakening { background: #fdf1dd; color: var(--amber); border-color: #f3dcaf; }
+      .lagging   { background: #fdeae7; color: var(--red);   border-color: #f6cabf; }
+      .stage2    { background: #e9f0fe; color: var(--blue);  border-color: #cfdefb; }
+
+      .note { padding: 12px 16px; color: var(--muted); font-size: 12.5px; border-top: 1px solid var(--line); line-height: 1.5; }
+      .empty { padding: 28px; color: var(--muted); text-align: center; }
+
+      /* ---------- charts ---------- */
+      .mini-chart { height: 260px; border: 1px solid var(--line); border-radius: 12px; margin: 14px; background: var(--panel); }
+      .chart-box { height: 360px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); position: relative; }
+      .chart-box canvas { width: 100%; height: 100%; display: block; }
+      .chart-message { height: 100%; display: flex; align-items: center; justify-content: center; color: var(--muted); padding: 18px; text-align: center; }
+
+      /* Global search console */
+      .omnisearch { position: relative; margin: 0 0 18px; }
+      .omni-box { display: flex; align-items: center; gap: 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 2px 14px; box-shadow: var(--shadow-sm); }
+      .omni-box:focus-within { border-color: #1f6feb; box-shadow: 0 0 0 3px rgba(31,111,235,.12); }
+      .omni-icon { font-size: 16px; opacity: .7; }
+      #omniInput { flex: 1; border: 0; outline: 0; background: transparent; font-size: 15px; padding: 13px 0; color: var(--ink); }
+      .omni-results { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 60; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 12px 32px rgba(15,23,42,.16); max-height: 60vh; overflow-y: auto; }
+      .omni-item { display: flex; align-items: baseline; gap: 10px; padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--line); }
+      .omni-item:last-child { border-bottom: 0; }
+      .omni-item.active, .omni-item:hover { background: #f1f5fb; }
+      .omni-name { font-weight: 600; color: var(--ink); }
+      .omni-sym { font-size: 12px; color: var(--muted); font-weight: 600; }
+      .omni-meta { font-size: 12px; color: var(--muted); margin-left: auto; text-align: right; max-width: 48%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .omni-empty { padding: 14px; color: var(--muted); font-size: 13px; }
+      .omni-item mark, .omni-meta mark { background: #fde68a; color: inherit; padding: 0 1px; border-radius: 2px; }
+
+      /* ---------- drawer ---------- */
+      .drawer-backdrop { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.4); z-index: 40; backdrop-filter: blur(2px); }
+      .drawer-backdrop.open { display: block; }
+      .drawer {
+        position: fixed; right: 0; top: 0; bottom: 0; width: min(780px, 100vw); background: var(--panel);
+        border-left: 1px solid var(--line); box-shadow: -18px 0 44px rgba(15,23,42,.22); overflow: auto;
+        transform: translateX(100%); transition: transform .22s cubic-bezier(.4,0,.2,1); z-index: 41;
+      }
+      .drawer.open { transform: translateX(0); }
+      .drawer-head { position: sticky; top: 0; background: color-mix(in srgb, var(--panel) 90%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); padding: 18px 20px; z-index: 2; display: flex; justify-content: space-between; gap: 12px; }
+      .drawer-body { padding: 18px 20px 30px; }
+      .detail-grid { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 10px; }
+      .detail-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--soft); }
+      .detail-card .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; font-weight: 600; }
+      .detail-card .value { margin-top: 5px; font-size: 16px; font-weight: 700; }
+      /* per-metric "vs industry" info button + popover */
+      .mi { margin-left: 5px; width: 15px; height: 15px; line-height: 13px; font-size: 10px; font-style: italic; font-weight: 700; font-family: Georgia, "Times New Roman", serif; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--muted); cursor: pointer; padding: 0; vertical-align: middle; }
+      .mi:hover { border-color: #1f6feb; color: #1f6feb; }
+      .mi-pop { position: fixed; z-index: 200; width: 264px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 16px 40px rgba(15,23,42,.22); padding: 12px 14px; font-size: 12.5px; }
+      .mi-title { font-weight: 700; font-size: 13px; }
+      .mi-def { color: var(--muted); margin: 3px 0 10px; line-height: 1.35; }
+      .mi-row { display: flex; justify-content: space-between; font-size: 12px; margin-top: 7px; }
+      .mi-bar { height: 7px; border-radius: 4px; background: var(--soft); overflow: hidden; margin-top: 3px; }
+      .mi-bar i { display: block; height: 100%; border-radius: 4px; }
+      .mi-bar i.mi-good { background: #16a34a; } .mi-bar i.mi-bad { background: #dc2626; }
+      .mi-bar i.mi-mid { background: #64748b; } .mi-bar i.mi-ind { background: #94a3b8; }
+      .mi-verdict { margin-top: 10px; font-weight: 600; line-height: 1.35; }
+      .mi-verdict.mi-good { color: #16a34a; } .mi-verdict.mi-bad { color: #dc2626; } .mi-verdict.mi-mid { color: var(--muted); }
+
+      /* ---------- swot / chips / prose ---------- */
+      .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+      .chip { border-radius: 999px; padding: 6px 11px; font-size: 12px; background: var(--soft); border: 1px solid var(--line); }
+      .chip.good { background: #e8f7ef; border-color: #c7ead6; color: var(--green); }
+      .chip.bad { background: #fdeae7; border-color: #f6cabf; color: var(--red); }
+      .swot-grid { display: grid; grid-template-columns: repeat(2, minmax(220px, 1fr)); gap: 10px; }
+      .swot-card { border: 1px solid var(--line); border-radius: 12px; padding: 12px 13px; background: var(--soft); }
+      .swot-card h3 { margin: 0 0 8px; font-size: 14px; }
+      .swot-card ul { margin: 0; padding-left: 18px; color: #334155; line-height: 1.45; font-size: 13px; }
+      .prose { color: #334155; line-height: 1.6; font-size: 14px; white-space: normal; }
+      /* AI write-up callout (Qwen + Llama) */
+      .ai-box { border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--line)); background:
+        linear-gradient(180deg, var(--accent-soft), var(--panel)); border-radius: 12px; padding: 14px 16px; margin-top: 6px; }
+      .ai-box + .ai-box { margin-top: 10px; }
+      .ai-box .ai-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+      .ai-box .ai-title { font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 7px; }
+      .ai-box .ai-badge { font-size: 10.5px; font-weight: 700; color: var(--accent-ink); background: var(--panel);
+        border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
+      .ai-box .prose { color: #1f2937; font-size: 13.5px; }
+      .ai-box ul { margin: 8px 0 0; padding-left: 18px; }
+      .ai-box li { margin: 3px 0; line-height: 1.5; }
+      .ai-box .ai-pending { color: var(--muted); font-size: 13px; font-style: italic; }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 1050px) {
+        .kpis { grid-template-columns: repeat(2, minmax(150px, 1fr)); }
+        .toolbar { grid-template-columns: 1fr 1fr; }
+        .advanced-toolbar { grid-template-columns: 1fr 1fr; }
+        .split, .blog-layout { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 640px) {
+        header, .layout { padding-left: 14px; padding-right: 14px; }
+        .kpis, .toolbar, .advanced-toolbar { grid-template-columns: 1fr; }
+        h1 { font-size: 17px; }
+        .detail-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+        .swot-grid { grid-template-columns: 1fr; }
+        .tabs { flex-wrap: nowrap; overflow-x: auto; }
+      }
+      /* ---- Upstox drawer sections ---- */
+      .ux-card { background: var(--soft); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin: 8px 0; }
+      .ux-h { font-size: 12px; font-weight: 700; letter-spacing: .03em; color: var(--ink); margin-bottom: 6px; }
+      .ux-pos { color: var(--green); } .ux-neg { color: #dc2626; }
+      .ux-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+      .ux-table th { color: var(--muted); font-weight: 600; font-size: 11px; text-align: left; padding: 3px 6px; border-bottom: 1px solid var(--line); }
+      .ux-table td { padding: 4px 6px; border-bottom: 1px solid var(--line-soft); color: var(--ink); }
+      .ux-table td:first-child { color: var(--muted); text-transform: capitalize; }
+      .ux-stats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+      .ux-stat { flex: 1; min-width: 62px; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; padding: 7px 6px; text-align: center; }
+      .ux-sv { font-size: 15px; font-weight: 700; color: var(--ink); }
+      .ux-sl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; margin-top: 2px; }
+      .ux-oi td { border-bottom: 1px solid var(--line-soft); }
+      .ux-oc, .ux-op { width: 42%; } .ux-oc { text-align: right; }
+      .ux-b { display: inline-block; height: 9px; border-radius: 3px; vertical-align: middle; }
+      .ux-call { background: #ef4444; } .ux-put { background: var(--green); }
+      .ux-hold { display: flex; flex-direction: column; gap: 5px; }
+      .ux-hbar { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+      .ux-hn { width: 120px; color: var(--muted); text-transform: capitalize; }
+      .ux-htrack { flex: 1; height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+      .ux-htrack > span { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
+      .ux-hv { width: 66px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+      .ux-act { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
+      .ux-rats { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 14px; }
+      .ux-rat { display: flex; gap: 6px; align-items: baseline; font-size: 12.5px; padding: 2px 0; }
+      .ux-rat > span:first-child { color: var(--muted); min-width: 74px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="title-row">
+        <div class="brand">
+          <div class="mark">W</div>
+          <div>
+            <h1>Stage 2 &amp; Sector Rotation Screener</h1>
+            <div class="subtle">Which NSE stocks are in a healthy uptrend, in the strongest sectors — updated daily.
+              <span id="generatedAt" style="color:var(--faint)"></span>
+            </div>
+          </div>
+        </div>
+        <div class="hdr-actions">
+          <a class="btn accent" href="index.html">🔍 Stock Search</a>
+          <button class="btn accent" id="legendToggle" aria-expanded="false">ⓘ How to read this</button>
+          <a class="btn" href="sector-leadership.html">Sector Leadership Report ↗</a>
+          <button class="btn dark" id="resetButton">Reset</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="omnisearch" id="omnisearch">
+        <div class="omni-box">
+          <span class="omni-icon" aria-hidden="true">🔎</span>
+          <input id="omniInput" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="omniResults" aria-autocomplete="list"
+            placeholder="Search any NSE stock — company, symbol, industry, or product / service (e.g. “Bolero”, “Thums Up”, “paints”)…">
+        </div>
+        <div class="omni-results" id="omniResults" role="listbox" hidden></div>
+      </section>
+
+      <section class="kpis">
+        <div class="kpi"><div class="label">Industries Analyzed</div><div class="value" id="kpiIndustries">-</div></div>
+        <div class="kpi"><div class="label">Stage 2 + Leading Industries</div><div class="value" id="kpiLeadingIndustries">-</div></div>
+        <div class="kpi"><div class="label">Stocks Analyzed</div><div class="value" id="kpiStocks">-</div></div>
+        <div class="kpi"><div class="label">Stage 2 + Leading Stocks</div><div class="value" id="kpiLeadingStocks">-</div></div>
+      </section>
+
+      <section class="panel legend" id="legendPanel" hidden>
+        <div class="panel-head">
+          <div class="panel-title">How to read this dashboard</div>
+          <div class="subtle">Plain-English guide to the terms below</div>
+        </div>
+        <div class="legend-grid">
+          <div class="legend-card">
+            <h4>📈 Stage (Weinstein)</h4>
+            <p>Where a stock is in its cycle. <b>Stage 2 = advancing (a healthy uptrend — what we look for)</b>. Stage 1 = basing, Stage 3 = topping, Stage 4 = declining.</p>
+            <div class="tags"><span class="pill stage2">Stage 2 = good</span></div>
+          </div>
+          <div class="legend-card">
+            <h4>🧭 RRG quadrant</h4>
+            <p>Strength versus the overall market, and where it's heading next.</p>
+            <div class="tags">
+              <span class="pill leading">Leading</span><span class="pill improving">Improving</span>
+              <span class="pill weakening">Weakening</span><span class="pill lagging">Lagging</span>
+            </div>
+          </div>
+          <div class="legend-card">
+            <h4>💪 RS Ratio &amp; RS Momentum</h4>
+            <p><b>RS Ratio</b> — how strong vs the market (above 100 = outperforming). <b>RS Momentum</b> — whether that strength is speeding up or slowing down (above 100 = accelerating).</p>
+          </div>
+          <div class="legend-card">
+            <h4>🎯 CMP · Entry · SL · Target</h4>
+            <p><b>CMP</b> = current price. <b>Entry</b> = suggested buy level. <b>SL</b> = stop-loss (exit if wrong). <b>Target</b> = profit goal.</p>
+          </div>
+          <div class="legend-card">
+            <h4>⭐ Score &amp; Fund Score</h4>
+            <p><b>Score</b> = overall technical strength of the setup (higher is stronger). <b>Fund Score</b> = fundamental quality from financials.</p>
+          </div>
+          <div class="legend-card">
+            <h4>👆 Tip</h4>
+            <p>Click any stock row to open a full panel with fundamentals, financials, SWOT and a price chart.</p>
+          </div>
+        </div>
+        <div class="note">Educational and informational only — not investment advice. Chart setups and backtests can and do fail. Always do your own research and manage risk.</div>
+      </section>
+
+      <section class="panel">
+        <div class="toolbar">
+          <input id="searchInput" type="search" placeholder="Search industry, stock, symbol, product">
+          <select id="industryFilter"><option value="">All industries</option></select>
+          <select id="stageFilter">
+            <option value="">All stages</option>
+            <option value="stage_2">Stage 2</option>
+            <option value="not_stage_2">Not Stage 2</option>
+          </select>
+          <select id="rrgFilter">
+            <option value="">All RRG quadrants</option>
+            <option value="leading">Leading</option>
+            <option value="improving">Improving</option>
+            <option value="weakening">Weakening</option>
+            <option value="lagging">Lagging</option>
+          </select>
+          <select id="stockLimit">
+            <option value="5">Top 5 stocks</option>
+            <option value="10">Top 10 stocks</option>
+            <option value="9999">All stocks</option>
+          </select>
+        </div>
+        <div class="filter-bar">
+          <button class="btn" id="advToggle" aria-expanded="false" style="font-size:13px;padding:7px 12px">＋ More filters</button>
+        </div>
+        <div class="advanced-toolbar" id="advancedToolbar" hidden>
+          <input id="minStockScore" type="number" step="1" placeholder="Min technical score">
+          <input id="minFundScore" type="number" step="1" placeholder="Min fundamental score">
+          <input id="minROCE" type="number" step="1" placeholder="Min ROCE %">
+          <input id="maxPE" type="number" step="1" placeholder="Max P/E">
+          <input id="minCMP" type="number" step="1" placeholder="Min CMP">
+          <input id="maxCMP" type="number" step="1" placeholder="Max CMP">
+        </div>
+      </section>
+
+      <nav class="tabs" aria-label="Sections">
+        <button class="tab-button active" data-tab="screener" title="Screener"><span class="tab-ico" aria-hidden="true">📊</span><span class="tab-txt">Screener</span></button>
+        <button class="tab-button" data-tab="high52w-stocks" title="52W High Stocks"><span class="tab-ico" aria-hidden="true">🔝</span><span class="tab-txt">52W High Stocks</span></button>
+        <button class="tab-button" data-tab="market-blog" title="Market Blog"><span class="tab-ico" aria-hidden="true">📝</span><span class="tab-txt">Market Blog</span></button>
+        <button class="tab-button" data-tab="backtest-daily" title="Daily Backtest"><span class="tab-ico" aria-hidden="true">📅</span><span class="tab-txt">Daily Backtest</span></button>
+        <button class="tab-button" data-tab="backtest-weekly" title="Weekly Backtest"><span class="tab-ico" aria-hidden="true">🗓️</span><span class="tab-txt">Weekly Backtest</span></button>
+        <button class="tab-button" data-tab="backtest-52w" title="52W High Breakout"><span class="tab-ico" aria-hidden="true">💥</span><span class="tab-txt">52W High Breakout</span></button>
+        <button class="tab-button" data-tab="chart-patterns" title="Chart Patterns"><span class="tab-ico" aria-hidden="true">🕯️</span><span class="tab-txt">Chart Patterns</span></button>
+      </nav>
+
+      <section class="split tab-view active" id="tab-screener">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Industries</div>
+            <div class="subtle" id="industryCount"></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="name">Industry</button></th>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="stage">Stage</button></th>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="rrg_quadrant">RRG</button></th>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="rs_ratio">RS Ratio</button></th>
+                  <th><button class="sort-button" data-table="industries" data-sort-key="rs_momentum">RS Momentum</button></th>
+                </tr>
+              </thead>
+              <tbody id="industryBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Best Stocks</div>
+            <div class="subtle" id="stockCount"></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="parent">Industry</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="name">Stock</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="display_symbol">Symbol</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="common_product_business">Known Product / Business</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="cmp">CMP</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="entry_price">Entry</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="sl">SL</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="target">Target</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="stage">Stage</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="rrg_quadrant">RRG</button></th>
+                  <th><button class="sort-button" data-table="stocks" data-sort-key="stock_score">Score</button></th>
+                </tr>
+              </thead>
+              <tbody id="stockBody"></tbody>
+            </table>
+          </div>
+          <div class="note"><span id="coverageNote"></span><br><span id="tradeLevelNote"></span></div>
+          <div class="subsection">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title">Fundamental Picks From Best Stocks</div>
+                <div class="subtle">Ranked using Screener financials plus available margin, cash flow, leverage and liquidity data.</div>
+              </div>
+              <div class="subtle" id="fundamentalCount"></div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="parent">Industry</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="name">Stock</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="display_symbol">Symbol</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="fundamental_score">Fund Score</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="pe_value">P/E</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="roce">ROCE</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="roe_pct">ROE</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="net_margin_pct">Net Margin</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="debt_to_equity">D/E</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="qtr_sales_var_pct">Qtr Sales %</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="qtr_profit_var_pct">Qtr Profit %</button></th>
+                    <th><button class="sort-button" data-table="fundamentals" data-sort-key="fundamental_reasons">Why Picked</button></th>
+                  </tr>
+                </thead>
+                <tbody id="fundamentalBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel tab-view" id="tab-high52w-stocks">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Stocks With A Weekly Close Above The 52-Week High</div>
+            <div class="subtle">Latest weekly candle closed at or above the highest of the prior 52 weeks. Click a row for full fundamentals, financials and chart.</div>
+          </div>
+          <div class="subtle"><span id="high52wStockCount">0 shown</span></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="parent">Industry</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="name">Stock</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="display_symbol">Symbol</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="common_product_business">Known Product / Business</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="cmp">CMP</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="high_52w">52W High</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="pct_above_52wh">% Above</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="breakout_week">Breakout Week</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="fundamental_score">Fund Score</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="pe_value">P/E</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="roce">ROCE</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="roe_pct">ROE</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="net_margin_pct">Net Margin</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="debt_to_equity">D/E</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="stage">Stage</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="rrg_quadrant">RRG</button></th>
+                <th><button class="sort-button" data-table="breakout52w" data-sort-key="stock_score">Score</button></th>
+              </tr>
+            </thead>
+            <tbody id="high52wStockBody"></tbody>
+          </table>
+        </div>
+        <div class="note">A weekly close above the 52-week high is the live entry trigger for the 52W High Breakout strategy. Fundamentals are Yahoo/Screener sourced and may be partial for newly covered names.</div>
+      </section>
+
+      <section class="tab-view" id="tab-market-blog">
+        <div class="blog-layout">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="panel-title" id="blogTitle">Market Blog</div>
+                <div class="subtle" id="blogGenerated">Loading market blog...</div>
+              </div>
+            </div>
+            <div class="blog-body" id="blogBody"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">CPR & Market Levels</div>
+              <div class="subtle" id="blogBias"></div>
+            </div>
+            <div class="blog-body">
+              <div class="detail-grid" id="blogLevels"></div>
+              <div class="section-title">Global Markets</div>
+              <div class="table-wrap" style="max-height:320px;">
+                <table>
+                  <thead><tr><th>Market</th><th>Level</th><th>Change</th></tr></thead>
+                  <tbody id="blogGlobalBody"></tbody>
+                </table>
+              </div>
+              <div class="section-title">Dashboard Leadership</div>
+              <div class="table-wrap" style="max-height:260px;">
+                <table>
+                  <thead><tr><th>Name</th><th>RS / Score</th><th>Type</th></tr></thead>
+                  <tbody id="blogLeadershipBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel tab-view" id="tab-backtest-daily">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Daily Backtested Strategy Results</div>
+            <div class="subtle" id="dailyBacktestRules"></div>
+          </div>
+          <div class="subtle" id="dailyBacktestGenerated"></div>
+        </div>
+        <div class="kpis" style="padding:14px;">
+          <div class="kpi"><div class="label">Trades</div><div class="value" id="dailyBtTrades">-</div></div>
+          <div class="kpi"><div class="label">Win Rate</div><div class="value" id="dailyBtWinRate">-</div></div>
+          <div class="kpi"><div class="label">Total P&L</div><div class="value" id="dailyBtPnl">-</div></div>
+          <div class="kpi"><div class="label">Max Drawdown</div><div class="value" id="dailyBtDrawdown">-</div></div>
+        </div>
+        <div class="mini-chart" id="dailyEquityChart"></div>
+        <div class="split" style="padding: 0 14px 14px;">
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Month-wise P&L</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Trades</th><th>P&L</th><th>Win %</th></tr></thead><tbody id="dailyMonthlyPnlBody"></tbody></table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Capital Deployed Per Month</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Entries</th><th>Capital</th><th>Avg/Trade</th><th>Max Trade</th></tr></thead><tbody id="dailyMonthlyCapitalBody"></tbody></table></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="symbol">Symbol</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="name">Name</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="industry">Industry</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="entry_date">Entry Date</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="entry_price">Entry</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="initial_sl_swing_low">Initial SL<br>Swing Low</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="entry_filter_50dma">50 MA<br>Entry</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="entry_filter_200dma">200 MA<br>Entry</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="exit_filter_50dma">50 MA<br>Exit</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="quantity">Qty</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="target_30_hit">30% Hit</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="exit_date">Exit Date</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="exit_price">Exit</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="pnl">P&L</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="r_multiple">R</button></th>
+                <th><button class="sort-button" data-table="dailyTrades" data-sort-key="exit_reason">Reason</button></th>
+              </tr>
+            </thead>
+            <tbody id="dailyBacktestBody"></tbody>
+          </table>
+        </div>
+        <div class="note">Backtest is rule-based and excludes brokerage, taxes, slippage and liquidity constraints.</div>
+      </section>
+
+      <section class="panel tab-view" id="tab-backtest-weekly">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Weekly Backtested Strategy Results</div>
+            <div class="subtle" id="weeklyBacktestRules"></div>
+          </div>
+          <div class="subtle" id="weeklyBacktestGenerated"></div>
+        </div>
+        <div class="kpis" style="padding:14px;">
+          <div class="kpi"><div class="label">Trades</div><div class="value" id="weeklyBtTrades">-</div></div>
+          <div class="kpi"><div class="label">Win Rate</div><div class="value" id="weeklyBtWinRate">-</div></div>
+          <div class="kpi"><div class="label">Total P&L</div><div class="value" id="weeklyBtPnl">-</div></div>
+          <div class="kpi"><div class="label">Max Drawdown</div><div class="value" id="weeklyBtDrawdown">-</div></div>
+        </div>
+        <div class="mini-chart" id="weeklyEquityChart"></div>
+        <div class="split" style="padding: 0 14px 14px;">
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Month-wise P&L</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Trades</th><th>P&L</th><th>Win %</th></tr></thead><tbody id="weeklyMonthlyPnlBody"></tbody></table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Capital Deployed Per Month</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Entries</th><th>Capital</th><th>Avg/Trade</th><th>Max Trade</th></tr></thead><tbody id="weeklyMonthlyCapitalBody"></tbody></table></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="symbol">Symbol</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="name">Name</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="industry">Industry</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="entry_date">Entry Date</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="entry_price">Entry</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="initial_sl_swing_low">Initial SL<br>Swing Low</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="entry_filter_50dma">50 DMA<br>Entry</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="entry_filter_200dma">200 DMA<br>Entry</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="exit_filter_50dma">50 DMA<br>Exit</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="quantity">Qty</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="target_30_hit">30% Hit</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="exit_date">Exit Date</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="exit_price">Exit</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="pnl">P&L</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="r_multiple">R</button></th>
+                <th><button class="sort-button" data-table="weeklyTrades" data-sort-key="exit_reason">Reason</button></th>
+              </tr>
+            </thead>
+            <tbody id="weeklyBacktestBody"></tbody>
+          </table>
+        </div>
+        <div class="note">Backtest is rule-based and excludes brokerage, taxes, slippage and liquidity constraints.</div>
+      </section>
+
+      <section class="panel tab-view" id="tab-backtest-52w">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">52-Week High Breakout &mdash; 6-Year Backtest</div>
+            <div class="subtle" id="high52wBacktestRules"></div>
+          </div>
+          <div class="subtle" id="high52wBacktestGenerated"></div>
+        </div>
+        <div class="kpis" style="padding:14px;">
+          <div class="kpi"><div class="label">Trades</div><div class="value" id="high52wBtTrades">-</div></div>
+          <div class="kpi"><div class="label">Win Rate</div><div class="value" id="high52wBtWinRate">-</div></div>
+          <div class="kpi"><div class="label">Total P&L</div><div class="value" id="high52wBtPnl">-</div></div>
+          <div class="kpi"><div class="label">Max Drawdown</div><div class="value" id="high52wBtDrawdown">-</div></div>
+          <div class="kpi"><div class="label">Avg R</div><div class="value" id="high52wBtAvgR">-</div></div>
+          <div class="kpi"><div class="label">Avg Hold (days)</div><div class="value" id="high52wBtHold">-</div></div>
+        </div>
+        <div class="mini-chart" id="high52wEquityChart"></div>
+        <div class="split" style="padding: 0 14px 14px;">
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Month-wise P&L</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Trades</th><th>P&L</th><th>Win %</th></tr></thead><tbody id="high52wMonthlyPnlBody"></tbody></table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div class="panel-title">Capital Deployed Per Month</div></div>
+            <div class="table-wrap" style="max-height:300px;"><table><thead><tr><th>Month</th><th>Entries</th><th>Capital</th><th>Avg/Trade</th><th>Max Trade</th></tr></thead><tbody id="high52wMonthlyCapitalBody"></tbody></table></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="symbol">Symbol</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="name">Name</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="industry">Industry</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="entry_date">Entry Date</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="entry_price">Entry<br>(52W High)</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="initial_sl_52w_ma">Initial SL<br>(52W MA)</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="quantity">Qty</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="exit_date">Exit Date</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="exit_price">Exit</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="exit_52w_ma">52W MA<br>Exit</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="holding_days">Hold<br>Days</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="pnl">P&L</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="r_multiple">R</button></th>
+                <th><button class="sort-button" data-table="high52wTrades" data-sort-key="exit_reason">Reason</button></th>
+              </tr>
+            </thead>
+            <tbody id="high52wBacktestBody"></tbody>
+          </table>
+        </div>
+        <div class="note">Entry on a fresh 52-week high breakout; stop trails at the 52-week MA; held until a weekly close below the 52-week MA. Rule-based, excludes brokerage, taxes, slippage and liquidity constraints.</div>
+      </section>
+
+      <section class="tab-view" id="tab-chart-patterns">
+        <div class="panel" style="padding:0;overflow:hidden">
+          <div class="panel-head" style="padding:12px 16px">
+            <div class="panel-title">NIFTY 500 — Daily Chart Patterns</div>
+            <div class="subtle">EOD pattern &amp; breakout scan with per-chart trade notes ·
+              <a href="https://myfinancialria.github.io/chart-analysis-patterns/" target="_blank" rel="noopener">open full page ↗</a>
+            </div>
+          </div>
+          <iframe id="chartPatternsFrame" title="NIFTY 500 Chart Patterns" loading="lazy"
+            style="width:100%;height:calc(100vh - 220px);min-height:640px;border:0;display:block"></iframe>
+        </div>
+      </section>
+    </main>
+
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="drawer" id="stockDrawer" aria-hidden="true">
+      <div class="drawer-head">
+        <div>
+          <h2 id="drawerTitle" style="font-size:20px;margin:0;"></h2>
+          <div class="subtle" id="drawerSubtitle"></div>
+        </div>
+        <button id="drawerClose" style="max-width:96px;">Close</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+    </aside>
+    <div id="metricPop" class="mi-pop" hidden></div>
+
+    <script>
+      let AI_WRITEUPS = { industries: {}, stocks: {}, models: {} };
+      const state = {
+        data: null,
+        selectedIndustry: "",
+        sorts: {
+          industries: { key: "rs_momentum", dir: "desc" },
+          stocks: { key: "stock_score", dir: "desc" },
+          fundamentals: { key: "fundamental_score", dir: "desc" },
+          breakout52w: { key: "pct_above_52wh", dir: "desc" },
+          dailyTrades: { key: "entry_date", dir: "desc" },
+          weeklyTrades: { key: "entry_date", dir: "desc" },
+          high52wTrades: { key: "entry_date", dir: "desc" },
+        },
+      };
+      const el = (id) => document.getElementById(id);
+      const fmt = (value) => value === null || value === undefined || Number.isNaN(value) ? "-" : Number(value).toFixed(2);
+      const pill = (value, extra = "") => `<span class="pill ${String(value || "").replaceAll("_", "")} ${extra}">${value || "-"}</span>`;
+      const asText = (value) => value === null || value === undefined || value === "" ? "-" : value;
+      const listChips = (items, kind) => (items && items.length ? items.map((item) => `<span class="chip ${kind}">${item}</span>`).join("") : `<span class="chip">None flagged</span>`);
+      const listItems = (items) => (items && items.length ? items.map((item) => `<li>${item}</li>`).join("") : "<li>No major item flagged.</li>");
+      const numberFilter = (id) => {
+        const raw = el(id).value;
+        if (raw === "") return null;
+        const parsed = Number(raw);
+        return Number.isFinite(parsed) ? parsed : null;
+      };
+
+      function rowMatchesSearch(record, search) {
+        if (!search) return true;
+        const haystack = Object.values(record).join(" ").toLowerCase();
+        return haystack.includes(search.toLowerCase());
+      }
+
+      function valueFor(row, key) {
+        if (key === "pe_value") return row.pe_ratio ?? row.pe;
+        if (key === "fundamental_reasons") return (row.fundamental_reasons || []).join(", ");
+        const value = row[key];
+        if (value === null || value === undefined || value === "") return null;
+        if (typeof value === "boolean") return value ? 1 : 0;
+        return value;
+      }
+
+      function sortRows(rows, tableName) {
+        const sort = state.sorts[tableName];
+        if (!sort || !sort.key) return rows;
+        const direction = sort.dir === "asc" ? 1 : -1;
+        return [...rows].sort((a, b) => {
+          const av = valueFor(a, sort.key);
+          const bv = valueFor(b, sort.key);
+          if (av === null && bv === null) return 0;
+          if (av === null) return 1;
+          if (bv === null) return -1;
+          const an = Number(av);
+          const bn = Number(bv);
+          if (Number.isFinite(an) && Number.isFinite(bn)) return (an - bn) * direction;
+          return String(av).localeCompare(String(bv), undefined, { numeric: true, sensitivity: "base" }) * direction;
+        });
+      }
+
+      function applyMetricFilters(rows, filters) {
+        return rows.filter((row) => {
+          const pe = row.pe_ratio ?? row.pe;
+          if (filters.minStockScore !== null && Number(row.stock_score || 0) < filters.minStockScore) return false;
+          if (filters.minFundScore !== null && Number(row.fundamental_score || 0) < filters.minFundScore) return false;
+          if (filters.minROCE !== null && Number(row.roce || 0) < filters.minROCE) return false;
+          if (filters.maxPE !== null && (pe === null || pe === undefined || Number(pe) > filters.maxPE)) return false;
+          if (filters.minCMP !== null && Number(row.cmp || 0) < filters.minCMP) return false;
+          if (filters.maxCMP !== null && (row.cmp === null || row.cmp === undefined || Number(row.cmp) > filters.maxCMP)) return false;
+          return true;
+        });
+      }
+
+      function refreshSortIndicators() {
+        document.querySelectorAll(".sort-button").forEach((button) => {
+          const sort = state.sorts[button.dataset.table];
+          const active = sort && sort.key === button.dataset.sortKey;
+          button.classList.toggle("active", active);
+          button.classList.toggle("asc", active && sort.dir === "asc");
+          button.classList.toggle("desc", active && sort.dir === "desc");
+        });
+      }
+
+      function getFilters() {
+        return {
+          search: el("searchInput").value.trim(),
+          industry: el("industryFilter").value || state.selectedIndustry,
+          stage: el("stageFilter").value,
+          rrg: el("rrgFilter").value,
+          limit: Number(el("stockLimit").value),
+          minStockScore: numberFilter("minStockScore"),
+          minFundScore: numberFilter("minFundScore"),
+          minROCE: numberFilter("minROCE"),
+          maxPE: numberFilter("maxPE"),
+          minCMP: numberFilter("minCMP"),
+          maxCMP: numberFilter("maxCMP"),
+        };
+      }
+
+      function renderKpis() {
+        const m = state.data.metrics;
+        el("generatedAt").textContent = `Generated ${m.generated_at}`;
+        el("kpiIndustries").textContent = m.industries_analyzed;
+        el("kpiLeadingIndustries").textContent = m.stage2_leading_industries;
+        el("kpiStocks").textContent = m.stocks_analyzed;
+        el("kpiLeadingStocks").textContent = m.stage2_leading_stocks;
+        el("coverageNote").textContent = m.coverage_note;
+        el("tradeLevelNote").textContent = m.trade_level_note || "";
+        renderBacktest();
+      }
+
+      function renderMarketBlog(blog) {
+        if (!blog) {
+          el("blogGenerated").textContent = "No market blog has been generated yet.";
+          el("blogBody").innerHTML = `<div class="empty">Run update_morning_market_blog.sh to generate the first post.</div>`;
+          return;
+        }
+        el("blogTitle").textContent = blog.title || "Market Blog";
+        el("blogGenerated").textContent = blog.generated_at ? `Generated ${blog.generated_at}` : "";
+        const probabilities = blog.probabilities || {};
+        const gift = blog.gift_nifty || {};
+        const nifty = blog.nifty || {};
+        el("blogBody").innerHTML = `
+          <div class="blog-section">
+            <h2>${asText(blog.headline)}</h2>
+            <div class="prose">${asText((blog.blog_sections && blog.blog_sections[0] && blog.blog_sections[0].body) || "")}</div>
+            <div class="probability-grid">
+              ${detail("Up Chance", pct(probabilities.up))}
+              ${detail("Down Chance", pct(-Math.abs(probabilities.down || 0)).replace("-", ""))}
+              ${detail("Sideways", pct(probabilities.sideways))}
+            </div>
+          </div>
+          ${(blog.blog_sections || []).slice(1).map((section) => `
+            <div class="blog-section">
+              <h2>${section.heading}</h2>
+              <div class="prose">${section.body}</div>
+            </div>
+          `).join("")}
+          <div class="blog-section">
+            <h2>Past Pattern Notes</h2>
+            <ul>${listItems(blog.pattern_notes)}</ul>
+          </div>
+          <div class="blog-section">
+            <h2>GIFT Nifty Opening Read</h2>
+            <div class="prose">Level: <strong>${fmt(gift.level)}</strong> | Implied gap: <strong>${pct(gift.change_pct)}</strong><br>${asText(gift.note)} Source: ${asText(gift.source)}</div>
+          </div>
+          <div class="blog-section">
+            <h2>Nifty Trend Snapshot</h2>
+            <div class="detail-grid">
+              ${detail("Close", fmt(nifty.close))}
+              ${detail("5D Return", pct(nifty.change_5d_pct))}
+              ${detail("20D Return", pct(nifty.change_20d_pct))}
+              ${detail("RSI 14", fmt(nifty.rsi14))}
+              ${detail("20 DMA", fmt(nifty.ma20))}
+              ${detail("50 DMA", fmt(nifty.ma50))}
+              ${detail("200 DMA", fmt(nifty.ma200))}
+            </div>
+          </div>
+          <div class="note">${asText(blog.disclaimer)}</div>
+        `;
+        const cpr = blog.cpr || {};
+        el("blogBias").textContent = `Up ${probabilities.up || "-"}% | Down ${probabilities.down || "-"}% | Sideways ${probabilities.sideways || "-"}%`;
+        el("blogLevels").innerHTML = `
+          ${detail("Pivot", fmt(cpr.pivot))}
+          ${detail("BC", fmt(cpr.bc))}
+          ${detail("TC", fmt(cpr.tc))}
+          ${detail("CPR Width", pct(cpr.width_pct))}
+          ${detail("R1", fmt(cpr.r1))}
+          ${detail("R2", fmt(cpr.r2))}
+          ${detail("S1", fmt(cpr.s1))}
+          ${detail("S2", fmt(cpr.s2))}
+        `;
+        el("blogGlobalBody").innerHTML = (blog.global_markets || []).length ? blog.global_markets.map((row) => `
+          <tr>
+            <td>${row.name}</td>
+            <td>${fmt(row.level)}</td>
+            <td>${pct(row.change_pct)}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="3" class="empty">No global-market data available.</td></tr>`;
+        const leadership = [
+          ...(blog.leading_industries || []).map((row) => ({ name: row.name, score: row.rs_momentum, type: "Industry" })),
+          ...(blog.fundamental_picks || []).map((row) => ({ name: `${row.symbol || ""} ${row.name || ""}`, score: row.score, type: "Stock" })),
+        ];
+        el("blogLeadershipBody").innerHTML = leadership.length ? leadership.map((row) => `
+          <tr><td class="truncate">${row.name}</td><td>${fmt(row.score)}</td><td>${row.type}</td></tr>
+        `).join("") : `<tr><td colspan="3" class="empty">No leadership data available.</td></tr>`;
+      }
+
+      function renderIndustryOptions() {
+        const select = el("industryFilter");
+        const names = [...new Set(state.data.leadingIndustries.map((row) => row.name))].sort();
+        names.forEach((name) => {
+          const option = document.createElement("option");
+          option.value = name;
+          option.textContent = name;
+          select.appendChild(option);
+        });
+      }
+
+      function filteredIndustries(filters) {
+        return sortRows(state.data.leadingIndustries.filter((row) => {
+          if (filters.industry && row.name !== filters.industry) return false;
+          if (filters.stage && row.stage !== filters.stage) return false;
+          if (filters.rrg && row.rrg_quadrant !== filters.rrg) return false;
+          return rowMatchesSearch(row, filters.search);
+        }), "industries");
+      }
+
+      function filteredStocks(filters, industryNames) {
+        const allowed = new Set(industryNames);
+        const counts = new Map();
+        return sortRows(applyMetricFilters(state.data.leadingStocks
+          .filter((row) => allowed.has(row.parent))
+          .filter((row) => {
+            if (filters.stage && row.stage !== filters.stage) return false;
+            if (filters.rrg && row.rrg_quadrant !== filters.rrg) return false;
+            return rowMatchesSearch(row, filters.search);
+          }), filters), "stocks")
+          .filter((row) => {
+            const count = counts.get(row.parent) || 0;
+            if (count >= filters.limit) return false;
+            counts.set(row.parent, count + 1);
+            return true;
+          });
+      }
+
+      function filteredFundamentalPicks(filters, industryNames) {
+        const allowed = new Set(industryNames);
+        return sortRows(applyMetricFilters((state.data.fundamentalPicks || [])
+          .filter((row) => allowed.has(row.parent))
+          .filter((row) => {
+            if (filters.stage && row.stage !== filters.stage) return false;
+            if (filters.rrg && row.rrg_quadrant !== filters.rrg) return false;
+            return rowMatchesSearch(row, filters.search);
+          }), filters), "fundamentals");
+      }
+
+      function render() {
+        const filters = getFilters();
+        const industries = filteredIndustries(filters);
+        const stocks = filteredStocks(filters, industries.map((row) => row.name));
+        const fundamentalPicks = filteredFundamentalPicks(filters, industries.map((row) => row.name));
+        el("industryCount").textContent = `${industries.length} shown`;
+        el("stockCount").textContent = `${stocks.length} shown`;
+        el("fundamentalCount").textContent = `${fundamentalPicks.length} shown`;
+        refreshSortIndicators();
+        el("industryBody").innerHTML = industries.length ? industries.map((row) => `
+          <tr data-industry="${row.name}">
+            <td class="truncate"><strong>${row.name}</strong><div class="subtle">${row.parent || ""}</div></td>
+            <td>${pill(row.stage, row.stage === "stage_2" ? "stage2" : "")}</td>
+            <td>${pill(row.rrg_quadrant)}</td>
+            <td>${fmt(row.rs_ratio)}</td>
+            <td>${fmt(row.rs_momentum)}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="5" class="empty">No industries match the filters.</td></tr>`;
+        el("stockBody").innerHTML = stocks.length ? stocks.map((row) => `
+          <tr>
+            <td class="truncate">${row.parent || ""}</td>
+            <td><strong>${row.name || ""}</strong></td>
+            <td>${row.display_symbol || row.symbol || ""}</td>
+            <td class="product-cell">${row.common_product_business || "-"}</td>
+            <td>${fmt(row.cmp)}</td>
+            <td>${fmt(row.entry_price)}</td>
+            <td>${fmt(row.sl)}</td>
+            <td>${fmt(row.target)}</td>
+            <td>${pill(row.stage, row.stage === "stage_2" ? "stage2" : "")}</td>
+            <td>${pill(row.rrg_quadrant)}</td>
+            <td>${fmt(row.stock_score)}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="11" class="empty">No stocks match the filters.</td></tr>`;
+        el("fundamentalBody").innerHTML = fundamentalPicks.length ? fundamentalPicks.map((row) => `
+          <tr>
+            <td class="truncate">${row.parent || ""}</td>
+            <td><strong>${row.name || ""}</strong></td>
+            <td>${row.display_symbol || row.symbol || ""}</td>
+            <td><strong>${fmt(row.fundamental_score)}</strong></td>
+            <td>${fmt(row.pe_ratio || row.pe)}</td>
+            <td>${fmt(row.roce)}</td>
+            <td>${pct(row.roe_pct)}</td>
+            <td>${pct(row.net_margin_pct)}</td>
+            <td>${fmt(row.debt_to_equity)}</td>
+            <td>${pct(row.qtr_sales_var_pct)}</td>
+            <td>${pct(row.qtr_profit_var_pct)}</td>
+            <td class="product-cell">${(row.fundamental_reasons || []).join(", ") || "-"}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="12" class="empty">No fundamental picks match the filters.</td></tr>`;
+        const stockRows = [...document.querySelectorAll("#stockBody tr")];
+        stockRows.forEach((tr, index) => {
+          if (!stocks[index]) return;
+          tr.classList.add("clickable-row");
+          tr.addEventListener("click", () => openStockDrawer(stocks[index]));
+        });
+        const fundamentalRows = [...document.querySelectorAll("#fundamentalBody tr")];
+        fundamentalRows.forEach((tr, index) => {
+          if (!fundamentalPicks[index]) return;
+          tr.classList.add("clickable-row");
+          tr.addEventListener("click", () => openStockDrawer(fundamentalPicks[index]));
+        });
+        document.querySelectorAll("#industryBody tr[data-industry]").forEach((tr) => {
+          tr.addEventListener("click", () => {
+            state.selectedIndustry = tr.dataset.industry;
+            el("industryFilter").value = state.selectedIndustry;
+            render();
+          });
+        });
+        renderBreakout52w();
+      }
+
+      function buildSymbolIndex() {
+        const index = {};
+        const add = (row) => {
+          if (!row || !row.symbol) return;
+          const key = String(row.symbol).toUpperCase();
+          // Later (richer) sources overwrite earlier ones for the same symbol.
+          index[key] = { ...(index[key] || {}), ...row };
+        };
+        (state.data.stocks || []).forEach(add);
+        (state.data.leadingStocks || []).forEach(add);
+        (state.data.breakout52wStocks || []).forEach(add);
+        state.symbolIndex = index;
+      }
+
+      function stockForSymbol(yahooSymbol, fallback) {
+        const key = String(yahooSymbol || "").toUpperCase();
+        const found = (state.symbolIndex || {})[key];
+        if (found) return found;
+        // No enriched record - build a minimal object so the drawer + chart
+        // (keyed on the Yahoo symbol) still render for backtest-only names.
+        return {
+          symbol: yahooSymbol,
+          display_symbol: (fallback && fallback.symbol) || String(yahooSymbol || "").replace(/\.NS$/i, ""),
+          name: (fallback && fallback.name) || "",
+          parent: (fallback && fallback.industry) || "",
+        };
+      }
+
+      function renderBreakout52w() {
+        const rows = state.data.breakout52wStocks || [];
+        const filters = getFilters();
+        const list = sortRows(rows.filter((row) => {
+          if (filters.industry && row.parent !== filters.industry) return false;
+          return rowMatchesSearch(row, filters.search);
+        }), "breakout52w");
+        el("high52wStockCount").textContent = `${list.length} shown`;
+        el("high52wStockBody").innerHTML = list.length ? list.map((row) => `
+          <tr>
+            <td class="truncate">${row.parent || ""}</td>
+            <td><strong>${row.name || ""}</strong></td>
+            <td>${row.display_symbol || row.symbol || ""}</td>
+            <td class="product-cell">${row.common_product_business || "-"}</td>
+            <td>${fmt(row.cmp)}</td>
+            <td>${fmt(row.high_52w)}</td>
+            <td>${pct(row.pct_above_52wh)}</td>
+            <td>${row.breakout_week || "-"}</td>
+            <td><strong>${fmt(row.fundamental_score)}</strong></td>
+            <td>${fmt(row.pe_ratio || row.pe)}</td>
+            <td>${fmt(row.roce)}</td>
+            <td>${pct(row.roe_pct)}</td>
+            <td>${pct(row.net_margin_pct)}</td>
+            <td>${fmt(row.debt_to_equity)}</td>
+            <td>${pill(row.stage, row.stage === "stage_2" ? "stage2" : "")}</td>
+            <td>${pill(row.rrg_quadrant)}</td>
+            <td>${fmt(row.stock_score)}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="17" class="empty">No stocks closed above their 52-week high in the latest week.</td></tr>`;
+        [...document.querySelectorAll("#high52wStockBody tr")].forEach((tr, index) => {
+          if (!list[index]) return;
+          tr.classList.add("clickable-row");
+          tr.addEventListener("click", () => openStockDrawer(list[index]));
+        });
+      }
+
+      function renderBacktest() {
+        renderBacktestTimeframe("daily");
+        renderBacktestTimeframe("weekly");
+        renderHigh52wBacktest();
+      }
+
+      function renderHigh52wBacktest() {
+        const backtest = state.data.backtest52w || { summary: {}, trades: [], monthlyPnl: [], monthlyCapital: [], equityCurve: [] };
+        const s = backtest.summary || {};
+        el("high52wBacktestRules").textContent = s.rules || "";
+        el("high52wBacktestGenerated").textContent = s.generated_at ? `Generated ${s.generated_at}` : "";
+        el("high52wBtTrades").textContent = s.trade_count ?? "-";
+        el("high52wBtWinRate").textContent = s.win_rate_pct === null || s.win_rate_pct === undefined ? "-" : `${Number(s.win_rate_pct).toFixed(1)}%`;
+        el("high52wBtPnl").textContent = s.total_pnl === undefined ? "-" : Number(s.total_pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        el("high52wBtDrawdown").textContent = s.max_drawdown === undefined ? "-" : Number(s.max_drawdown).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        el("high52wBtAvgR").textContent = s.avg_r_multiple === null || s.avg_r_multiple === undefined ? "-" : Number(s.avg_r_multiple).toFixed(2);
+        el("high52wBtHold").textContent = s.avg_holding_days === null || s.avg_holding_days === undefined ? "-" : Number(s.avg_holding_days).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        renderMiniEquityChart(el("high52wEquityChart"), backtest.equityCurve || []);
+        renderMonthlyPnl("high52wMonthlyPnlBody", backtest.monthlyPnl || []);
+        renderMonthlyCapital("high52wMonthlyCapitalBody", backtest.monthlyCapital || []);
+        const filters = getFilters();
+        const trades = sortRows((backtest.trades || []).filter((trade) => {
+          if (filters.industry && trade.industry !== filters.industry) return false;
+          return rowMatchesSearch(trade, filters.search);
+        }), "high52wTrades");
+        el("high52wBacktestBody").innerHTML = trades.length ? trades.map((trade) => `
+          <tr>
+            <td><span class="link-symbol">${trade.symbol}</span></td>
+            <td class="truncate">${trade.name}</td>
+            <td class="truncate">${trade.industry}</td>
+            <td>${trade.entry_date}</td>
+            <td>${fmt(trade.entry_price)}</td>
+            <td>${fmt(trade.initial_sl_52w_ma)}</td>
+            <td>${trade.quantity}</td>
+            <td>${trade.exit_date || "Open"}</td>
+            <td>${fmt(trade.exit_price)}</td>
+            <td>${fmt(trade.exit_52w_ma)}</td>
+            <td>${trade.holding_days ?? "-"}</td>
+            <td style="color:${Number(trade.pnl) >= 0 ? "var(--green)" : "var(--red)"}">${Number(trade.pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td>
+            <td>${fmt(trade.r_multiple)}</td>
+            <td>${trade.exit_reason}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="14" class="empty">No trades found for this rule set.</td></tr>`;
+        attachTradeSymbolLinks("high52wBacktestBody", trades);
+      }
+
+      function renderBacktestTimeframe(timeframe) {
+        const backtest = (state.data.backtest || {})[timeframe] || { summary: {}, trades: [], monthlyPnl: [], monthlyCapital: [], equityCurve: [] };
+        const s = backtest.summary || {};
+        const prefix = timeframe === "daily" ? "daily" : "weekly";
+        el(`${prefix}BacktestRules`).textContent = s.rules || "";
+        el(`${prefix}BacktestGenerated`).textContent = s.generated_at ? `Generated ${s.generated_at}` : "";
+        el(`${prefix}BtTrades`).textContent = s.trade_count ?? "-";
+        el(`${prefix}BtWinRate`).textContent = s.win_rate_pct === null || s.win_rate_pct === undefined ? "-" : `${Number(s.win_rate_pct).toFixed(1)}%`;
+        el(`${prefix}BtPnl`).textContent = s.total_pnl === undefined ? "-" : Number(s.total_pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        el(`${prefix}BtDrawdown`).textContent = s.max_drawdown === undefined ? "-" : Number(s.max_drawdown).toLocaleString("en-IN", { maximumFractionDigits: 0 });
+        renderMiniEquityChart(el(`${prefix}EquityChart`), backtest.equityCurve || []);
+        renderMonthlyPnl(`${prefix}MonthlyPnlBody`, backtest.monthlyPnl || []);
+        renderMonthlyCapital(`${prefix}MonthlyCapitalBody`, backtest.monthlyCapital || []);
+        const filters = getFilters();
+        const trades = sortRows((backtest.trades || []).filter((trade) => {
+          if (filters.industry && trade.industry !== filters.industry) return false;
+          return rowMatchesSearch(trade, filters.search);
+        }), `${timeframe}Trades`);
+        el(`${prefix}BacktestBody`).innerHTML = trades.length ? trades.map((trade) => `
+          <tr>
+            <td><span class="link-symbol">${trade.symbol}</span></td>
+            <td class="truncate">${trade.name}</td>
+            <td class="truncate">${trade.industry}</td>
+            <td>${trade.entry_date}</td>
+            <td>${fmt(trade.entry_price)}</td>
+            <td>${fmt(trade.initial_sl_swing_low)}</td>
+            <td>${fmt(trade.entry_filter_50dma)}</td>
+            <td>${fmt(trade.entry_filter_200dma)}</td>
+            <td>${fmt(trade.exit_filter_50dma)}</td>
+            <td>${trade.quantity}</td>
+            <td>${trade.target_30_hit ? "Yes" : "No"}</td>
+            <td>${trade.exit_date || "Open"}</td>
+            <td>${fmt(trade.exit_price)}</td>
+            <td style="color:${Number(trade.pnl) >= 0 ? "var(--green)" : "var(--red)"}">${Number(trade.pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td>
+            <td>${fmt(trade.r_multiple)}</td>
+            <td>${trade.exit_reason}</td>
+          </tr>
+        `).join("") : `<tr><td colspan="16" class="empty">No trades found for this rule set.</td></tr>`;
+        attachTradeSymbolLinks(`${prefix}BacktestBody`, trades);
+      }
+
+      function attachTradeSymbolLinks(bodyId, trades) {
+        [...document.querySelectorAll(`#${bodyId} tr`)].forEach((tr, index) => {
+          const trade = trades[index];
+          if (!trade) return;
+          const cell = tr.querySelector("td .link-symbol");
+          if (!cell) return;
+          cell.addEventListener("click", (event) => {
+            event.stopPropagation();
+            openStockDrawer(stockForSymbol(trade.yahoo_symbol || `${trade.symbol}.NS`, trade));
+          });
+        });
+      }
+
+      function renderMonthlyPnl(id, rows) {
+        el(id).innerHTML = rows.length ? rows.map((row) => `
+          <tr><td>${row.month}</td><td>${row.trades}</td><td style="color:${Number(row.pnl) >= 0 ? "var(--green)" : "var(--red)"}">${Number(row.pnl).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td><td>${fmt(row.win_rate_pct)}%</td></tr>
+        `).join("") : `<tr><td colspan="4" class="empty">No monthly P&L data.</td></tr>`;
+      }
+
+      function renderMonthlyCapital(id, rows) {
+        el(id).innerHTML = rows.length ? rows.map((row) => `
+          <tr><td>${row.month}</td><td>${row.entries}</td><td>${Number(row.capital_deployed).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td><td>${Number(row.avg_capital_per_trade).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td><td>${Number(row.max_single_trade_capital).toLocaleString("en-IN", { maximumFractionDigits: 0 })}</td></tr>
+        `).join("") : `<tr><td colspan="5" class="empty">No capital deployment data.</td></tr>`;
+      }
+
+      function renderMiniEquityChart(container, rows) {
+        container.innerHTML = "";
+        if (!rows.length) {
+          container.innerHTML = `<div class="chart-message">No equity curve data.</div>`;
+          return;
+        }
+        const canvas = document.createElement("canvas");
+        container.appendChild(canvas);
+        const rect = container.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const width = Math.max(360, Math.floor(rect.width || 900));
+        const height = Math.max(220, Math.floor(rect.height || 260));
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+
+        const pad = { left: 64, right: 18, top: 22, bottom: 28 };
+        const chartW = width - pad.left - pad.right;
+        const chartH = height - pad.top - pad.bottom;
+        const values = rows.flatMap((row) => [Number(row.equity), Number(row.drawdown)]);
+        const minValue = Math.min(...values, 0);
+        const maxValue = Math.max(...values, 0);
+        const range = Math.max(1, maxValue - minValue);
+        const xStep = rows.length > 1 ? chartW / (rows.length - 1) : chartW;
+        const y = (value) => pad.top + ((maxValue - value) / range) * chartH;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+        ctx.strokeStyle = "#eef2f7";
+        ctx.fillStyle = "#617084";
+        ctx.font = "12px Inter, system-ui, sans-serif";
+        for (let i = 0; i <= 4; i += 1) {
+          const yy = pad.top + (chartH / 4) * i;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, yy);
+          ctx.lineTo(width - pad.right, yy);
+          ctx.stroke();
+          const value = maxValue - (range / 4) * i;
+          ctx.fillText(value.toLocaleString("en-IN", { maximumFractionDigits: 0 }), 8, yy + 4);
+        }
+
+        function drawLine(field, color) {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          rows.forEach((row, index) => {
+            const x = pad.left + index * xStep;
+            const yy = y(Number(row[field]));
+            if (index === 0) ctx.moveTo(x, yy);
+            else ctx.lineTo(x, yy);
+          });
+          ctx.stroke();
+        }
+        drawLine("equity", "#1f6feb");
+        drawLine("drawdown", "#c2410c");
+
+        const last = rows[rows.length - 1];
+        ctx.fillStyle = "#17202a";
+        ctx.font = "600 13px Inter, system-ui, sans-serif";
+        ctx.fillText(`Equity ${Number(last.equity).toLocaleString("en-IN", { maximumFractionDigits: 0 })}  •  Drawdown ${Number(last.drawdown).toLocaleString("en-IN", { maximumFractionDigits: 0 })}`, pad.left, 16);
+        ctx.fillStyle = "#1f6feb";
+        ctx.fillRect(width - 178, 10, 10, 10);
+        ctx.fillStyle = "#617084";
+        ctx.fillText("Equity", width - 162, 19);
+        ctx.fillStyle = "#c2410c";
+        ctx.fillRect(width - 96, 10, 10, 10);
+        ctx.fillStyle = "#617084";
+        ctx.fillText("Drawdown", width - 80, 19);
+      }
+
+      function openStockDrawer(stock) {
+        const thesis = (state.data.industryTheses || {})[stock.parent] || {};
+        const tvSymbol = (stock.display_symbol || (stock.symbol || "").replace(/\.NS$/i, "")).toUpperCase();
+        const tvUrl = `https://www.tradingview.com/chart/?symbol=NSE:${encodeURIComponent(tvSymbol)}`;
+        el("drawerTitle").textContent = stock.name || stock.symbol || "Stock";
+        el("drawerSubtitle").textContent = `${stock.display_symbol || stock.symbol || ""} • ${stock.parent || ""}`;
+        el("drawerBody").innerHTML = `
+          <div class="detail-grid">
+            ${detail("CMP", fmt(stock.cmp))}
+            ${detail("Entry", fmt(stock.entry_price))}
+            ${detail("SL", fmt(stock.sl))}
+            ${detail("Target", fmt(stock.target))}
+            ${detail("Market Cap Cr", fmt(stock.market_cap_cr))}
+            ${detailC("P/E", fmt(stock.pe_ratio || stock.pe), "pe_ratio")}
+            ${detailC("ROCE %", fmt(stock.roce), "roce")}
+            ${detailC("Promoter/Insider %", fmt(stock.promoter_or_insider_holding_pct), "promoter_or_insider_holding_pct")}
+            ${detail("Fund Score", fmt(stock.fundamental_score))}
+          </div>
+
+          <div class="section-title">Revenue by Segment</div>
+          <div id="segmentChart"><div class="seg-note">Loading segments&hellip;</div></div>
+
+          <div class="section-title">AI Analysis — In Simple Words</div>
+          ${aiBox("Why this stock looks strong", (AI_WRITEUPS.stocks || {})[stock.display_symbol || stock.symbol])}
+          ${aiBox("Why this industry looks strong", (AI_WRITEUPS.industries || {})[stock.parent])}
+
+          <div class="section-title">Fundamentals</div>
+          <div class="detail-grid">
+            ${detailC("EPS", fmt(stock.eps), "eps")}
+            ${detail("Gross Margin", pct(stock.gross_margin_pct))}
+            ${detailC("Operating Margin", pct(stock.operating_margin_pct), "operating_margin_pct")}
+            ${detailC("Net Margin", pct(stock.net_margin_pct), "net_margin_pct")}
+            ${detailC("ROE", pct(stock.roe_pct), "roe_pct")}
+            ${detailC("Debt / Equity", fmt(stock.debt_to_equity), "debt_to_equity")}
+            ${detail("Current Ratio", fmt(stock.current_ratio))}
+            ${detail("Quick Ratio", fmt(stock.quick_ratio))}
+            ${detailC("FCF Cr", fmt(stock.free_cash_flow_cr), "free_cash_flow_cr")}
+            ${detailC("P/E", fmt(stock.pe_ratio || stock.pe), "pe_ratio")}
+            ${detailC("P/B", fmt(stock.pb_ratio), "pb_ratio")}
+            ${detail("PEG", fmt(stock.peg_ratio))}
+            ${detailC("Dividend Yield", pct(stock.dividend_yield_pct), "dividend_yield_pct")}
+            ${detail("Sales Qtr Cr", fmt(stock.sales_qtr_cr))}
+            ${detail("NP Qtr Cr", fmt(stock.np_qtr_cr))}
+            ${detail("Qtr Sales Growth", pct(stock.qtr_sales_var_pct))}
+            ${detail("Qtr Profit Growth", pct(stock.qtr_profit_var_pct))}
+          </div>
+
+          <div class="section-title">Upstox &mdash; Options, Financials &amp; Institutional Flows</div>
+          <div id="upstoxSections"><div class="seg-note">Loading Upstox data&hellip;</div></div>
+
+          <div class="section-title">Why It Is A Fundamental Pick</div>
+          <div class="chips">${listChips(stock.fundamental_reasons, "good")}</div>
+
+          <div class="section-title" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">Price Chart
+            <span class="chart-ivl" role="group" aria-label="Chart interval">
+              <button type="button" class="ivl-btn active" data-ivl="weekly">Weekly</button>
+              <button type="button" class="ivl-btn" data-ivl="daily">Daily</button>
+            </span>
+            <a class="tv-link" style="margin-left:auto;font-size:12px;font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>
+          </div>
+          <div class="chart-box" id="stockChart" style="height:460px">
+            <div class="chart-message">Loading chart&hellip;</div>
+          </div>
+          <div class="subtle" style="margin-top:6px;font-size:12px;"><b style="color:#f59e0b">Orange line = 30-week MA</b> (Weinstein stage line). Weekly &asymp; 20 years, Daily &asymp; 10 years. Hover for values, scroll to zoom, drag to pan. For intraday &amp; live data, use <a class="tv-link" style="font-weight:600;color:#1f6feb;text-decoration:none;" href="${tvUrl}" target="_blank" rel="noopener">Open in TradingView &#8599;</a>.</div>
+
+          <div class="section-title">Returns</div>
+          <div class="detail-grid">
+            ${detail("1W", pct(stock.return_1w))}
+            ${detail("1M", pct(stock.return_1m))}
+            ${detail("3M", pct(stock.return_3m))}
+            ${detail("6M", pct(stock.return_6m))}
+            ${detail("1Y", pct(stock.return_1y))}
+            ${detail("3Y", pct(stock.return_3y))}
+            ${detail("5Y", pct(stock.return_5y))}
+            ${detail("Score", fmt(stock.stock_score))}
+          </div>
+
+          <div class="section-title">Product / Business</div>
+          <div class="prose">${asText(stock.common_product_business || stock.yahoo_industry || stock.sector)}</div>
+
+          <div class="section-title">Company Description</div>
+          <div class="prose">${asText(stock.company_description || stock.common_product_business || (stock.name ? `${stock.name} operates in ${stock.yahoo_industry || stock.parent || stock.sector || "its"} segment.` : ""))}</div>
+
+          <div class="section-title">Pros</div>
+          <div class="chips">${listChips(stock.pros, "good")}</div>
+
+          <div class="section-title">Red Flags</div>
+          <div class="chips">${listChips(stock.red_flags, "bad")}</div>
+
+          <div class="section-title">SWOT &mdash; Company Internal (Strengths / Weaknesses) &amp; External (Opportunities / Threats) Factors</div>
+          <div class="swot-grid">
+            ${swotCard("Strengths", stock.swot && stock.swot.strengths)}
+            ${swotCard("Weaknesses", stock.swot && stock.swot.weaknesses)}
+            ${swotCard("Opportunities", stock.swot && stock.swot.opportunities)}
+            ${swotCard("Threats", stock.swot && stock.swot.threats)}
+          </div>
+
+          <div class="section-title">Why This Industry Is Relevant Now</div>
+          <div class="prose">${asText(thesis.relevance_now)}</div>
+
+          <div class="section-title">Future Possibilities</div>
+          <div class="prose">${asText(thesis.future_possibilities)}</div>
+
+          <div class="section-title">Government / Policy Support</div>
+          <div class="prose">${asText(thesis.policy_support)}</div>
+
+          <div class="section-title">Links</div>
+          <div class="chips">
+            <a class="chip" href="https://www.screener.in/company/${encodeURIComponent(tvSymbol)}/" target="_blank" rel="noopener">Screener ↗</a>
+            <a class="chip" href="${tvUrl}" target="_blank" rel="noopener">TradingView ↗</a>
+            <a class="chip" href="https://www.nseindia.com/get-quotes/equity?symbol=${encodeURIComponent(tvSymbol)}" target="_blank" rel="noopener">NSE ↗</a>
+            ${stock.website ? `<a class="chip" href="${stock.website}" target="_blank" rel="noopener">Company site ↗</a>` : ""}
+          </div>
+          ${thesis.policy_sources ? `<div class="prose" style="margin-top:8px"><b>Policy references:</b> ${asText(thesis.policy_sources)}</div>` : ""}
+        `;
+        state.drawerStock = stock;
+        el("drawerBackdrop").classList.add("open");
+        el("stockDrawer").classList.add("open");
+        el("stockDrawer").setAttribute("aria-hidden", "false");
+        // Weekly/daily interval toggle — re-renders from the cached chart file.
+        el("drawerBody").querySelectorAll(".ivl-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const group = btn.parentElement;
+            group.querySelectorAll(".ivl-btn").forEach((b) => b.classList.toggle("active", b === btn));
+            renderStockChart(stock, btn.dataset.ivl);
+          });
+        });
+        setTimeout(() => { renderStockChart(stock, "weekly"); renderSegments(stock); renderUpstox(stock); }, 0);
+      }
+
+      // ---------------- Upstox drawer sections (lazy) ----------------
+      // Fundamentals (statements/holdings/actions/peers), per-stock options
+      // (PCR/max-pain/OI) and market-wide FII/DII, all from ./upstox_data.json —
+      // refreshed daily by the VM sync job. One fetch, cached for the session.
+      let UPSTOX_PROMISE = null;
+      function loadUpstox() {
+        if (!UPSTOX_PROMISE) {
+          UPSTOX_PROMISE = fetch("./upstox_data.json?_=" + (state.data && state.data.metrics ? "" : Date.now()))
+            .then((r) => (r.ok ? r.json() : null)).catch(() => null);
+        }
+        return UPSTOX_PROMISE;
+      }
+      function uxNum(v, d) { return v === null || v === undefined ? "—" : Number(v).toLocaleString("en-IN", { maximumFractionDigits: d || 0 }); }
+      function uxCr(v) { if (v === null || v === undefined) return "—"; const a = Math.abs(v); return a >= 100000 ? (v / 100000).toFixed(2) + "L Cr" : uxNum(v) + " Cr"; }
+      function uxNet(v) { if (v === null || v === undefined) return "—"; return `<span class="${v >= 0 ? "ux-pos" : "ux-neg"}">${v >= 0 ? "+" : ""}${uxNum(v)}</span>`; }
+      function upstoxKey(stock) { return (stock.display_symbol || stock.symbol || "").replace(/\.NS$/i, "").toUpperCase(); }
+
+      function uxFlows(fd, date) {
+        if (!fd || !fd.segments) return "";
+        const s = fd.segments;
+        const cash = s["NSE_EQ|CASH"] || {};
+        const line = (label, o) => o ? `<tr><td>${label}</td><td style="text-align:right">${uxNet(o.net)}</td><td class="subtle" style="text-align:right">${uxNum(o.buy)} / ${uxNum(o.sell)}</td></tr>` : "";
+        const rows = [
+          line("<b>FII — Cash</b>", cash.fii),
+          line("<b>DII — Cash</b>", cash.dii),
+          line("FII — Index Futures", (s["NSE_FO|INDEX_FUTURES"] || {}).fii),
+          line("FII — Stock Futures", (s["NSE_FO|STOCK_FUTURES"] || {}).fii),
+          line("FII — Index Options", (s["NSE_FO|INDEX_OPTIONS"] || {}).fii),
+          line("FII — Stock Options", (s["NSE_FO|STOCK_OPTIONS"] || {}).fii),
+        ].join("");
+        return `<div class="ux-card"><div class="ux-h">Institutional Flows &mdash; market-wide, latest session (&#8377; Cr)</div>
+          <table class="ux-table"><thead><tr><th>Segment</th><th style="text-align:right">Net</th><th style="text-align:right">Buy / Sell</th></tr></thead><tbody>${rows}</tbody></table>
+          <div class="subtle" style="margin-top:4px;font-size:11px">FII/DII are market-wide (not per-stock). Source: Upstox market-information API.</div></div>`;
+      }
+
+      function uxOptions(o, name) {
+        if (!o) return "";
+        const pcr = o.pcr, spot = o.spot, mp = o.max_pain;
+        const pcrTone = pcr == null ? "" : (pcr > 1.1 ? "ux-pos" : pcr < 0.7 ? "ux-neg" : "");
+        // OI-by-strike: show a band of strikes around max-pain with call/put bars.
+        let bars = "";
+        const strikes = (o.oi_by_strike || []).filter((x) => x.strike != null);
+        if (strikes.length) {
+          const maxOI = Math.max(1, ...strikes.flatMap((x) => [x.call_oi || 0, x.put_oi || 0]));
+          const near = mp ? strikes.slice().sort((a, b) => Math.abs(a.strike - mp) - Math.abs(b.strike - mp)).slice(0, 9).sort((a, b) => a.strike - b.strike) : strikes.slice(0, 9);
+          bars = `<table class="ux-table ux-oi"><thead><tr><th style="text-align:right">Call OI</th><th style="text-align:center">Strike</th><th>Put OI</th></tr></thead><tbody>` +
+            near.map((x) => {
+              const cw = ((x.call_oi || 0) / maxOI * 100).toFixed(0), pw = ((x.put_oi || 0) / maxOI * 100).toFixed(0);
+              const isMp = mp && Math.abs(x.strike - mp) < 1e-6;
+              return `<tr><td class="ux-oc"><span class="ux-b ux-call" style="width:${cw}%"></span></td>
+                <td style="text-align:center;${isMp ? "font-weight:700;color:#f59e0b" : ""}">${uxNum(x.strike)}${isMp ? " •" : ""}</td>
+                <td class="ux-op"><span class="ux-b ux-put" style="width:${pw}%"></span></td></tr>`;
+            }).join("") + `</tbody></table>`;
+        }
+        return `<div class="ux-card"><div class="ux-h">Options &mdash; ${name || "current month"} (exp ${o.expiry || "—"})</div>
+          <div class="ux-stats">
+            <div class="ux-stat"><div class="ux-sv ${pcrTone}">${pcr == null ? "—" : pcr.toFixed(2)}</div><div class="ux-sl">PCR</div></div>
+            <div class="ux-stat"><div class="ux-sv">${uxNum(mp)}</div><div class="ux-sl">Max Pain</div></div>
+            <div class="ux-stat"><div class="ux-sv">${uxNum(spot)}</div><div class="ux-sl">Spot</div></div>
+            <div class="ux-stat"><div class="ux-sv">${uxNum(o.total_calls)}</div><div class="ux-sl">Call OI</div></div>
+            <div class="ux-stat"><div class="ux-sv">${uxNum(o.total_puts)}</div><div class="ux-sl">Put OI</div></div>
+          </div>${bars}
+          <div class="subtle" style="margin-top:4px;font-size:11px">PCR&gt;1 = more puts (support-heavy); &lt;0.7 = call-heavy. Max-pain &#8226; marked.</div></div>`;
+      }
+
+      function uxStmt(title, rows, cats, units) {
+        if (!rows || !rows.length) return "";
+        const periods = (rows[0].history || []).slice(0, 4).map((h) => h.period);
+        const body = rows.filter((r) => !cats || cats.includes(r.category)).map((r) => {
+          const cells = (r.history || []).slice(0, 4).map((h) => {
+            const ch = h.change ? `<br><span class="subtle ${String(h.change).trim().startsWith("-") ? "ux-neg" : "ux-pos"}" style="font-size:10px">${h.change}</span>` : "";
+            return `<td style="text-align:right">${uxCr(h.value)}${ch}</td>`;
+          }).join("");
+          return `<tr><td>${(r.category || "").replace(/_/g, " ")}</td>${cells}</tr>`;
+        }).join("");
+        return `<div class="ux-h" style="margin-top:8px">${title} <span class="subtle" style="font-weight:400">&#8377; ${units || "crore"}</span></div>
+          <table class="ux-table"><thead><tr><th></th>${periods.map((p) => `<th style="text-align:right">${p}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table>`;
+      }
+
+      function uxHoldings(list) {
+        if (!list || !list.length) return "";
+        const bars = list.map((c) => {
+          const l = (c.history || [])[0] || {};
+          const v = l.value;
+          return `<div class="ux-hbar"><span class="ux-hn">${(c.category || "").replace(/_/g, " ")}</span>
+            <span class="ux-htrack"><span style="width:${Math.min(100, v || 0)}%"></span></span>
+            <span class="ux-hv">${v == null ? "—" : v.toFixed(2) + "%"}</span></div>`;
+        }).join("");
+        return `<div class="ux-h" style="margin-top:8px">Shareholding &mdash; latest</div><div class="ux-hold">${bars}</div>`;
+      }
+
+      function uxActions(list) {
+        if (!list || !list.length) return "";
+        const items = list.slice(0, 6).map((a) => {
+          const ex = (a.event_details || []).find((d) => /ex/i.test(d.name || ""));
+          const amt = a.amount ? `&#8377;${a.amount}` : (a.ratio || "");
+          return `<div class="ux-act"><span><b>${a.name || ""}</b> ${ex ? "· ex " + ex.value : (a.expiry_date ? "· " + a.expiry_date : "")}</span><span class="subtle">${amt}</span></div>`;
+        }).join("");
+        return `<div class="ux-h" style="margin-top:8px">Corporate Actions</div>${items}`;
+      }
+
+      function uxFund(f) {
+        if (!f) return `<div class="seg-note">No Upstox fundamentals for this symbol.</div>`;
+        const p = f.profile || {};
+        const inc = f.income_statement || {}, bal = f.balance_sheet || {}, cf = f.cash_flow || {};
+        const ratios = (f.ratios_full || []).map((r) => `<div class="ux-rat"><span>${r.name}</span><b>${r.company_value}</b><span class="subtle">${r.sector_value != null ? "/ " + r.sector_value + " sec" : ""}</span></div>`).join("");
+        const balRows = (bal.history || []).slice(0, 4);
+        const balTable = balRows.length ? `<div class="ux-h" style="margin-top:8px">Balance Sheet <span class="subtle" style="font-weight:400">&#8377; ${bal.units_in || "crore"}</span></div>
+          <table class="ux-table"><thead><tr><th></th>${balRows.map((x) => `<th style="text-align:right">${x.period}</th>`).join("")}</tr></thead><tbody>
+          <tr><td>total asset</td>${balRows.map((x) => `<td style="text-align:right">${uxCr(x.total_asset)}</td>`).join("")}</tr>
+          <tr><td>total liability</td>${balRows.map((x) => `<td style="text-align:right">${uxCr(x.total_liability)}</td>`).join("")}</tr></tbody></table>` : "";
+        const peers = (f.competitors || []).map((c) => `<span class="chip">${c.name || c.instrument_key}</span>`).join("");
+        return `<div class="ux-card">
+            ${p.company_profile ? `<div class="prose" style="font-size:12.5px;margin-bottom:8px">${p.company_profile}</div>` : ""}
+            ${ratios ? `<div class="ux-h">Key Ratios &mdash; vs sector</div><div class="ux-rats">${ratios}</div>` : ""}
+            ${uxStmt("Income Statement", inc.income_statement, null, inc.units_in)}
+            ${balTable}
+            ${uxStmt("Cash Flow", cf.cash_flow, null, cf.units_in)}
+            ${uxHoldings(f.share_holdings)}
+            ${uxActions(f.corporate_actions)}
+            ${peers ? `<div class="ux-h" style="margin-top:8px">Peers</div><div class="chips">${peers}</div>` : ""}
+          </div>`;
+      }
+
+      function renderUpstox(stock) {
+        const box = el("upstoxSections");
+        if (!box) return;
+        loadUpstox().then((d) => {
+          if (!d) { box.innerHTML = `<div class="seg-note">Upstox data not published yet.</div>`; return; }
+          const key = upstoxKey(stock);
+          const f = (d.fundamentals || {})[key];
+          const o = (d.options || {})[key];
+          box.innerHTML = uxOptions(o, "current month") + uxFund(f) + uxFlows(d.fii_dii, d.options_date);
+        }).catch(() => { box.innerHTML = `<div class="seg-note">Upstox data failed to load.</div>`; });
+      }
+
+      // Lazily inject TradingView's open-source Lightweight Charts lib once.
+      // (The free TradingView *embed* widget can't show NSE data anonymously —
+      // NSE symbols require a logged-in TradingView session — so we render the
+      // OHLC/close bars the dashboard already ships instead.) Resolves false if
+      // the CDN is blocked so we fall back to the pre-baked canvas line chart.
+      let _lwcLoader = null;
+      function loadLightweightCharts() {
+        if (window.LightweightCharts) return Promise.resolve(true);
+        if (_lwcLoader) return _lwcLoader;
+        _lwcLoader = new Promise((resolve) => {
+          const s = document.createElement("script");
+          s.src = "https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js";
+          s.async = true;
+          s.onload = () => resolve(true);
+          s.onerror = () => { _lwcLoader = null; resolve(false); };
+          document.head.appendChild(s);
+        });
+        return _lwcLoader;
+      }
+
+      // Simple moving average over close, aligned to bar time (null until `period` bars).
+      function movingAverage(bars, period) {
+        const out = [];
+        let sum = 0;
+        for (let i = 0; i < bars.length; i++) {
+          sum += bars[i].close;
+          if (i >= period) sum -= bars[i - period].close;
+          if (i >= period - 1) out.push({ time: bars[i].time, value: +(sum / period).toFixed(2) });
+        }
+        return out;
+      }
+
+      // Bars = Stan Weinstein's 30-week MA regardless of timeframe: 30 bars on
+      // weekly data (the pipeline's default), ~150 trading days on daily data.
+      function maPeriodFor30Week(bars) {
+        if (bars.length < 3) return 30;
+        const gaps = [];
+        for (let i = 1; i < bars.length; i++) {
+          gaps.push((Date.parse(bars[i].time) - Date.parse(bars[i - 1].time)) / 86400000);
+        }
+        gaps.sort((a, b) => a - b);
+        const medianGapDays = gaps[Math.floor(gaps.length / 2)];
+        return medianGapDays >= 4 ? 30 : 150;
+      }
+
+      const escHtml = (x) => String(x == null ? "" : x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+      // ---- Interactive revenue-by-segment donut (data: state.data.segments) ----
+      const SEG_COLORS = ["#2563eb", "#f59e0b", "#16a34a", "#dc2626", "#7c3aed", "#0891b2", "#db2777", "#65a30d", "#ea580c", "#0d9488", "#9333ea", "#64748b"];
+      function _polar(cx, cy, r, deg) {
+        const a = (deg - 90) * Math.PI / 180;
+        return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+      }
+      function _donutSlice(cx, cy, R, r, a0, a1) {
+        const large = (a1 - a0) > 180 ? 1 : 0;
+        const [x1, y1] = _polar(cx, cy, R, a0), [x2, y2] = _polar(cx, cy, R, a1);
+        const [x3, y3] = _polar(cx, cy, r, a1), [x4, y4] = _polar(cx, cy, r, a0);
+        return `M${x1},${y1} A${R},${R} 0 ${large} 1 ${x2},${y2} L${x3},${y3} A${r},${r} 0 ${large} 0 ${x4},${y4} Z`;
+      }
+      const _clip = (s, n) => (s && s.length > n ? s.slice(0, n - 1) + "…" : s);
+
+      function renderSegments(stock) {
+        const box = el("segmentChart");
+        if (!box) return;
+        const info = (state.data.segments || {})[stock.symbol];
+        const segs = (info && info.segments) || [];
+        const names = (info && info.names) || [];
+        const hasSegData = state.data.segments && Object.keys(state.data.segments).length;
+        if (!segs.length) {
+          let msg;
+          if (info && info.gated) msg = `Segment revenue is premium-gated on the source${names.length ? ` — known segments: ${names.map(escHtml).join(", ")}` : ""}.`;
+          else if (names.length === 1) msg = `Single reportable business segment — ${escHtml(names[0])}.`;
+          else if (names.length > 1) msg = `Reported segments: ${names.map(escHtml).join(", ")} (revenue split not published).`;
+          else msg = hasSegData ? "Revenue segments not disclosed for this company." : "Segment data not loaded (needs the screener premium cookie).";
+          box.innerHTML = `<div class="seg-note">${msg}</div>`;
+          return;
+        }
+        if (segs.length === 1) {
+          box.innerHTML = `<div class="seg-note">Single reportable segment — ${escHtml(segs[0].name)} (100%).</div>`;
+          return;
+        }
+        const cx = 110, cy = 110, R = 104, r = 62;
+        let ang = 0;
+        const paths = [], legend = [];
+        segs.forEach((s, i) => {
+          const a0 = ang, a1 = ang + (s.pct / 100) * 360;
+          ang = a1;
+          const color = SEG_COLORS[i % SEG_COLORS.length];
+          paths.push(`<path d="${_donutSlice(cx, cy, R, r, a0, a1)}" fill="${color}" data-i="${i}" class="seg-slice"><title>${escHtml(s.name)} — ${s.pct}%</title></path>`);
+          legend.push(`<li data-i="${i}"><span class="seg-sw" style="background:${color}"></span><span class="seg-lname">${escHtml(s.name)}</span><span class="seg-lpct">${s.pct}%</span></li>`);
+        });
+        box.innerHTML = `
+          <div class="seg-wrap">
+            <svg viewBox="0 0 220 220" class="seg-svg" width="200" height="200" role="img" aria-label="Revenue by segment">
+              ${paths.join("")}
+              <text x="110" y="104" text-anchor="middle" class="seg-center-1" id="segCenterName">${escHtml(_clip(segs[0].name, 16))}</text>
+              <text x="110" y="128" text-anchor="middle" class="seg-center-2" id="segCenterPct">${segs[0].pct}%</text>
+            </svg>
+            <ul class="seg-legend">${legend.join("")}</ul>
+          </div>
+          <div class="seg-src">Revenue mix${info.period ? ` &middot; as of ${escHtml(info.period)}` : ""} &middot; source: screener.in</div>`;
+        const focus = (i) => {
+          box.querySelectorAll(".seg-slice").forEach((p) => { p.style.opacity = (i == null || +p.dataset.i === i) ? "1" : "0.32"; });
+          box.querySelectorAll(".seg-legend li").forEach((li) => li.classList.toggle("active", +li.dataset.i === i));
+          const s = i == null ? segs[0] : segs[i];
+          const nm = el("segCenterName"), pc = el("segCenterPct");
+          if (nm && pc) { nm.textContent = _clip(s.name, 16); pc.textContent = s.pct + "%"; }
+        };
+        box.querySelectorAll(".seg-slice, .seg-legend li").forEach((n) => {
+          n.addEventListener("mouseenter", () => focus(+n.dataset.i));
+          n.addEventListener("mouseleave", () => focus(null));
+        });
+      }
+
+      // Per-symbol chart files are lazy-loaded on drawer open and cached. Each is
+      // {weekly:[~20yr],daily:[~10yr]} (older builds were a bare weekly array).
+      // chartFile() mirrors build_dashboard_data.chart_filename(): drop .NS,
+      // replace anything outside [A-Za-z0-9_-] (e.g. the & in M&M).
+      const _chartCache = {};
+      function chartFile(symbol) {
+        return (symbol || "").replace(/\.NS$/i, "").replace(/[^A-Za-z0-9_-]/g, "_");
+      }
+      function seriesFor(data, interval) {
+        if (Array.isArray(data)) return data;                       // legacy bare-array file
+        if (!data) return [];
+        if (data[interval] && data[interval].length) return data[interval];
+        if (data.weekly && data.weekly.length) return data.weekly;  // fall back to weekly
+        return data.daily || [];
+      }
+      function chartHasBars(data) {
+        if (Array.isArray(data)) return data.length > 0;
+        return !!(data && ((data.weekly && data.weekly.length) || (data.daily && data.daily.length)));
+      }
+      function fetchChartBars(symbol) {
+        if (_chartCache[symbol]) return _chartCache[symbol];
+        const p = fetch(`./charts/${chartFile(symbol)}.json`)
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null);
+        _chartCache[symbol] = p;
+        // Don't cache misses/errors, so a later re-open can retry.
+        p.then((data) => { if (!chartHasBars(data)) delete _chartCache[symbol]; });
+        return p;
+      }
+
+      function renderStockChart(stock, interval) {
+        interval = interval || "weekly";
+        const container = el("stockChart");
+        if (!container) return;
+        container.innerHTML = `<div class="chart-message">Loading chart&hellip;</div>`;
+        Promise.all([fetchChartBars(stock.symbol), loadLightweightCharts()]).then(([data, ok]) => {
+          // Drawer may have been closed or switched to another stock meanwhile.
+          if (!document.body.contains(container) || el("stockChart") !== container) return;
+          const bars = seriesFor(data, interval);
+          if (!Array.isArray(bars) || !bars.length) {
+            container.innerHTML = `<div class="chart-message">No chart data available for ${stock.display_symbol || stock.symbol}.</div>`;
+            return;
+          }
+          if (!ok || !window.LightweightCharts) {
+            renderLineChart(container, bars, stock.display_symbol || stock.symbol);
+            return;
+          }
+          container.innerHTML = "";
+          const clean = bars
+            .filter((b) => b && b.time && Number.isFinite(Number(b.close)))
+            .map((b) => ({ time: b.time, open: +b.open, high: +b.high, low: +b.low, close: +b.close }));
+          if (!clean.length) {
+            renderLineChart(container, bars, stock.display_symbol || stock.symbol);
+            return;
+          }
+          // Auto-upgrade to candles if the pipeline ever bakes OHLC; else area of closes.
+          const hasOHLC = clean.every((b) => Number.isFinite(b.open) && Number.isFinite(b.high) && Number.isFinite(b.low));
+          const chart = LightweightCharts.createChart(container, {
+            autoSize: true,
+            layout: { background: { color: "transparent" }, textColor: "#5b6472", fontFamily: "inherit" },
+            grid: { horzLines: { color: "#eef1f4" }, vertLines: { color: "#f4f6f8" } },
+            rightPriceScale: { borderColor: "#e5e9ee" },
+            timeScale: { borderColor: "#e5e9ee" },
+            crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+          });
+          if (hasOHLC) {
+            chart.addCandlestickSeries({
+              upColor: "#16a34a", downColor: "#dc2626",
+              wickUpColor: "#16a34a", wickDownColor: "#dc2626", borderVisible: false,
+            }).setData(clean);
+          } else {
+            chart.addAreaSeries({
+              lineColor: "#1f6feb", topColor: "rgba(31,111,235,0.20)",
+              bottomColor: "rgba(31,111,235,0.02)", lineWidth: 2,
+            }).setData(clean.map((b) => ({ time: b.time, value: b.close })));
+          }
+          const ma = movingAverage(clean, maPeriodFor30Week(clean));
+          if (ma.length) {
+            chart.addLineSeries({ color: "#f59e0b", lineWidth: 2, priceLineVisible: false, lastValueVisible: false }).setData(ma);
+          }
+          chart.timeScale().fitContent();
+        });
+      }
+
+      function renderLineChart(container, bars, label) {
+        container.innerHTML = "";
+        const canvas = document.createElement("canvas");
+        container.appendChild(canvas);
+        const rect = container.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        const width = Math.max(320, Math.floor(rect.width || 720));
+        const height = Math.max(260, Math.floor(rect.height || 360));
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        const ctx = canvas.getContext("2d");
+        ctx.scale(dpr, dpr);
+
+        const data = bars.slice(-220).filter((bar) => Number.isFinite(Number(bar.close)));
+        const pad = { left: 52, right: 16, top: 28, bottom: 30 };
+        const chartW = width - pad.left - pad.right;
+        const chartH = height - pad.top - pad.bottom;
+        const minPrice = Math.min(...data.map((bar) => bar.close));
+        const maxPrice = Math.max(...data.map((bar) => bar.close));
+        const range = Math.max(1, maxPrice - minPrice);
+        const xStep = data.length > 1 ? chartW / (data.length - 1) : chartW;
+        const y = (price) => pad.top + ((maxPrice - price) / range) * chartH;
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+        ctx.strokeStyle = "#eef2f7";
+        ctx.lineWidth = 1;
+        ctx.font = "12px Inter, system-ui, sans-serif";
+        ctx.fillStyle = "#617084";
+        for (let i = 0; i <= 4; i += 1) {
+          const yy = pad.top + (chartH / 4) * i;
+          ctx.beginPath();
+          ctx.moveTo(pad.left, yy);
+          ctx.lineTo(width - pad.right, yy);
+          ctx.stroke();
+          const price = maxPrice - (range / 4) * i;
+          ctx.fillText(price.toFixed(0), 8, yy + 4);
+        }
+
+        ctx.strokeStyle = "#1f6feb";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        data.forEach((bar, index) => {
+          const x = pad.left + index * xStep;
+          const yy = y(bar.close);
+          if (index === 0) ctx.moveTo(x, yy);
+          else ctx.lineTo(x, yy);
+        });
+        ctx.stroke();
+
+        const first = data[0];
+        const latest = data[data.length - 1];
+        const positive = latest.close >= first.close;
+        ctx.fillStyle = positive ? "rgba(15, 138, 95, 0.10)" : "rgba(194, 65, 12, 0.10)";
+        ctx.lineTo(pad.left + (data.length - 1) * xStep, pad.top + chartH);
+        ctx.lineTo(pad.left, pad.top + chartH);
+        ctx.closePath();
+        ctx.fill();
+
+        data.forEach((bar, index) => {
+          if (index % Math.ceil(data.length / 8) !== 0 && index !== data.length - 1) return;
+          const x = pad.left + index * xStep;
+          const yy = y(bar.close);
+          ctx.fillStyle = "#1f6feb";
+          ctx.beginPath();
+          ctx.arc(x, yy, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.fillStyle = "#17202a";
+        ctx.font = "600 13px Inter, system-ui, sans-serif";
+        ctx.fillText(`${label}  •  ${latest.time}  •  Close ${latest.close.toFixed(2)}`, pad.left, 18);
+        ctx.fillStyle = "#617084";
+        ctx.font = "12px Inter, system-ui, sans-serif";
+        ctx.fillText(data[0].time, pad.left, height - 10);
+        ctx.fillText(latest.time, width - pad.right - 86, height - 10);
+      }
+
+      function detail(label, value) {
+        return `<div class="detail-card"><div class="label">${label}</div><div class="value">${value}</div></div>`;
+      }
+
+      // A detail card with a "vs industry" (i) button. `key` is a METRIC_META key.
+      function detailC(label, value, key) {
+        return `<div class="detail-card"><div class="label">${label}<button type="button" class="mi" data-mkey="${key}" aria-label="Compare ${label} to the industry">i</button></div><div class="value">${value}</div></div>`;
+      }
+
+      // ---- Per-metric "where does this stock stand vs its industry" ----
+      const METRIC_META = {
+        pe_ratio: { label: "P/E", def: "Price ÷ earnings per share. Lower is cheaper relative to profits.", higherBetter: false, unit: "x" },
+        pb_ratio: { label: "P/B", def: "Price ÷ book value. Lower is cheaper relative to net assets.", higherBetter: false, unit: "x" },
+        roe_pct: { label: "ROE", def: "Net profit ÷ shareholder equity. Higher = better return on owners' capital.", higherBetter: true, unit: "%" },
+        roce: { label: "ROCE", def: "Return on capital employed. Higher = more efficient use of all capital.", higherBetter: true, unit: "%" },
+        net_margin_pct: { label: "Net margin", def: "Net profit ÷ sales. Higher = more of each rupee of sales kept as profit.", higherBetter: true, unit: "%" },
+        operating_margin_pct: { label: "Operating margin", def: "Operating profit ÷ sales. Higher = stronger core operations.", higherBetter: true, unit: "%" },
+        debt_to_equity: { label: "Debt / Equity", def: "Total debt ÷ equity. Lower = less leverage and financial risk.", higherBetter: false, unit: "" },
+        dividend_yield_pct: { label: "Dividend yield", def: "Dividend ÷ price. Higher = more income per rupee invested.", higherBetter: true, unit: "%" },
+        eps: { label: "EPS", def: "Net profit earned per share.", higherBetter: true, unit: "" },
+        free_cash_flow_cr: { label: "Free cash flow", def: "Cash left after capex. Higher = more self-funded growth and payouts.", higherBetter: true, unit: "cr" },
+        promoter_or_insider_holding_pct: { label: "Promoter holding", def: "% of the company owned by promoters. Higher often signals owner commitment.", higherBetter: true, unit: "%" },
+      };
+      let INDUSTRY_STATS = {};
+      function _median(arr) {
+        if (!arr.length) return null;
+        const a = [...arr].sort((x, y) => x - y), m = Math.floor(a.length / 2);
+        return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
+      }
+      // Median of each metric within each industry (parent), computed once from all stocks.
+      function computeIndustryStats() {
+        const by = {};
+        (state.data.stocks || []).forEach((s) => {
+          const k = s.parent || "—";
+          (by[k] = by[k] || []).push(s);
+        });
+        INDUSTRY_STATS = {};
+        for (const [ind, list] of Object.entries(by)) {
+          const st = {};
+          for (const key of Object.keys(METRIC_META)) {
+            const vals = list.map((s) => Number(s[key])).filter(Number.isFinite);
+            st[key] = { median: _median(vals), n: vals.length };
+          }
+          INDUSTRY_STATS[ind] = st;
+        }
+      }
+      function _fmtMetric(v, meta) {
+        if (!Number.isFinite(v)) return "-";
+        if (meta.unit === "%") return v.toFixed(1) + "%";
+        if (meta.unit === "x") return v.toFixed(1) + "×";
+        if (meta.unit === "cr") return "₹" + Math.round(v).toLocaleString("en-IN") + " cr";
+        return v.toFixed(2);
+      }
+      function metricPopHtml(key, stock) {
+        const meta = METRIC_META[key];
+        if (!meta) return "";
+        const val = Number(stock[key]);
+        const ind = stock.parent || "—";
+        const st = (INDUSTRY_STATS[ind] || {})[key] || {};
+        let body;
+        if (Number.isFinite(val) && st.median != null && st.n >= 3) {
+          const med = st.median, diff = val - med;
+          const near = med !== 0 ? Math.abs(diff / Math.abs(med)) < 0.08 : Math.abs(diff) < 1e-9;
+          const higher = diff > 0;
+          const good = near ? null : (meta.higherBetter ? higher : !higher);
+          const cls = near ? "mi-mid" : (good ? "mi-good" : "mi-bad");
+          const verdict = near
+            ? "In line with the industry"
+            : `${higher ? "Above" : "Below"} the industry median — ${good ? "stronger than peers" : "weaker than peers"}`;
+          const mx = (Math.max(Math.abs(val), Math.abs(med)) * 1.25) || 1;
+          const cw = Math.max(2, Math.min(100, Math.abs(val) / mx * 100));
+          const mw = Math.max(2, Math.min(100, Math.abs(med) / mx * 100));
+          body = `<div class="mi-row"><span>This stock</span><b>${_fmtMetric(val, meta)}</b></div>`
+            + `<div class="mi-bar"><i class="${cls}" style="width:${cw}%"></i></div>`
+            + `<div class="mi-row"><span>Industry median</span><b>${_fmtMetric(med, meta)}</b></div>`
+            + `<div class="mi-bar"><i class="mi-ind" style="width:${mw}%"></i></div>`
+            + `<div class="mi-verdict ${cls}">${verdict} &middot; ${st.n} peers in ${escapeHtml(ind)}</div>`;
+        } else {
+          body = `<div class="mi-verdict mi-mid">Not enough industry peers to compare${Number.isFinite(val) ? "" : " (no value for this stock)"}.</div>`;
+        }
+        return `<div class="mi-title">${meta.label}</div><div class="mi-def">${meta.def}</div>${body}`;
+      }
+      function showMetricPop(btn, key) {
+        const pop = el("metricPop");
+        if (!pop || !state.drawerStock) return;
+        pop.innerHTML = metricPopHtml(key, state.drawerStock);
+        pop.hidden = false;
+        const r = btn.getBoundingClientRect(), w = 264;
+        pop.style.left = Math.max(10, Math.min(r.left - 8, window.innerWidth - w - 10)) + "px";
+        pop.style.top = (r.bottom + 6) + "px";
+      }
+      function hideMetricPop() {
+        const p = el("metricPop");
+        if (p) p.hidden = true;
+      }
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".mi");
+        if (btn) { e.stopPropagation(); showMetricPop(btn, btn.dataset.mkey); return; }
+        if (!e.target.closest("#metricPop")) hideMetricPop();
+      });
+      window.addEventListener("scroll", hideMetricPop, true);
+
+      function escapeHtml(s) {
+        return String(s == null ? "" : s).replace(/[&<>"]/g, (c) =>
+          ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+      }
+      // Escape, then apply light inline markdown (**bold**).
+      function inlineMd(s) {
+        return escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      }
+      // Render a simple AI write-up (markdown headings / bold / bullets) into safe HTML.
+      function aiHtml(text) {
+        const lines = String(text || "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+        let html = "", inList = false;
+        const closeList = () => { if (inList) { html += "</ul>"; inList = false; } };
+        for (const line of lines) {
+          const heading = line.match(/^#{1,6}\s+(.*)$/);
+          if (heading) { closeList(); html += `<p class="prose" style="margin:8px 0 2px;font-weight:700">${inlineMd(heading[1])}</p>`; continue; }
+          const bullet = line.match(/^[-*•]\s+(.*)$/);
+          if (bullet) { if (!inList) { html += "<ul>"; inList = true; } html += `<li>${inlineMd(bullet[1])}</li>`; continue; }
+          closeList();
+          html += `<p class="prose" style="margin:6px 0 0">${inlineMd(line)}</p>`;
+        }
+        closeList();
+        return html;
+      }
+      // AI callout block; shows a friendly pending note if the write-up isn't generated yet.
+      function aiBox(title, text) {
+        const models = AI_WRITEUPS.models || {};
+        const tag = (models.qwen && models.llama) ? "Qwen + Llama" : "Qwen + Llama";
+        const body = text
+          ? aiHtml(text)
+          : `<div class="ai-pending">AI analysis will appear here after the next generation run.</div>`;
+        return `<div class="ai-box">
+          <div class="ai-head"><span class="ai-title">🤖 ${title}</span><span class="ai-badge">${tag}</span></div>
+          ${body}
+        </div>`;
+      }
+
+      function swotCard(title, items) {
+        return `<div class="swot-card"><h3>${title}</h3><ul>${listItems(items)}</ul></div>`;
+      }
+
+      function pct(value) {
+        if (value === null || value === undefined || Number.isNaN(value)) return "-";
+        const n = Number(value);
+        const color = n >= 0 ? "var(--green)" : "var(--red)";
+        return `<span style="color:${color}">${n.toFixed(2)}%</span>`;
+      }
+
+      function closeDrawer() {
+        hideMetricPop();
+        el("drawerBackdrop").classList.remove("open");
+        el("stockDrawer").classList.remove("open");
+        el("stockDrawer").setAttribute("aria-hidden", "true");
+      }
+
+      ["searchInput", "industryFilter", "stageFilter", "rrgFilter", "stockLimit", "minStockScore", "minFundScore", "minROCE", "maxPE", "minCMP", "maxCMP"].forEach((id) => {
+        el(id).addEventListener("input", () => {
+          if (id === "industryFilter") state.selectedIndustry = el(id).value;
+          render();
+          renderBacktest();
+        });
+      });
+      document.querySelectorAll(".sort-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const table = button.dataset.table;
+          const key = button.dataset.sortKey;
+          const current = state.sorts[table] || {};
+          state.sorts[table] = {
+            key,
+            dir: current.key === key && current.dir === "desc" ? "asc" : "desc",
+          };
+          render();
+          renderBacktest();
+        });
+      });
+      document.querySelectorAll(".tab-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll(".tab-button").forEach((item) => item.classList.remove("active"));
+          document.querySelectorAll(".tab-view").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+          el(`tab-${button.dataset.tab}`).classList.add("active");
+          // lazy-load the embedded Chart Patterns dashboard on first open
+          if (button.dataset.tab === "chart-patterns") {
+            const frame = el("chartPatternsFrame");
+            if (frame && !frame.src) {
+              frame.src = "https://myfinancialria.github.io/chart-analysis-patterns/";
+            }
+          }
+        });
+      });
+      el("resetButton").addEventListener("click", () => {
+        state.selectedIndustry = "";
+        ["searchInput", "industryFilter", "stageFilter", "rrgFilter", "minStockScore", "minFundScore", "minROCE", "maxPE", "minCMP", "maxCMP"].forEach((id) => el(id).value = "");
+        el("stockLimit").value = "5";
+        render();
+        renderBacktest();
+      });
+      el("drawerClose").addEventListener("click", closeDrawer);
+      el("drawerBackdrop").addEventListener("click", closeDrawer);
+
+      // ---- Global search console: type a company, symbol, industry, OR a
+      // product/service and jump straight to that company's drawer. Searches the
+      // full analysed universe (state.data.stocks), not just the visible table. ----
+      (function () {
+        const input = el("omniInput");
+        const results = el("omniResults");
+        const box = el("omnisearch");
+        if (!input || !results || !box) return;
+        let items = [];
+        let active = -1;
+
+        const escapeHtml = (x) => String(x).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+        function universe() {
+          const seen = new Set();
+          const out = [];
+          (((state.data || {}).stocks) || []).forEach((s) => {
+            if (s && s.symbol && !seen.has(s.symbol)) { seen.add(s.symbol); out.push(s); }
+          });
+          return out;
+        }
+
+        // Ranked match across symbol/name (highest), then industry, then
+        // product/service — so a product query still resolves to the company.
+        function scoreStock(s, q) {
+          const sym = (s.display_symbol || s.symbol || "").toLowerCase();
+          const name = (s.name || "").toLowerCase();
+          const ind = (s.parent || "").toLowerCase();
+          const prod = (s.common_product_business || "").toLowerCase();
+          if (sym.startsWith(q)) return 100;
+          if (name.startsWith(q)) return 90;
+          if (sym.includes(q)) return 70;
+          if (name.includes(q)) return 60;
+          if (ind.includes(q)) return 40;
+          if (prod.includes(q)) return 30;
+          return 0;
+        }
+
+        function search(q) {
+          return universe()
+            .map((s) => ({ s, score: scoreStock(s, q) }))
+            .filter((r) => r.score > 0)
+            .sort((a, b) => b.score - a.score || (a.s.name || "").localeCompare(b.s.name || ""))
+            .slice(0, 10)
+            .map((r) => r.s);
+        }
+
+        function highlight(text, q) {
+          const t = String(text || "");
+          const i = t.toLowerCase().indexOf(q);
+          if (i < 0) return escapeHtml(t);
+          return escapeHtml(t.slice(0, i)) + "<mark>" + escapeHtml(t.slice(i, i + q.length)) + "</mark>" + escapeHtml(t.slice(i + q.length));
+        }
+
+        function open() { results.hidden = false; input.setAttribute("aria-expanded", "true"); }
+        function close() { results.hidden = true; input.setAttribute("aria-expanded", "false"); active = -1; }
+
+        function render() {
+          const q = input.value.trim().toLowerCase();
+          if (!q) { close(); return; }
+          items = search(q);
+          active = -1;
+          if (!items.length) {
+            results.innerHTML = `<div class="omni-empty">No stock matches “${escapeHtml(q)}”. Try a company, symbol, industry, or product name.</div>`;
+            open();
+            return;
+          }
+          results.innerHTML = items.map((s, i) => {
+            const sym = s.display_symbol || (s.symbol || "").replace(/\.NS$/i, "");
+            const prod = s.common_product_business || "";
+            // When the hit is only in the product/service text, surface that snippet.
+            const inProd = prod.toLowerCase().includes(q)
+              && !(s.name || "").toLowerCase().includes(q)
+              && !sym.toLowerCase().includes(q);
+            const meta = inProd ? highlight(prod, q) : escapeHtml(s.parent || "");
+            return `<div class="omni-item" role="option" data-i="${i}">`
+              + `<span class="omni-name">${highlight(s.name || sym, q)}</span>`
+              + `<span class="omni-sym">${highlight(sym, q)}</span>`
+              + `<span class="omni-meta">${meta}</span>`
+              + `</div>`;
+          }).join("");
+          open();
+        }
+
+        function setActive(i) {
+          const nodes = Array.from(results.querySelectorAll(".omni-item"));
+          nodes.forEach((n, k) => n.classList.toggle("active", k === i));
+          if (nodes[i]) nodes[i].scrollIntoView({ block: "nearest" });
+          active = i;
+        }
+
+        function choose(i) {
+          const s = items[i];
+          if (!s) return;
+          close();
+          input.value = "";
+          openStockDrawer(s);
+        }
+
+        input.addEventListener("input", render);
+        input.addEventListener("focus", () => { if (input.value.trim()) render(); });
+        input.addEventListener("keydown", (e) => {
+          if (results.hidden) return;
+          if (e.key === "ArrowDown") { e.preventDefault(); setActive(Math.min(active + 1, items.length - 1)); }
+          else if (e.key === "ArrowUp") { e.preventDefault(); setActive(Math.max(active - 1, 0)); }
+          else if (e.key === "Enter") { e.preventDefault(); choose(active >= 0 ? active : 0); }
+          else if (e.key === "Escape") { close(); }
+        });
+        results.addEventListener("click", (e) => {
+          const item = e.target.closest(".omni-item");
+          if (item) choose(Number(item.dataset.i));
+        });
+        document.addEventListener("click", (e) => { if (!box.contains(e.target)) close(); });
+      })();
+
+      fetch("./dashboard_data.json")
+        .then((response) => response.json())
+        .then((data) => {
+          state.data = data;
+          buildSymbolIndex();
+          computeIndustryStats();
+          renderKpis();
+          renderIndustryOptions();
+          render();
+        })
+        .catch((error) => {
+          el("generatedAt").textContent = `Could not load dashboard_data.json: ${error.message}`;
+        });
+      fetch("./market_blog.json")
+        .then((response) => response.ok ? response.json() : null)
+        .then((blog) => renderMarketBlog(blog))
+        .catch(() => renderMarketBlog(null));
+      // Plain-English AI analysis (generated by Qwen + Llama). Optional file;
+      // absent/empty until the generator runs, so the drawer degrades gracefully.
+      fetch("./ai_writeups.json")
+        .then((response) => response.ok ? response.json() : null)
+        .then((data) => { if (data) AI_WRITEUPS = data; })
+        .catch(() => {});
+    </script>
+    <script>
+      // Collapsible "How to read this" legend + "More filters" toggle
+      (function () {
+        const lt = document.getElementById("legendToggle");
+        const lp = document.getElementById("legendPanel");
+        if (lt && lp) lt.addEventListener("click", () => {
+          const open = lp.hasAttribute("hidden");
+          if (open) { lp.removeAttribute("hidden"); } else { lp.setAttribute("hidden", ""); }
+          lt.setAttribute("aria-expanded", String(open));
+          lt.textContent = open ? "✕ Hide guide" : "ⓘ How to read this";
+        });
+        const at = document.getElementById("advToggle");
+        const ab = document.getElementById("advancedToolbar");
+        if (at && ab) at.addEventListener("click", () => {
+          const open = ab.hasAttribute("hidden");
+          if (open) { ab.removeAttribute("hidden"); } else { ab.setAttribute("hidden", ""); }
+          at.setAttribute("aria-expanded", String(open));
+          at.textContent = open ? "－ Fewer filters" : "＋ More filters";
+        });
+      })();
+    </script>
+  </body>
+</html>
