@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28 22:33:05 IST",
+  "generated_at": "2026-07-28 23:51:42 IST",
   "title": "Pre-market Technical Blog - 28 Jul 2026",
   "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
@@ -36,20 +36,20 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7451.5,
-      "change_pct": 0.52
+      "level": 7430.93,
+      "change_pct": 0.24
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52894.74,
-      "change_pct": 1.31
+      "level": 52766.1,
+      "change_pct": 1.06
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 24976.1,
-      "change_pct": 0.18
+      "level": 24888.9,
+      "change_pct": -0.17
     },
     {
       "name": "FTSE 100",
@@ -78,20 +78,20 @@
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 95.84,
-      "change_pct": -0.75
+      "level": 95.62,
+      "change_pct": -0.98
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 83.48,
-      "change_pct": -5.52
+      "level": 83.84,
+      "change_pct": -5.12
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4038.4,
-      "change_pct": -0.89
+      "level": 4027.8,
+      "change_pct": -1.15
     }
   ],
   "pattern_notes": [
