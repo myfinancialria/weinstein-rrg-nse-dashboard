@@ -135,6 +135,9 @@
   .donutwrap svg{flex:none}
   rect.bar,path.slice{transition:opacity .12s}
   rect.bar:hover,path.slice:hover{opacity:.82}
+  .seg{display:inline-flex;border:1px solid var(--border);border-radius:9px;overflow:hidden}
+  .seg button{background:var(--panel);color:var(--muted);border:0;padding:5px 13px;font-size:.8rem;cursor:pointer;font-family:inherit}
+  .seg button.on{background:var(--accent);color:#fff}
 </style>
 </head>
 <body>
@@ -149,7 +152,6 @@
 <script src="./api_config.js"></script>
 <script>
 // API base comes from api_config.js (window.API_BASE = your Stock 360 API URL).
-// Empty = not configured yet; the page shows a notice instead of failing silently.
 const API_BASE = (window.API_BASE || "").replace(/\/$/,"");
 const api = path => API_BASE + path;
 const DASHBOARD_URL = "./app.html";  // the RRG / Weinstein dashboard ("the rest")
@@ -207,11 +209,11 @@ function attachTypeahead(input, acEl){
 function renderHome(){
   document.title = "myfinancial · Stock Search";
   const notice = API_BASE ? "" : `<div class="hint" style="color:var(--amber)">
-    ⚠ Search backend not configured yet — set <b>window.API_BASE</b> in <b>api_config.js</b> to your Stock 360 API URL.</div>`;
+    ⚠ Search backend not configured yet — set <b>window.API_BASE</b> in <b>api_config.js</b>.</div>`;
   V.innerHTML = `
     <div class="hero">
       <h1 class="brand">Stock<span class="three60"> 360</span><span class="dot">.</span></h1>
-      <div class="subtitle">Search any NSE-listed company — full company details, ratios, financials, plain-English interpretation, and red-flag warnings.</div>
+      <div class="subtitle">Search any NSE-listed company — full company details, ratios, financials, price chart, plain-English interpretation, and red-flag warnings.</div>
       <div class="searchbox">
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg>
         <input class="bigsearch" id="q" autocomplete="off" spellcheck="false"
@@ -384,13 +386,13 @@ function revProfitChart(d){
   const np=_rowBy(rows,/net.*prof|prof.*(period|year)|\bpat\b/i);
   const base=_hist(rev,5); if(!base.length) return "";
   const periods=base.map(x=>x.period);
-  const series=[
-    {name:"Revenue",cvar:"--s1",data:_hist(rev,5).map(x=>x.value)},
+  const bars=[{name:"Revenue",cvar:"--s1",data:_hist(rev,5).map(x=>x.value)}];
+  const lines=[
     op?{name:"Operating profit",cvar:"--s3",data:_hist(op,5).map(x=>x.value)}:null,
     np?{name:"Net profit",cvar:"--s2",data:_hist(np,5).map(x=>x.value)}:null,
   ].filter(Boolean);
   return `<section class="chartcard"><h2>Revenue &amp; profit · ₹ ${esc((d.income_statement||{}).units_in||"crore")}</h2>
-    ${barsSVG(periods,series)}${legendHTML(series)}</section>`;
+    ${comboSVG(periods,bars,lines)}${legendHTML([...bars,...lines])}</section>`;
 }
 function cashflowChart(d){
   const rows=(d.cash_flow||{}).cash_flow||[];
@@ -411,6 +413,84 @@ function shareholdingBlock(d){
     value:(c.history&&c.history[0]?c.history[0].value:0), cvar:CVARS[i%CVARS.length]})).filter(x=>x.value>0);
   if(!items.length) return `<section><h2>Shareholding</h2><div class="muted">No shareholding data.</div></section>`;
   return `<section><h2>Shareholding · latest</h2><div class="donutwrap">${donutSVG(items)}${donutLegendHTML(items)}</div></section>`;
+}
+
+// Bars + line overlays on ONE ₹ axis — so small profits stay visible against big revenue.
+function comboSVG(periods, bars, lines){
+  const W=520,H=210,padL=52,padR=12,padT=16,padB=28,plotH=H-padT-padB,plotW=W-padL-padR;
+  const all=[...bars.flatMap(s=>s.data),...lines.flatMap(s=>s.data)].filter(v=>v!=null&&!isNaN(v));
+  if(!all.length||!periods.length) return '<div class="muted">—</div>';
+  let max=Math.max(0,...all),min=Math.min(0,...all); if(max===min) max=max||1;
+  const span=(max-min)||1, y=v=>padT+plotH*(max-v)/span, gw=plotW/periods.length, cx=i=>padL+gw*i+gw/2;
+  const nb=bars.length, bw=Math.max(8,Math.min(30,(gw-14)/Math.max(1,nb)));
+  let bs="";
+  periods.forEach((p,i)=>{ const gx=padL+gw*i+(gw-bw*nb)/2;
+    bars.forEach((s,j)=>{ const v=s.data[i]; if(v==null||isNaN(v))return;
+      const x=gx+bw*j, yt=y(Math.max(v,0)), h=Math.max(1.5,y(Math.min(v,0))-yt);
+      bs+=`<rect class="bar" x="${x.toFixed(1)}" y="${yt.toFixed(1)}" width="${(bw-2).toFixed(1)}" height="${h.toFixed(1)}" rx="3" fill="var(${s.cvar})"><title>${esc(s.name)} · ${esc(p)}: ${fmtCr(v)}</title></rect>`;
+    });
+  });
+  let ls="";
+  lines.forEach(s=>{ const pts=[]; s.data.forEach((v,i)=>{ if(v!=null&&!isNaN(v)) pts.push([cx(i),y(v),v]); });
+    if(!pts.length) return;
+    if(pts.length>1) ls+=`<polyline fill="none" stroke="var(${s.cvar})" stroke-width="2.5" stroke-linejoin="round" points="${pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}"/>`;
+    pts.forEach(pt=>{ ls+=`<circle cx="${pt[0].toFixed(1)}" cy="${pt[1].toFixed(1)}" r="3.5" fill="var(${s.cvar})" stroke="var(--panel)" stroke-width="1.5"><title>${esc(s.name)}: ${fmtCr(pt[2])}</title></circle>`; });
+  });
+  const ticks=min<0?[max,0,min]:[max,0];
+  const grid=ticks.map(v=>`<line x1="${padL}" x2="${W-padR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--border)"/><text x="${padL-7}" y="${(y(v)+3.5).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--muted)">${fmtCr(v)}</text>`).join("");
+  const lab=periods.map((p,i)=>`<text x="${cx(i).toFixed(1)}" y="${H-9}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(p)}</text>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="chart">${grid}${bs}${ls}${lab}</svg>`;
+}
+
+function priceSVG(series, maPeriod){
+  if(!series||series.length<2) return '<div class="muted">No price history.</div>';
+  const W=760,H=260,padL=46,padR=10,padT=12,padB=22,plotH=H-padT-padB,plotW=W-padL-padR;
+  const closes=series.map(r=>r[4]), min=Math.min(...closes), max=Math.max(...closes), span=(max-min)||1;
+  const x=i=>padL+plotW*i/(series.length-1), y=v=>padT+plotH*(max-v)/span;
+  const line=closes.map((c,i)=>`${x(i).toFixed(1)},${y(c).toFixed(1)}`).join(" ");
+  const area=`${padL.toFixed(1)},${(padT+plotH).toFixed(1)} ${line} ${x(series.length-1).toFixed(1)},${(padT+plotH).toFixed(1)}`;
+  let ma="";
+  if(closes.length>=maPeriod){ const pts=[];
+    for(let i=maPeriod-1;i<closes.length;i++){ let s=0; for(let k=0;k<maPeriod;k++) s+=closes[i-k]; pts.push(`${x(i).toFixed(1)},${y(s/maPeriod).toFixed(1)}`); }
+    ma=`<polyline fill="none" stroke="var(--s2)" stroke-width="2" points="${pts.join(' ')}"/>`;
+  }
+  const grid=[max,(max+min)/2,min].map(v=>`<line x1="${padL}" x2="${W-padR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--border)"/><text x="${padL-6}" y="${(y(v)+3.5).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--muted)">${num(Math.round(v))}</text>`).join("");
+  let xl=""; const step=Math.max(1,Math.floor(series.length/6));
+  for(let i=0;i<series.length;i+=step) xl+=`<text x="${x(i).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="10" fill="var(--muted)">${esc(String(series[i][0]).slice(0,7))}</text>`;
+  const up=closes[closes.length-1]>=closes[0], col=up?"var(--good)":"var(--crit)";
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="price chart">
+    <defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity="0.22"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+    ${grid}<polygon fill="url(#pg)" points="${area}"/><polyline fill="none" stroke="${col}" stroke-width="2" points="${line}"/>${ma}${xl}</svg>`;
+}
+function returnsStrip(r){
+  if(!r) return "";
+  const tiles=["1W","1M","3M","6M","1Y","3Y"].map(k=>{ const v=r[k]; if(v==null) return "";
+    return `<div class="stat"><div class="l">${k}</div><div class="v" style="color:${v>=0?'var(--good)':'var(--crit)'}">${v>=0?'+':''}${v.toFixed(1)}%</div></div>`;
+  }).filter(Boolean).join("");
+  return tiles?`<div class="statgrid" style="margin-top:12px">${tiles}</div>`:"";
+}
+async function loadPriceChart(sym){
+  const el=document.getElementById("priceBox"); if(!el) return;
+  const hide=()=>{ const s=el.closest("section"); if(s) s.style.display="none"; };
+  try{
+    const c=await (await fetch(api(`/api/chart/${encodeURIComponent(sym)}`))).json();
+    if(c.detail || ((!c.weekly||!c.weekly.length)&&(!c.daily||!c.daily.length))){ hide(); return; }
+    let interval = (c.weekly&&c.weekly.length)?"weekly":"daily";
+    const draw=()=>{ const ser=interval==="weekly"?c.weekly:c.daily;
+      el.querySelector("#priceSvgWrap").innerHTML=priceSVG(ser, interval==="weekly"?30:150);
+      el.querySelector("#maNote").textContent=(interval==="weekly"?"30-week":"150-day")+" moving average"; };
+    el.innerHTML=`
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px">
+        ${c.cmp!=null?`<div><span class="muted" style="font-size:.7rem;text-transform:uppercase;letter-spacing:.04em">CMP</span> <b style="font-size:1.4rem;letter-spacing:-.01em">₹${num(c.cmp)}</b></div>`:""}
+        <div class="seg">${(c.weekly&&c.weekly.length)?'<button data-i="weekly" class="on">Weekly</button>':''}${(c.daily&&c.daily.length)?'<button data-i="daily"'+(!(c.weekly&&c.weekly.length)?' class="on"':'')+'>Daily</button>':''}</div>
+      </div>
+      <div id="priceSvgWrap"></div>
+      ${returnsStrip(c.returns)}
+      <div class="muted" style="margin-top:8px;font-size:.72rem"><b style="color:var(--s2)">━</b> <span id="maNote"></span></div>`;
+    draw();
+    el.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{ interval=b.dataset.i;
+      el.querySelectorAll(".seg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); }));
+  }catch(e){ hide(); }
 }
 
 /* ---------------- Detail ---------------- */
@@ -451,6 +531,7 @@ async function renderStock(sym){
       ${p.company_profile?`<p class="desc">${esc(p.company_profile)}</p>`:""}
     </div>
 
+    <section class="chartcard"><h2>Price</h2><div id="priceBox"><div class="muted"><span class="spin" style="width:16px;height:16px;border-width:2px"></span> loading price history…</div></div></section>
     ${snap?`<section><h2>Snapshot</h2><div class="statgrid">${snap}</div></section>`:""}
     ${warnSection(d.interpretation)}
     ${aiSection(d.interpretation)}
@@ -481,6 +562,7 @@ async function renderStock(sym){
     <section><h2>News · past 7 days</h2>${newsList(d.news)}</section>
     ${d.notes&&d.notes.length?`<div class="muted">Unavailable sections: ${esc(d.notes.join(", "))}</div>`:""}
   `;
+  loadPriceChart(d.symbol);
 }
 
 route();
