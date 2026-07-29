@@ -1270,13 +1270,13 @@
     "roe_pct": -0.48
   },
   "JSFB": {
-    "_scraped": "2026-07-24",
+    "_scraped": "2026-07-29",
     "dividend_yield_pct": 0.0,
     "eps": 36.07,
     "net_margin_pct": 6.7,
     "operating_margin_pct": -11.0,
-    "pb_ratio": 1.28,
-    "pe_ratio": 14.8,
+    "pb_ratio": 1.36,
+    "pe_ratio": 15.9,
     "promoter_or_insider_holding_pct": 16.94,
     "qtr_profit_var_pct": 52.0,
     "qtr_sales_var_pct": 22.1,
