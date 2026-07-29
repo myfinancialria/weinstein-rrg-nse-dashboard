@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29 17:13:50 IST",
+  "generated_at": "2026-07-29 18:12:11 IST",
   "title": "Pre-market Technical Blog - 29 Jul 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
@@ -9,12 +9,12 @@
   },
   "nifty": {
     "close": 24250.2,
-    "change_5d_pct": 0.05,
-    "change_20d_pct": 1.27,
-    "ma20": 24124.29,
-    "ma50": 23866.22,
-    "ma200": 24796.77,
-    "rsi14": 46.54
+    "change_5d_pct": 1.06,
+    "change_20d_pct": 1.02,
+    "ma20": 24118.35,
+    "ma50": 23875.4,
+    "ma200": 24786.89,
+    "rsi14": 58.11
   },
   "cpr": {
     "pivot": 24223.5,
@@ -36,26 +36,26 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7413.18,
-      "change_pct": 0.07
+      "level": 7428.78,
+      "change_pct": 0.21
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52210.08,
-      "change_pct": 0.96
+      "level": 52747.32,
+      "change_pct": 1.03
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 24932.08,
-      "change_pct": -0.82
+      "level": 24876.91,
+      "change_pct": -0.22
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10906.26,
-      "change_pct": 0.32
+      "level": 10887.96,
+      "change_pct": 0.16
     },
     {
       "name": "Nikkei 225",
@@ -67,7 +67,7 @@
       "name": "Hang Seng",
       "symbol": "^HSI",
       "level": 25807.92,
-      "change_pct": 2.38
+      "change_pct": 1.96
     },
     {
       "name": "Shanghai",
@@ -84,19 +84,19 @@
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 88.11,
-      "change_pct": 4.78
+      "level": 90.08,
+      "change_pct": 7.12
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4091.1,
-      "change_pct": 1.36
+      "level": 4073.6,
+      "change_pct": 0.92
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 0.05%, while last 20-session return is 1.27%.",
+    "Last 5-session return is 1.06%, while last 20-session return is 1.02%.",
     "CPR width is 0.11%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
     "Immediate bullish confirmation improves above TC 24236.85 and R1 24310.25; weakness increases below BC 24210.15 and S1 24163.45."
   ],
@@ -207,20 +207,6 @@
   ],
   "recent_nifty": [
     {
-      "date": "2026-07-20",
-      "open": 24190.05,
-      "high": 24266.1,
-      "low": 24135.85,
-      "close": 24238.5
-    },
-    {
-      "date": "2026-07-21",
-      "open": 24216.05,
-      "high": 24262.2,
-      "low": 24135.65,
-      "close": 24187.7
-    },
-    {
       "date": "2026-07-22",
       "open": 24150.45,
       "high": 24166.3,
@@ -235,11 +221,25 @@
       "close": 23869.6
     },
     {
+      "date": "2026-07-24",
+      "open": 23666.35,
+      "high": 23823.6,
+      "low": 23606.3,
+      "close": 23767.45
+    },
+    {
       "date": "2026-07-27",
       "open": 23928.4,
       "high": 24011.6,
       "low": 23891.55,
       "close": 23995.95
+    },
+    {
+      "date": "2026-07-28",
+      "open": 23971.25,
+      "high": 24041.15,
+      "low": 23954.6,
+      "close": 23985.35
     },
     {
       "date": "2026-07-29",
