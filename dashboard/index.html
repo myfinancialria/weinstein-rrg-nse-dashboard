@@ -138,6 +138,18 @@
   .seg{display:inline-flex;border:1px solid var(--border);border-radius:9px;overflow:hidden}
   .seg button{background:var(--panel);color:var(--muted);border:0;padding:5px 13px;font-size:.8rem;cursor:pointer;font-family:inherit}
   .seg button.on{background:var(--accent);color:#fff}
+  .chip.pos{border-color:var(--good);color:var(--good)}
+  .chip.neg{border-color:var(--crit);color:var(--crit)}
+  .swot{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.swot{grid-template-columns:1fr}}
+  .swotq{border:1px solid var(--border);border-radius:12px;padding:12px 14px;background:var(--panel2)}
+  .swotq .swoth{font-weight:700;font-size:.8rem;margin-bottom:6px;letter-spacing:.02em}
+  .swotq.s .swoth{color:var(--good)}.swotq.w .swoth{color:var(--crit)}
+  .swotq.o .swoth{color:var(--s1)}.swotq.t .swoth{color:var(--warn)}
+  .swotq ul{margin:0;padding-left:16px;font-size:.86rem}.swotq li{margin:3px 0}
+  .flowtbl{width:100%;border-collapse:collapse;font-size:.84rem;font-variant-numeric:tabular-nums}
+  .flowtbl th,.flowtbl td{padding:5px 8px;border-top:1px solid var(--border);text-align:right}
+  .flowtbl th:first-child,.flowtbl td:first-child{text-align:left;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -213,7 +225,7 @@ function renderHome(){
   V.innerHTML = `
     <div class="hero">
       <h1 class="brand">Stock<span class="three60"> 360</span><span class="dot">.</span></h1>
-      <div class="subtitle">Search any NSE-listed company — full company details, ratios, financials, price chart, plain-English interpretation, and red-flag warnings.</div>
+      <div class="subtitle">Search any NSE-listed company — price chart, financials, risk metrics, plain-English interpretation, and red-flag warnings.</div>
       <div class="searchbox">
         <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg>
         <input class="bigsearch" id="q" autocomplete="off" spellcheck="false"
@@ -377,6 +389,9 @@ function snapshotTiles(d){
   if(lnp) tiles.push(statTile("Net profit", fmtCr(lnp.value), lnp.change||"", chgClass(lnp.change)));
   if(lr&&lnp&&lr.value) tiles.push(statTile("Net margin", (lnp.value/lr.value*100).toFixed(1)+"%",""));
   if(lr&&lop&&lr.value) tiles.push(statTile("Op. margin", (lop.value/lr.value*100).toFixed(1)+"%",""));
+  const bh=((d.balance_sheet||{}).history||[])[0];
+  if(bh&&bh.total_asset&&bh.total_liability){ const eq=bh.total_asset-bh.total_liability;
+    if(eq>0) tiles.push(statTile("Liab / equity",(bh.total_liability/eq).toFixed(2),"leverage")); }
   return tiles.filter(Boolean).join("");
 }
 function revProfitChart(d){
@@ -469,27 +484,108 @@ function returnsStrip(r){
   }).filter(Boolean).join("");
   return tiles?`<div class="statgrid" style="margin-top:12px">${tiles}</div>`:"";
 }
+function candleSVG(series){
+  if(!series||series.length<2) return '<div class="muted">No price history.</div>';
+  const W=760,H=260,padL=46,padR=10,padT=12,padB=22,plotH=H-padT-padB,plotW=W-padL-padR;
+  const min=Math.min(...series.map(r=>r[3])), max=Math.max(...series.map(r=>r[2])), span=(max-min)||1;
+  const xf=i=>padL+plotW*(i+0.5)/series.length, y=v=>padT+plotH*(max-v)/span;
+  const cw=Math.max(0.6,Math.min(8,plotW/series.length*0.62));
+  let cs="";
+  series.forEach((r,i)=>{ const o=r[1],h=r[2],l=r[3],c=r[4],col=c>=o?"var(--good)":"var(--crit)",xi=xf(i);
+    cs+=`<line x1="${xi.toFixed(1)}" x2="${xi.toFixed(1)}" y1="${y(h).toFixed(1)}" y2="${y(l).toFixed(1)}" stroke="${col}" stroke-width="0.8"/>`;
+    cs+=`<rect x="${(xi-cw/2).toFixed(1)}" y="${y(Math.max(o,c)).toFixed(1)}" width="${cw.toFixed(1)}" height="${Math.max(0.8,Math.abs(y(o)-y(c))).toFixed(1)}" fill="${col}"><title>${esc(r[0])} O ${num(o)} H ${num(h)} L ${num(l)} C ${num(c)}</title></rect>`;
+  });
+  const grid=[max,(max+min)/2,min].map(v=>`<line x1="${padL}" x2="${W-padR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="var(--border)"/><text x="${padL-6}" y="${(y(v)+3.5).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--muted)">${num(Math.round(v))}</text>`).join("");
+  let xl=""; const step=Math.max(1,Math.floor(series.length/6));
+  for(let i=0;i<series.length;i+=step) xl+=`<text x="${xf(i).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="10" fill="var(--muted)">${esc(String(series[i][0]).slice(0,7))}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="candlestick chart">${grid}${cs}${xl}</svg>`;
+}
+function riskMetricsHTML(c){
+  const m=c.metrics||{};
+  const t=(l,v,suf,sign)=> (v==null?"":`<div class="stat"><div class="l">${l}</div><div class="v"${sign?` style="color:${v>=0?'var(--good)':'var(--crit)'}"`:""}>${sign&&v>=0?'+':''}${v}${suf||""}</div></div>`);
+  const body=[
+    t("Beta",m.beta), t("Alpha",m.alpha_pct,"%",1), t("Sharpe",m.sharpe,"",1), t("Treynor",m.treynor_pct,"%"),
+    t("Volatility",m.volatility_pct,"%"), t("Return · ann",m.annual_return_pct,"%",1),
+    t("NIFTY · ann",m.market_return_pct,"%",1),
+    c.industry_return_pct!=null?t("Industry · 1Y",c.industry_return_pct,"%",1):"",
+  ].filter(Boolean).join("");
+  if(!body) return "";
+  return `<section><h2>Risk &amp; return · vs NIFTY 50</h2><div class="statgrid">${body}</div>
+    <div class="muted" style="margin-top:8px;font-size:.72rem">Beta = sensitivity to the market (1 ≈ moves with NIFTY). Alpha = return beyond what beta predicts. Sharpe / Treynor = return per unit of total / market risk. Annualised${m.days?` from ${m.days} trading days`:""} · risk-free 7%${c.peers_used?` · industry = avg 1Y of ${c.peers_used} peers`:""}.</div></section>`;
+}
+function rollingHTML(c){
+  const r=c.rolling_1y||{}; if(r.avg_pct==null) return "";
+  const tile=(l,v,col)=>`<div class="stat"><div class="l">${l}</div><div class="v"${col?` style="color:${col}"`:""}>${v}</div></div>`;
+  return `<section><h2>Rolling 1-year returns · last 5y</h2><div class="statgrid">
+    ${tile("Average",(r.avg_pct>=0?'+':'')+r.avg_pct+'%',r.avg_pct>=0?'var(--good)':'var(--crit)')}
+    ${tile("Best","+"+r.max_pct+"%","var(--good)")}
+    ${tile("Worst",r.min_pct+"%","var(--crit)")}
+    ${tile("Positive",r.positive_pct+"%")}
+  </div><div class="muted" style="margin-top:8px;font-size:.72rem">Across ${r.windows||"—"} overlapping 1-year windows — how consistent the yearly return has been.</div></section>`;
+}
 async function loadPriceChart(sym){
   const el=document.getElementById("priceBox"); if(!el) return;
   const hide=()=>{ const s=el.closest("section"); if(s) s.style.display="none"; };
   try{
     const c=await (await fetch(api(`/api/chart/${encodeURIComponent(sym)}`))).json();
     if(c.detail || ((!c.weekly||!c.weekly.length)&&(!c.daily||!c.daily.length))){ hide(); return; }
-    let interval = (c.weekly&&c.weekly.length)?"weekly":"daily";
+    let interval=(c.weekly&&c.weekly.length)?"weekly":"daily", ptype="line";
     const draw=()=>{ const ser=interval==="weekly"?c.weekly:c.daily;
-      el.querySelector("#priceSvgWrap").innerHTML=priceSVG(ser, interval==="weekly"?30:150);
-      el.querySelector("#maNote").textContent=(interval==="weekly"?"30-week":"150-day")+" moving average"; };
+      el.querySelector("#priceSvgWrap").innerHTML = ptype==="candle"?candleSVG(ser):priceSVG(ser, interval==="weekly"?30:150);
+      const note=el.querySelector("#maNote"); if(note) note.textContent = ptype==="candle"?"candlesticks (O/H/L/C)":(interval==="weekly"?"30-week":"150-day")+" moving average"; };
+    const ivBtns=`${(c.weekly&&c.weekly.length)?'<button data-iv="weekly" class="on">Weekly</button>':''}${(c.daily&&c.daily.length)?`<button data-iv="daily"${!(c.weekly&&c.weekly.length)?' class="on"':''}>Daily</button>`:''}`;
     el.innerHTML=`
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:8px">
         ${c.cmp!=null?`<div><span class="muted" style="font-size:.7rem;text-transform:uppercase;letter-spacing:.04em">CMP</span> <b style="font-size:1.4rem;letter-spacing:-.01em">₹${num(c.cmp)}</b></div>`:""}
-        <div class="seg">${(c.weekly&&c.weekly.length)?'<button data-i="weekly" class="on">Weekly</button>':''}${(c.daily&&c.daily.length)?'<button data-i="daily"'+(!(c.weekly&&c.weekly.length)?' class="on"':'')+'>Daily</button>':''}</div>
+        <div class="seg">${ivBtns}</div>
+        <div class="seg"><button data-ty="line" class="on">Line</button><button data-ty="candle">Candle</button></div>
       </div>
       <div id="priceSvgWrap"></div>
       ${returnsStrip(c.returns)}
       <div class="muted" style="margin-top:8px;font-size:.72rem"><b style="color:var(--s2)">━</b> <span id="maNote"></span></div>`;
     draw();
-    el.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{ interval=b.dataset.i;
-      el.querySelectorAll(".seg button").forEach(x=>x.classList.toggle("on",x===b)); draw(); }));
+    el.querySelectorAll(".seg button[data-iv]").forEach(b=>b.addEventListener("click",()=>{ interval=b.dataset.iv; el.querySelectorAll("[data-iv]").forEach(x=>x.classList.toggle("on",x===b)); draw(); }));
+    el.querySelectorAll(".seg button[data-ty]").forEach(b=>b.addEventListener("click",()=>{ ptype=b.dataset.ty; el.querySelectorAll("[data-ty]").forEach(x=>x.classList.toggle("on",x===b)); draw(); }));
+    const risk=document.getElementById("riskBox"); if(risk) risk.innerHTML=riskMetricsHTML(c)+rollingHTML(c);
+  }catch(e){ hide(); }
+}
+
+function prosRedFlags(ai){
+  if(!ai||!ai.available) return "";
+  const pros=ai.positives||[], flags=(ai.warnings||[]).map(w=>w.title||w.detail).filter(Boolean);
+  if(!pros.length && !flags.length) return "";
+  return `<div class="cols">
+    ${pros.length?`<section><h2>Pros</h2><div class="chips">${pros.map(p=>`<span class="chip pos">${esc(p)}</span>`).join("")}</div></section>`:"<section></section>"}
+    ${flags.length?`<section><h2>Red flags</h2><div class="chips">${flags.map(f=>`<span class="chip neg">${esc(f)}</span>`).join("")}</div></section>`:"<section></section>"}
+  </div>`;
+}
+function swotBlock(ai){
+  const s=(ai&&ai.swot)||{};
+  if(!["strengths","weaknesses","opportunities","threats"].some(k=>(s[k]||[]).length)) return "";
+  const q=(title,arr,cls)=>`<div class="swotq ${cls}"><div class="swoth">${title}</div><ul>${(arr||[]).map(x=>`<li>${esc(x)}</li>`).join("")||'<li class="muted">—</li>'}</ul></div>`;
+  return `<section><h2>SWOT</h2><div class="swot">
+    ${q("Strengths",s.strengths,"s")}${q("Weaknesses",s.weaknesses,"w")}
+    ${q("Opportunities",s.opportunities,"o")}${q("Threats",s.threats,"t")}</div></section>`;
+}
+async function loadFlows(){
+  const el=document.getElementById("flowsBox"); if(!el) return;
+  const hide=()=>{ const s=el.closest("section"); if(s) s.style.display="none"; };
+  try{
+    const f=await (await fetch(api(`/api/market/flows`))).json();
+    const rows=[];
+    const pick=(o,keys)=>{ for(const k of keys){ if(o&&o[k]!=null) return o[k]; } return null; };
+    [["FII",f.fii],["DII",f.dii]].forEach(([lbl,arr])=>{
+      const rec=Array.isArray(arr)&&arr.length?arr[0]:null; if(!rec) return;
+      const net=pick(rec,["netValue","net","net_value","netTradeValue","fiiNet","diiNet"]);
+      const buy=pick(rec,["buyValue","buy","buy_value","grossPurchase"]);
+      const sell=pick(rec,["sellValue","sell","sell_value","grossSales"]);
+      if(net!=null||buy!=null||sell!=null) rows.push([lbl,net,buy,sell]);
+    });
+    if(!rows.length){ hide(); return; }
+    const cell=v=>v==null?"—":num(Math.round(v));
+    el.innerHTML=`<table class="flowtbl"><thead><tr><th>Flow</th><th>Net</th><th>Buy</th><th>Sell</th></tr></thead>
+      <tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td style="color:${(r[1]||0)>=0?'var(--good)':'var(--crit)'}">${cell(r[1])}</td><td>${cell(r[2])}</td><td>${cell(r[3])}</td></tr>`).join("")}</tbody></table>
+      <div class="muted" style="margin-top:6px;font-size:.72rem">Market-wide institutional activity (₹, latest session) — not stock-specific.</div>`;
   }catch(e){ hide(); }
 }
 
@@ -532,9 +628,12 @@ async function renderStock(sym){
     </div>
 
     <section class="chartcard"><h2>Price</h2><div id="priceBox"><div class="muted"><span class="spin" style="width:16px;height:16px;border-width:2px"></span> loading price history…</div></div></section>
+    <div id="riskBox"></div>
     ${snap?`<section><h2>Snapshot</h2><div class="statgrid">${snap}</div></section>`:""}
     ${warnSection(d.interpretation)}
     ${aiSection(d.interpretation)}
+    ${prosRedFlags(d.interpretation)}
+    ${swotBlock(d.interpretation)}
 
     <div class="cols">
       ${revProfitChart(d)||`<section><h2>Revenue &amp; profit</h2><div class="muted">—</div></section>`}
@@ -559,10 +658,12 @@ async function renderStock(sym){
       <section><h2>Peers</h2><div class="chips">${(d.competitors||[]).map(c=>peerChip(c)).join("")||'<span class="muted">—</span>'}</div></section>
     </div>
 
+    <section><h2>Institutional flows · FII / DII</h2><div id="flowsBox"><div class="muted">loading…</div></div></section>
     <section><h2>News · past 7 days</h2>${newsList(d.news)}</section>
     ${d.notes&&d.notes.length?`<div class="muted">Unavailable sections: ${esc(d.notes.join(", "))}</div>`:""}
   `;
   loadPriceChart(d.symbol);
+  loadFlows();
 }
 
 route();
