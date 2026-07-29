@@ -570,22 +570,24 @@ function swotBlock(ai){
 async function loadFlows(){
   const el=document.getElementById("flowsBox"); if(!el) return;
   const hide=()=>{ const s=el.closest("section"); if(s) s.style.display="none"; };
+  const SEG={"NSE_EQ|CASH":"Cash","NSE_FO|STOCK_FUTURES":"Stock futures","NSE_FO|INDEX_FUTURES":"Index futures","NSE_FO|INDEX_OPTIONS":"Index options","NSE_FO|STOCK_OPTIONS":"Stock options"};
   try{
     const f=await (await fetch(api(`/api/market/flows`))).json();
     const rows=[];
-    const pick=(o,keys)=>{ for(const k of keys){ if(o&&o[k]!=null) return o[k]; } return null; };
-    [["FII",f.fii],["DII",f.dii]].forEach(([lbl,arr])=>{
-      const rec=Array.isArray(arr)&&arr.length?arr[0]:null; if(!rec) return;
-      const net=pick(rec,["netValue","net","net_value","netTradeValue","fiiNet","diiNet"]);
-      const buy=pick(rec,["buyValue","buy","buy_value","grossPurchase"]);
-      const sell=pick(rec,["sellValue","sell","sell_value","grossSales"]);
-      if(net!=null||buy!=null||sell!=null) rows.push([lbl,net,buy,sell]);
+    [["FII",f.fii],["DII",f.dii]].forEach(([who,obj])=>{
+      if(!obj||typeof obj!=="object"||Array.isArray(obj)) return;
+      Object.keys(obj).forEach(seg=>{ const recs=obj[seg];
+        if(!Array.isArray(recs)||!recs.length) return;
+        const r=recs[0], buy=r.buy_amount, sell=r.sell_amount;
+        if(buy==null&&sell==null) return;
+        rows.push([who+" · "+(SEG[seg]||seg),(buy||0)-(sell||0),buy,sell]);
+      });
     });
     if(!rows.length){ hide(); return; }
     const cell=v=>v==null?"—":num(Math.round(v));
-    el.innerHTML=`<table class="flowtbl"><thead><tr><th>Flow</th><th>Net</th><th>Buy</th><th>Sell</th></tr></thead>
-      <tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td style="color:${(r[1]||0)>=0?'var(--good)':'var(--crit)'}">${cell(r[1])}</td><td>${cell(r[2])}</td><td>${cell(r[3])}</td></tr>`).join("")}</tbody></table>
-      <div class="muted" style="margin-top:6px;font-size:.72rem">Market-wide institutional activity (₹, latest session) — not stock-specific.</div>`;
+    el.innerHTML=`<table class="flowtbl"><thead><tr><th>Segment</th><th>Net</th><th>Buy</th><th>Sell</th></tr></thead>
+      <tbody>${rows.map(r=>`<tr><td>${esc(r[0])}</td><td style="color:${(r[1]||0)>=0?'var(--good)':'var(--crit)'}">${(r[1]||0)>=0?'+':''}${cell(r[1])}</td><td>${cell(r[2])}</td><td>${cell(r[3])}</td></tr>`).join("")}</tbody></table>
+      <div class="muted" style="margin-top:6px;font-size:.72rem">Market-wide institutional activity · ₹ crore, latest session — not stock-specific.</div>`;
   }catch(e){ hide(); }
 }
 
