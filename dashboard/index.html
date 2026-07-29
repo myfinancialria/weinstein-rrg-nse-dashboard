@@ -166,7 +166,7 @@
 // API base comes from api_config.js (window.API_BASE = your Stock 360 API URL).
 const API_BASE = (window.API_BASE || "").replace(/\/$/,"");
 const api = path => API_BASE + path;
-const DASHBOARD_URL = "./app.html";  // the RRG / Weinstein dashboard ("the rest")
+const DASHBOARD_URL = "./home.html";  // the new plain-English dashboard (app.html = advanced)
 
 const V = document.getElementById("view");
 const num = n => (n===null||n===undefined||n==="")?"—":Number(n).toLocaleString("en-IN");
