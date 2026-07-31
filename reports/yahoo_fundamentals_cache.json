@@ -3304,5 +3304,24 @@
     "pe_ratio": 63.235542,
     "pb_ratio": 11.966151,
     "peg_ratio": null
+  },
+  "BAJFINANCE.NS": {
+    "company_description": "Bajaj Finance Limited operates as a deposit-taking non-banking financial company in India. The company offers financing for various products, such as consumer electronics, furniture, digital products, lifestyle products, lifecare services, e-commerce purchases, retail spends, and two and three-wheelers; and personal, unsecured, home, secured, gold, and car loans. It also provides secured and unsecured loans to micro, small, and medium enterprises; loans against property, mutual funds, insurance policies, and shares; developer finance and lease rental discounting services; commercial vehicle financing; and new and used car financing, and tractor financing. In addition, the company offers commercial and rural lending; public and corporate deposits; loans against securities; micro-finance and auto financing lending; proprietary trading, ESOP financing, and broking and margin trade financing services. Further, it distributes life, health, and general insurance products. The company was formerly known as Bajaj Auto Finance Limited and changed its name to Bajaj Finance Limited in September 2010. The company was incorporated in 1987 and is based in Pune, India. Bajaj Finance Limited is a subsidiary of Bajaj Finserv Ltd.",
+    "website": "https://www.aboutbajajfinserv.com/finance-about-us",
+    "yahoo_sector": "Financial Services",
+    "yahoo_industry": "Credit Services",
+    "promoter_or_insider_holding_pct": 56.49,
+    "eps": 30.45,
+    "gross_margin_pct": 91.67,
+    "operating_margin_pct": 60.31,
+    "net_margin_pct": 43.28,
+    "roe_pct": 17.91,
+    "debt_to_equity": 314.833,
+    "current_ratio": 2.692,
+    "quick_ratio": 2.593,
+    "free_cash_flow_cr": null,
+    "pe_ratio": 37.21839,
+    "pb_ratio": 6.181378,
+    "peg_ratio": null
   }
 }

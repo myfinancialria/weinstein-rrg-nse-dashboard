@@ -188,15 +188,15 @@
     "roe_pct": 14.4
   },
   "ASTRAMICRO": {
-    "_scraped": "2026-07-11",
+    "_scraped": "2026-07-31",
     "debt_to_equity": 21.9,
     "dividend_yield_pct": 0.12,
     "eps": 20.32,
     "free_cash_flow_cr": 304.0,
     "net_margin_pct": 16.6,
     "operating_margin_pct": 29.0,
-    "pb_ratio": 13.07,
-    "pe_ratio": 88.8,
+    "pb_ratio": 13.77,
+    "pe_ratio": 93.4,
     "promoter_or_insider_holding_pct": 6.54,
     "qtr_profit_var_pct": 45.2,
     "qtr_sales_var_pct": 19.6,
@@ -271,6 +271,20 @@
     "qtr_sales_var_pct": 65.1,
     "roce": 28.2,
     "roe_pct": 29.2
+  },
+  "BAJFINANCE": {
+    "_scraped": "2026-07-31",
+    "dividend_yield_pct": 0.49,
+    "eps": 32.62,
+    "net_margin_pct": 24.0,
+    "operating_margin_pct": 34.0,
+    "pb_ratio": 6.19,
+    "pe_ratio": 34.4,
+    "promoter_or_insider_holding_pct": 54.68,
+    "qtr_profit_var_pct": 27.6,
+    "qtr_sales_var_pct": 18.6,
+    "roce": 10.9,
+    "roe_pct": 18.2
   },
   "BALAJITELE": {
     "_scraped": "2026-07-26",
@@ -2388,13 +2402,13 @@
     "roe_pct": 9.7
   },
   "UJJIVANSFB": {
-    "_scraped": "2026-07-24",
+    "_scraped": "2026-07-31",
     "dividend_yield_pct": 0.0,
     "eps": 4.67,
     "net_margin_pct": 12.3,
     "operating_margin_pct": 1.0,
-    "pb_ratio": 2.01,
-    "pe_ratio": 15.2,
+    "pb_ratio": 2.07,
+    "pe_ratio": 15.6,
     "promoter_or_insider_holding_pct": 0.0,
     "qtr_profit_var_pct": 207.8,
     "qtr_sales_var_pct": 25.1,
