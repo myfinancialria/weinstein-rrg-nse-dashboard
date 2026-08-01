@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-31 22:39:22 IST",
-  "title": "Pre-market Technical Blog - 31 Jul 2026",
+  "generated_at": "2026-08-01 22:41:55 IST",
+  "title": "Pre-market Technical Blog - 01 Aug 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 58,
-    "down": 33,
+    "up": 59,
+    "down": 32,
     "sideways": 9
   },
   "nifty": {
@@ -36,62 +36,62 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7471.63,
-      "change_pct": 0.46
+      "level": 7489.72,
+      "change_pct": 0.7
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52441.19,
-      "change_pct": 0.45
+      "level": 52485.03,
+      "change_pct": 0.53
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 25275.8,
-      "change_pct": 0.61
+      "level": 25373.85,
+      "change_pct": 1.0
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10868.05,
+      "level": 10868.1,
       "change_pct": -0.27
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 61867.43,
-      "change_pct": 0.71
+      "level": 64362.02,
+      "change_pct": 4.03
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 25858.88,
-      "change_pct": 0.2
+      "level": 25884.43,
+      "change_pct": 0.1
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3804.69,
-      "change_pct": -0.62
+      "level": 3832.26,
+      "change_pct": 0.72
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 95.37,
-      "change_pct": -0.37
+      "level": 95.39,
+      "change_pct": -0.31
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 89.92,
-      "change_pct": 1.0
+      "level": 90.12,
+      "change_pct": 1.22
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4099.6,
-      "change_pct": -0.01
+      "level": 4049.1,
+      "change_pct": -1.24
     }
   ],
   "pattern_notes": [
@@ -161,7 +161,7 @@
       "name": "Eicher Motors",
       "symbol": "EICHERMOT",
       "industry": "2/3 Wheelers",
-      "score": 89.54
+      "score": 93.27
     },
     {
       "name": "Bajaj Auto",
