@@ -612,10 +612,7 @@ async function renderStock(sym){
   if(d.detail){ V.innerHTML = topbar() + `<div class="loading">${esc(d.detail)}</div>`; return; }
 
   const p = d.profile||{};
-  const mcap = (p.sector_market_cap_inr&&p.sector_market_cap_inr.formatted)||"";
-  const maxr = Math.max(...(d.ratios||[]).flatMap(r=>[r.company_value,r.sector_value]
-    .map(v=>Math.abs(_num(v))||0)),1);
-  const inc=d.income_statement||{}, bal=d.balance_sheet||{}, cf=d.cash_flow||{};
+  const inc=d.income_statement||{}, bal=d.balance_sheet||{};
   const snap = snapshotTiles(d);
 
   V.innerHTML = topbar() + `
@@ -625,36 +622,28 @@ async function renderStock(sym){
       <div class="meta">
         <span>ISIN <b>${esc(d.isin)}</b></span>
         ${p.sector?`<span>Sector <b>${esc(p.sector)}</b></span>`:""}
-        ${mcap?`<span>Sector mcap <b>${esc(mcap)}</b></span>`:""}
       </div>
       ${p.company_profile?`<p class="desc">${esc(p.company_profile)}</p>`:""}
     </div>
 
     <section class="chartcard"><h2>Price</h2><div id="priceBox"><div class="muted"><span class="spin" style="width:16px;height:16px;border-width:2px"></span> loading price history…</div></div></section>
     <div id="riskBox"></div>
-    ${snap?`<section><h2>Snapshot</h2><div class="statgrid">${snap}</div></section>`:""}
+    ${snap?`<section><h2>Key numbers · company vs sector</h2><div class="statgrid">${snap}</div></section>`:""}
     ${warnSection(d.interpretation)}
     ${aiSection(d.interpretation)}
-    ${prosRedFlags(d.interpretation)}
     ${swotBlock(d.interpretation)}
 
+    ${revProfitChart(d)||""}
     <div class="cols">
-      ${revProfitChart(d)||`<section><h2>Revenue &amp; profit</h2><div class="muted">—</div></section>`}
       ${cashflowChart(d)||`<section><h2>Cash flow</h2><div class="muted">—</div></section>`}
-    </div>
-
-    <div class="cols">
       ${shareholdingBlock(d)}
-      <section><h2>Key ratios · vs sector</h2>${(d.ratios||[]).map(r=>ratioBar(r,maxr)).join("")||'<div class="muted">—</div>'}</section>
     </div>
 
-    <section><h2>Income statement · ₹ ${esc(inc.units_in||"crore")} · ${esc(inc.type||"")}</h2>
-      ${stmtTable(inc.income_statement, null, "P&L")||'<div class="muted">—</div>'}</section>
-
-    <div class="cols">
-      <section><h2>Balance sheet</h2>${balTable(bal)}</section>
-      <section><h2>Cash flow · detail</h2>${stmtTable(cf.cash_flow, null, "Flow")||'<div class="muted">—</div>'}</section>
-    </div>
+    <section><h2>Detailed financials · ₹ ${esc(inc.units_in||"crore")}</h2>
+      <div class="muted" style="font-size:.74rem;margin:-4px 0 8px">Exact yearly figures behind the charts above.</div>
+      ${stmtTable(inc.income_statement, null, "Income statement")||'<div class="muted">—</div>'}
+      <div style="height:14px"></div>
+      ${balTable(bal)}</section>
 
     <div class="cols">
       <section><h2>Corporate actions</h2>${actions(d.corporate_actions)}</section>
