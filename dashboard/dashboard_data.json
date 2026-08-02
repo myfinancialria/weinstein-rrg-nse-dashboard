@@ -4,7 +4,7 @@
     "stage2_leading_industries": 6,
     "stocks_analyzed": 345,
     "stage2_leading_stocks": 44,
-    "generated_at": "2026-08-02 13:21:41",
+    "generated_at": "2026-08-02 17:43:50",
     "stocks_above_52w_high": 16,
     "coverage_note": "Current data uses the latest completed Screener/Yahoo run. The last full industry scrape was rate-limited by Screener, so coverage is partial until the daily updater completes without rate-limit errors.",
     "trade_level_note": "CMP is the latest close. Entry is set at CMP. SL uses the tighter of the 30-week moving average when below CMP, or 8% below CMP. Target is 2R from entry."
