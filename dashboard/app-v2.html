@@ -475,7 +475,17 @@
 
       <section class="panel tab-view active" id="tab-market">
         <h2 style="margin:0 0 4px;font-size:1.1rem;font-weight:750">Market · last 5 years (daily)</h2>
-        <div class="mkt-note">Drag to pan, scroll to zoom, hover any day for its Open / High / Low / Close &amp; volume. NIFTY &amp; Dow include 50 &amp; 200-day moving averages.</div>
+        <div class="mkt-note">Drag to pan, scroll to zoom (all charts move together), hover any day for its Open / High / Low / Close &amp; volume. NIFTY &amp; Dow include 50 &amp; 200-day moving averages.</div>
+        <details style="margin-bottom:14px"><summary style="cursor:pointer;color:#4c8dff;font-size:.87rem;font-weight:600">How to read these — what they say about market direction</summary>
+          <ul style="color:#8b98a9;font-size:.85rem;line-height:1.6;margin:8px 0 0;padding-left:18px">
+            <li><b>NIFTY 50</b> — India's benchmark. Price above a <i>rising</i> 200-day line (blue) = healthy uptrend; below a falling line = downtrend. The 50-day (orange) crossing above the 200-day is a bullish "golden cross"; below it, a bearish "death cross".</li>
+            <li><b>Dow Jones</b> — the US market; India usually follows its direction. Dow strong and above its 200-day supports global risk-on.</li>
+            <li><b>USD / INR</b> — a rising line = weaker rupee, which can push foreign investors to sell Indian stocks; a stable or falling line is supportive.</li>
+            <li><b>Gold</b> &amp; <b>US Oil</b> — rising gold often signals caution (risk-off); rising oil pressures India (a net oil importer) through inflation.</li>
+            <li><b>India vs US (NIFTY ÷ Dow)</b> — rising = India outperforming the US (money favouring India); falling = the US leading.</li>
+          </ul>
+          <div style="color:#8b98a9;font-size:.85rem;margin-top:8px"><b>Quick read:</b> NIFTY and Dow both above <i>rising</i> 200-day averages, the RS line rising and the rupee stable → broadly favourable. The reverse → be defensive.</div>
+        </details>
         <div id="mktCharts" class="mkt-grid"><div style="color:#8b98a9">Loading charts…</div></div>
       </section>
 
@@ -2098,9 +2108,17 @@
           renderBacktest();
         });
       });
-      // ---- Market tab: 5-year daily candlestick + volume + MA charts ----
+      // ---- Market tab: 5-year daily candlestick + volume + MA charts (synced) ----
       let _mktDone = false;
       function _sma(bars, n){ const out=[]; for(let i=n-1;i<bars.length;i++){ let s=0; for(let k=0;k<n;k++) s+=bars[i-k][4]; out.push({time:bars[i][0], value:+(s/n).toFixed(2)});} return out; }
+      const _MKT_SERIES=[
+        {k:"nifty",  ma:true,   tv:"NSE:NIFTY"},
+        {k:"gold",   ma:false,  tv:"TVC:GOLD"},
+        {k:"dollar", ma:false,  tv:"FX_IDC:USDINR"},
+        {k:"dow",    ma:true,   tv:"TVC:DJI"},
+        {k:"oil",    ma:false,  tv:"TVC:USOIL"},
+        {k:"rs",     ma:"line", tv:null},
+      ];
       async function renderMarketCharts(){
         if (_mktDone) return;
         const box = document.getElementById("mktCharts"); if (!box) return;
@@ -2117,15 +2135,17 @@
           grid:{ vertLines:{ color:"rgba(140,150,170,.10)" }, horzLines:{ color:"rgba(140,150,170,.10)" } },
           rightPriceScale:{ borderVisible:false }, timeScale:{ borderVisible:false },
           crosshair:{ mode: (window.LightweightCharts.CrosshairMode ? LightweightCharts.CrosshairMode.Normal : 0) } };
-        [["nifty",true],["gold",false],["dollar",false],["dow",true],["rs","line"]].forEach(([k,ma])=>{
+        const charts=[];
+        _MKT_SERIES.forEach(({k,ma,tv})=>{
           const ser = data.series[k]; if (!ser) return;
           const card = document.createElement("div"); card.className = "mkt-card";
-          const h = document.createElement("div"); h.className = "mkt-h"; h.textContent = ser.label || k; card.appendChild(h);
+          const h = document.createElement("div"); h.className = "mkt-h";
+          h.innerHTML = (ser.label||k) + (tv ? ` <a href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(tv)}" target="_blank" rel="noopener" style="float:right;font-weight:400;font-size:.76rem">TradingView ↗</a>` : "");
+          card.appendChild(h);
           const cc = document.createElement("div"); cc.className = "mkt-chart"; card.appendChild(cc); box.appendChild(card);
           const chart = LightweightCharts.createChart(cc, opt);
           if (ma === "line"){
-            const ln = chart.addLineSeries({ color:"#199e70", lineWidth:2 });
-            ln.setData((ser.line||[]).map(p=>({ time:p[0], value:p[1] })));
+            chart.addLineSeries({ color:"#199e70", lineWidth:2 }).setData((ser.line||[]).map(p=>({ time:p[0], value:p[1] })));
           } else {
             const bars = ser.bars || [];
             const cs = chart.addCandlestickSeries({ upColor:"#2ea043", downColor:"#e5534b", borderVisible:false, wickUpColor:"#2ea043", wickDownColor:"#e5534b" });
@@ -2136,13 +2156,21 @@
               vs.setData(bars.map(b=>({ time:b[0], value:b[5], color:(b[4]>=b[1]?"rgba(46,160,67,.4)":"rgba(229,83,75,.4)") })));
             }
             if (ma){
-              const m50 = chart.addLineSeries({ color:"#eb6834", lineWidth:1, priceLineVisible:false, crosshairMarkerVisible:false, lastValueVisible:false });
-              m50.setData(_sma(bars,50));
-              const m200 = chart.addLineSeries({ color:"#4c8dff", lineWidth:1, priceLineVisible:false, crosshairMarkerVisible:false, lastValueVisible:false });
-              m200.setData(_sma(bars,200));
+              chart.addLineSeries({ color:"#eb6834", lineWidth:1, priceLineVisible:false, crosshairMarkerVisible:false, lastValueVisible:false }).setData(_sma(bars,50));
+              chart.addLineSeries({ color:"#4c8dff", lineWidth:1, priceLineVisible:false, crosshairMarkerVisible:false, lastValueVisible:false }).setData(_sma(bars,200));
             }
           }
           chart.timeScale().fitContent();
+          charts.push(chart);
+        });
+        // Sync pan/zoom across all charts by visible time range.
+        let _sync=false;
+        charts.forEach(ch=>{
+          ch.timeScale().subscribeVisibleTimeRangeChange(range=>{
+            if(_sync||!range) return; _sync=true;
+            charts.forEach(o=>{ if(o!==ch){ try{ o.timeScale().setVisibleRange(range); }catch(e){} } });
+            _sync=false;
+          });
         });
       }
       setTimeout(renderMarketCharts, 80);
