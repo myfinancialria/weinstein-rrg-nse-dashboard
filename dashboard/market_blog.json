@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-01 22:41:55 IST",
-  "title": "Pre-market Technical Blog - 01 Aug 2026",
+  "generated_at": "2026-08-02 15:58:21 IST",
+  "title": "Pre-market Technical Blog - 02 Aug 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
     "up": 59,
@@ -90,8 +90,8 @@
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4049.1,
-      "change_pct": -1.24
+      "level": 4107.0,
+      "change_pct": 0.17
     }
   ],
   "pattern_notes": [
