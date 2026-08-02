@@ -224,24 +224,24 @@ function sectors(){
     <div class="sub">Industries doing best versus the overall market — a rising tide for the stocks inside them.</div>
     <div class="grid g3">${cards}</div></section>`;
 }
-function bestStocks(){
-  const arr=(DATA.leadingStocks||[]);
+function bestStocks(arr){
+  arr=arr||(DATA.leadingStocks||[]);
   if(!arr.length) return "";
   const maxScore=Math.max(...arr.map(s=>s.stock_score||0),1);
   return `<section class="blk" id="sec-best"><h2>Best stocks now</h2>
-    <div class="sub">Stocks in a healthy uptrend inside the strongest sectors. Buy/exit/target are guides, not advice. Tap any card for full details.</div>
+    <div class="sub">In a healthy uptrend inside the strongest sectors — the financially-strongest are grouped under Quality picks below. Buy/exit/target are guides, not advice.</div>
     <div class="grid g2">${arr.slice(0,24).map(s=>stockCard(s,maxScore)).join("")}</div>
     ${arr.length>24?`<div class="note">Showing 24 of ${arr.length}. <a href="app.html">See all in the advanced view →</a></div>`:""}</section>`;
 }
-function quality(){
-  const arr=(DATA.fundamentalPicks||[]);
+function quality(arr){
+  arr=arr||(DATA.fundamentalPicks||[]);
   if(!arr.length) return "";
   return `<section class="blk" id="sec-quality"><h2>Financially strong companies</h2>
     <div class="sub">Picked for solid financials — good returns on capital, healthy margins, manageable debt.</div>
     <div class="grid g2">${arr.slice(0,18).map(qualityCard).join("")}</div></section>`;
 }
-function breakouts(){
-  const arr=(DATA.breakout52wStocks||[]);
+function breakouts(arr){
+  arr=arr||(DATA.breakout52wStocks||[]);
   if(!arr.length) return "";
   const cards=arr.map(s=>{ const biz=s.common_product_business||s.yahoo_industry||"";
     return `<a class="card" href="index.html?symbol=${encodeURIComponent(s.display_symbol||s.symbol)}">
@@ -319,8 +319,14 @@ function render(){
   const m=DATA.metrics||{};
   document.getElementById("heroSub").textContent =
     `${m.stage2_leading_stocks||m.stocks_analyzed||""} strong stocks across ${m.stage2_leading_industries||""} leading sectors · updated ${(m.generated_at||"").slice(0,16).replace("T"," ")}`;
+  // De-duplicate across the stock sections: each stock appears once, by priority
+  // Quality picks (uptrend + strong financials) > Breakouts (timely) > other leaders.
+  const key=s=>(s.display_symbol||s.symbol), used=new Set();
+  const qp=(DATA.fundamentalPicks||[]); qp.forEach(s=>used.add(key(s)));
+  const brk=(DATA.breakout52wStocks||[]).filter(s=>!used.has(key(s))); brk.forEach(s=>used.add(key(s)));
+  const best=(DATA.leadingStocks||[]).filter(s=>!used.has(key(s)));
   document.getElementById("view").innerHTML =
-    marketToday()+sectors()+bestStocks()+quality()+breakouts()+trackRecord()+glossary();
+    marketToday()+sectors()+bestStocks(best)+quality(qp)+breakouts(brk)+trackRecord()+glossary();
   document.getElementById("nav").innerHTML =
     SECTIONS.filter(([id])=>document.getElementById(id)).map(([id,l])=>`<a href="#${id}" data-id="${id}">${l}</a>`).join("");
   document.getElementById("foot").innerHTML =
