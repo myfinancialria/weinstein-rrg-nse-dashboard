@@ -356,10 +356,7 @@
         <div class="brand">
           <div class="mark">W</div>
           <div>
-            <h1>Stage 2 &amp; Sector Rotation Screener</h1>
-            <div class="subtle">Which NSE stocks are in a healthy uptrend, in the strongest sectors — updated daily.
-              <span id="generatedAt" style="color:var(--faint)"></span>
-            </div>
+            <h1>Screener</h1>
           </div>
         </div>
         <div class="hdr-actions">
@@ -381,12 +378,6 @@
         <div class="omni-results" id="omniResults" role="listbox" hidden></div>
       </section>
 
-      <section class="kpis">
-        <div class="kpi"><div class="label">Industries Analyzed</div><div class="value" id="kpiIndustries">-</div></div>
-        <div class="kpi"><div class="label">Stage 2 + Leading Industries</div><div class="value" id="kpiLeadingIndustries">-</div></div>
-        <div class="kpi"><div class="label">Stocks Analyzed</div><div class="value" id="kpiStocks">-</div></div>
-        <div class="kpi"><div class="label">Stage 2 + Leading Stocks</div><div class="value" id="kpiLeadingStocks">-</div></div>
-      </section>
 
       <section class="panel legend" id="legendPanel" hidden>
         <div class="panel-head">
@@ -931,11 +922,6 @@
 
       function renderKpis() {
         const m = state.data.metrics;
-        el("generatedAt").textContent = `Generated ${m.generated_at}`;
-        el("kpiIndustries").textContent = m.industries_analyzed;
-        el("kpiLeadingIndustries").textContent = m.stage2_leading_industries;
-        el("kpiStocks").textContent = m.stocks_analyzed;
-        el("kpiLeadingStocks").textContent = m.stage2_leading_stocks;
         el("coverageNote").textContent = m.coverage_note;
         el("tradeLevelNote").textContent = m.trade_level_note || "";
         renderBacktest();

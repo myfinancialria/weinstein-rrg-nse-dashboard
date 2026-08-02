@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Screener · myfinancial</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#0f172a;--muted:#64748b;--faint:#94a3b8;--line:#e6e9ef;
+    --up:#16a34a;--down:#dc2626;--accent:#2563eb;--soft:#f1f5f9;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
+  a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .wrap{max-width:1240px;margin:0 auto;padding:20px 20px 70px}
+  .top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+  h1{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;margin:0}
+  .top .lnk{font-size:.84rem;color:var(--muted)}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 12px}
+  .tab{padding:8px 15px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-weight:600;font-size:.85rem;color:var(--muted);cursor:pointer}
+  .tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  input.search{width:100%;max-width:420px;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:.9rem;margin-bottom:12px}
+  .count{color:var(--muted);font-size:.8rem;margin-bottom:10px}
+  .tblwrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:14px}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;white-space:nowrap}
+  th,td{text-align:right;padding:9px 12px;border-top:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--card)}
+  th{color:var(--faint);font-size:.66rem;text-transform:uppercase;letter-spacing:.04em;border-top:none;font-weight:600;cursor:pointer;user-select:none}
+  th.sec,td.sec{text-align:left}
+  tbody tr:hover td{background:var(--soft)}
+  .sym{font-weight:700}
+  .up{color:var(--up)}.down{color:var(--down)}.mut{color:var(--muted)}
+  .pill{display:inline-block;font-size:.68rem;font-weight:600;padding:1px 8px;border-radius:999px}
+  .pill.s2{background:#dcfce7;color:#166534}.pill.no{background:var(--soft);color:var(--muted)}
+  .pill.leading{background:#dcfce7;color:#166534}.pill.improving{background:#fef3c7;color:#92400e}
+  .pill.weakening{background:#e2e8f0;color:#475569}.pill.lagging{background:#fee2e2;color:#991b1b}
+  .loading{padding:60px 0;text-align:center;color:var(--muted)}
+  .foot{color:var(--faint);font-size:.75rem;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><h1>Screener</h1>
+    <div class="lnk"><a href="index.html">← Overview</a> · <a href="app-v2.html">Charts</a> · <a href="stock.html">Search a stock</a></div></div>
+  <div class="tabs" id="tabs"></div>
+  <input class="search" id="q" placeholder="Filter by symbol or sector…" />
+  <div class="count" id="count"></div>
+  <div id="view"><div class="loading">Loading the market…</div></div>
+  <div class="foot" id="foot"></div>
+</div>
+
+<script src="./api_config.js"></script>
+<script>
+const API=(window.API_BASE||"").replace(/\/$/,"");
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const num=n=>(n==null||isNaN(n))?"—":Number(n).toLocaleString("en-IN",{maximumFractionDigits:2});
+const pct=n=>(n==null||isNaN(n))?"—":(n>=0?"+":"")+Number(n).toFixed(2)+"%";
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+
+let ALL=[], TAB="best", Q="", sortKey=null, sortDir=-1;
+const TABS=[["best","Best stocks"],["industries","Industries"],["fundamental","Fundamental picks"],["high52","52-week-high crossing"]];
+
+fetch(API+"/api/universe/screen").then(r=>r.json()).then(d=>{
+  ALL=(d&&d.stocks)||[];
+  document.getElementById("foot").textContent = ALL.length
+    ? `${ALL.length.toLocaleString("en-IN")} NSE stocks · updated ${(d.generated_at||"").replace("T"," ").slice(0,16)}. Educational use only — not investment advice.`
+    : "";
+  render();
+}).catch(e=>{document.getElementById("view").innerHTML=`<div class="loading">Couldn't load the screener. ${esc(e.message)}</div>`;});
+
+function fundScore(s){
+  let v=0; if(s.roce!=null)v+=Math.min(s.roce,40)*1.2; if(s.roe!=null)v+=Math.min(s.roe,40);
+  if(s.pe!=null&&s.pe>0)v+=Math.max(0,30-s.pe); if(s.de!=null)v+=Math.max(0,60-s.de)/2; return v;
+}
+function rows(tab){
+  let list=ALL.slice();
+  if(tab==="best") list=list.filter(s=>s.stage==="stage_2").sort((a,b)=>(b.score||0)-(a.score||0));
+  else if(tab==="fundamental") list=list.filter(s=>s.pe!=null&&s.roce!=null).sort((a,b)=>fundScore(b)-fundScore(a));
+  else if(tab==="high52") list=list.filter(s=>s.high_52w&&s.cmp>=s.high_52w*0.98).sort((a,b)=>(b.cmp/b.high_52w)-(a.cmp/a.high_52w));
+  if(Q){ const q=Q.toLowerCase(); list=list.filter(s=>(s.symbol+" "+(s.industry||"")).toLowerCase().includes(q)); }
+  return list;
+}
+const COLS={
+  best:[["symbol","Symbol"],["industry","Sector"],["cmp","LTP"],["chg_pct","Chg"],["high_52w","52W High"],["low_52w","52W Low"],["high_5y","5Y High"],["ma50","50 MA"],["ma200","200 MA"],["rs_ratio","RS"],["stage","Stage"]],
+  fundamental:[["symbol","Symbol"],["industry","Sector"],["pe","P/E"],["roce","ROCE"],["roe","ROE"],["de","D/E"],["eps","EPS"],["cmp","LTP"],["rrg","RRG"]],
+  high52:[["symbol","Symbol"],["industry","Sector"],["cmp","LTP"],["high_52w","52W High"],["_fromhi","% from high"],["chg_pct","Chg"],["stage","Stage"]],
+};
+function cell(s,key){
+  if(key==="symbol") return `<td><a class="sym" href="stock.html?symbol=${encodeURIComponent(s.symbol)}">${esc(s.symbol)}</a></td>`;
+  if(key==="industry") return `<td class="sec mut">${esc(s.industry||"—")}</td>`;
+  if(key==="chg_pct") return `<td class="${(s.chg_pct||0)>=0?'up':'down'}">${pct(s.chg_pct)}</td>`;
+  if(key==="stage") return `<td>${s.stage==="stage_2"?'<span class="pill s2">Stage 2</span>':'<span class="pill no">—</span>'}</td>`;
+  if(key==="rrg") return `<td><span class="pill ${s.rrg||'no'}">${esc(s.rrg||"—")}</span></td>`;
+  if(key==="roce"||key==="roe") return `<td>${s[key]!=null?s[key].toFixed(1)+"%":"—"}</td>`;
+  if(key==="_fromhi"){ const p=s.high_52w?(s.cmp/s.high_52w-1)*100:null; return `<td class="${(p||0)>=0?'up':'down'}">${p!=null?p.toFixed(1)+"%":"—"}</td>`; }
+  return `<td>${num(s[key])}</td>`;
+}
+function render(){
+  document.getElementById("tabs").innerHTML=TABS.map(([k,l])=>`<div class="tab ${k===TAB?'on':''}" data-k="${k}">${l}</div>`).join("");
+  document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{TAB=t.dataset.k;sortKey=null;render();}));
+  const view=document.getElementById("view");
+  if(!ALL.length){ view.innerHTML='<div class="loading">The screener hasn\'t run on the server yet.</div>'; return; }
+  if(TAB==="industries"){ renderIndustries(view); document.getElementById("count").textContent=""; return; }
+  const cols=COLS[TAB]; let list=rows(TAB);
+  if(sortKey){ list.sort((a,b)=>{ let x=a[sortKey],y=b[sortKey]; if(x==null)return 1; if(y==null)return -1;
+    return (typeof x==="string"?String(x).localeCompare(y):x-y)*sortDir; }); }
+  document.getElementById("count").textContent=`${list.length.toLocaleString("en-IN")} stocks`;
+  const head=cols.map(([k,l])=>`<th data-k="${k}" class="${k==='industry'?'sec':''}">${l}${sortKey===k?(sortDir<0?" ▼":" ▲"):""}</th>`).join("");
+  const body=list.slice(0,400).map(s=>`<tr>${cols.map(([k])=>cell(s,k)).join("")}</tr>`).join("");
+  view.innerHTML=`<div class="tblwrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>${list.length>400?`<div class="count" style="margin-top:8px">Showing first 400 — filter to narrow.</div>`:""}`;
+  view.querySelectorAll("th[data-k]").forEach(th=>th.addEventListener("click",()=>{ const k=th.dataset.k;
+    if(sortKey===k) sortDir=-sortDir; else {sortKey=k;sortDir=-1;} render(); }));
+}
+function renderIndustries(view){
+  const byI={}; ALL.forEach(s=>{const i=s.industry||"Other";(byI[i]=byI[i]||[]).push(s);});
+  let inds=Object.entries(byI).map(([name,a])=>({name,n:a.length,
+    rr:avg(a.map(s=>s.rs_ratio).filter(v=>v!=null)),
+    rm:avg(a.map(s=>s.rs_momentum).filter(v=>v!=null)),
+    chg:avg(a.map(s=>s.chg_pct).filter(v=>v!=null)),
+    s2:a.filter(s=>s.stage==="stage_2").length})).filter(i=>i.rr!=null).sort((x,y)=>y.rr-x.rr);
+  if(Q){const q=Q.toLowerCase();inds=inds.filter(i=>i.name.toLowerCase().includes(q));}
+  const q=(rr,rm)=>rr>=100?(rm>=100?"leading":"weakening"):(rm>=100?"improving":"lagging");
+  const body=inds.map(i=>`<tr>
+    <td><span class="sym">${esc(i.name)}</span></td><td>${i.n}</td>
+    <td>${i.s2} <span class="mut">(${Math.round(i.s2/i.n*100)}%)</span></td>
+    <td>${i.rr.toFixed(1)}</td><td>${i.rm!=null?i.rm.toFixed(1):"—"}</td>
+    <td class="${i.chg>=0?'up':'down'}">${pct(i.chg)}</td>
+    <td><span class="pill ${q(i.rr,i.rm)}">${q(i.rr,i.rm)}</span></td></tr>`).join("");
+  view.innerHTML=`<div class="tblwrap"><table><thead><tr>
+    <th class="sec">Industry</th><th>Stocks</th><th>In Stage 2</th><th>RS ratio</th><th>RS momentum</th><th>Avg chg</th><th>RRG</th>
+    </tr></thead><tbody>${body}</tbody></table></div>`;
+}
+document.getElementById("q").addEventListener("input",e=>{Q=e.target.value;render();});
+</script>
+</body>
+</html>
