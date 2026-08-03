@@ -865,6 +865,22 @@
     "roce": 5.92,
     "roe_pct": 0.68
   },
+  "GAEL": {
+    "_scraped": "2026-08-03",
+    "debt_to_equity": 13.4,
+    "dividend_yield_pct": 0.14,
+    "eps": 9.07,
+    "free_cash_flow_cr": -153.0,
+    "net_margin_pct": 6.9,
+    "operating_margin_pct": 10.0,
+    "pb_ratio": 2.52,
+    "pe_ratio": 19.8,
+    "promoter_or_insider_holding_pct": 63.84,
+    "qtr_profit_var_pct": 172.3,
+    "qtr_sales_var_pct": 23.5,
+    "roce": 12.5,
+    "roe_pct": 9.76
+  },
   "GANDHAR": {
     "_scraped": "2026-08-01",
     "debt_to_equity": 23.3,

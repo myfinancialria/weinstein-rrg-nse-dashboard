@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-08-03 13:00:47 IST",
+  "generated_at": "2026-08-03 22:58:45 IST",
   "title": "Pre-market Technical Blog - 03 Aug 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 55,
-    "down": 36,
+    "up": 59,
+    "down": 32,
     "sideways": 9
   },
   "nifty": {
-    "close": 24581.35,
-    "change_5d_pct": 2.44,
-    "change_20d_pct": 0.62,
-    "ma20": 24138.61,
-    "ma50": 23922.41,
-    "ma200": 24777.14,
-    "rsi14": 65.61
+    "close": 24774.3,
+    "change_5d_pct": 3.24,
+    "change_20d_pct": 1.41,
+    "ma20": 24148.25,
+    "ma50": 23926.27,
+    "ma200": 24778.1,
+    "rsi14": 69.12
   },
   "cpr": {
-    "pivot": 24568.67,
-    "bc": 24562.33,
-    "tc": 24575.01,
-    "r1": 24622.18,
-    "r2": 24663.02,
-    "s1": 24527.83,
-    "s2": 24474.32,
-    "width_pct": 0.052
+    "pivot": 24687.92,
+    "bc": 24644.73,
+    "tc": 24731.11,
+    "r1": 24860.68,
+    "r2": 24947.07,
+    "s1": 24601.53,
+    "s2": 24428.77,
+    "width_pct": 0.349
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7489.72,
-      "change_pct": 0.7
+      "level": 7595.89,
+      "change_pct": 1.42
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52485.03,
-      "change_pct": 0.53
+      "level": 52987.0,
+      "change_pct": 0.96
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 25373.85,
-      "change_pct": 1.0
+      "level": 25931.91,
+      "change_pct": 2.2
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10859.13,
-      "change_pct": -0.08
+      "level": 10857.7,
+      "change_pct": -0.1
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 63754.9,
-      "change_pct": -0.94
+      "level": 64362.02,
+      "change_pct": 4.03
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 25974.42,
-      "change_pct": 0.35
+      "level": 25884.43,
+      "change_pct": 0.1
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3809.66,
-      "change_pct": -0.59
+      "level": 3832.26,
+      "change_pct": 0.72
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 95.3,
-      "change_pct": -0.4
+      "level": 95.33,
+      "change_pct": -0.37
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 90.12,
-      "change_pct": 1.22
+      "level": 83.73,
+      "change_pct": -7.09
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4108.0,
-      "change_pct": 1.45
+      "level": 4093.5,
+      "change_pct": 1.1
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 2.44%, while last 20-session return is 0.62%.",
-    "CPR width is 0.052%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24575.01 and R1 24622.18; weakness increases below BC 24562.33 and S1 24527.83."
+    "Last 5-session return is 3.24%, while last 20-session return is 1.41%.",
+    "CPR width is 0.349%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24731.11 and R1 24860.68; weakness increases below BC 24644.73 and S1 24601.53."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24575.01, buyers have better control and the first upside zones are 24622.18 and 24663.02. Below CPR bottom 24562.33, sellers gain control and downside zones are 24527.83 and 24474.32. A sustained move around pivot 24568.67 can mean a range day."
+      "body": "Above CPR top 24731.11, buyers have better control and the first upside zones are 24860.68 and 24947.07. Below CPR bottom 24644.73, sellers gain control and downside zones are 24601.53 and 24428.77. A sustained move around pivot 24687.92 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -120,67 +120,27 @@
   ],
   "leading_industries": [
     {
-      "name": "2/3 Wheelers",
-      "rs_ratio": 101.97,
-      "rs_momentum": 100.05
-    },
-    {
       "name": "Aerospace & Defense",
-      "rs_ratio": 100.98,
-      "rs_momentum": 102.1
-    },
-    {
-      "name": "Auto Components & Equipments",
-      "rs_ratio": 101.44,
-      "rs_momentum": 101.42
+      "rs_ratio": 101.14,
+      "rs_momentum": 103.46
     },
     {
       "name": "Logistics Solution Provider",
-      "rs_ratio": 101.25,
-      "rs_momentum": 101.76
+      "rs_ratio": 100.87,
+      "rs_momentum": 100.43
     },
     {
       "name": "Lubricants",
-      "rs_ratio": 101.19,
-      "rs_momentum": 100.78
+      "rs_ratio": 101.36,
+      "rs_momentum": 100.25
     },
     {
       "name": "Oil Equipment & Services",
-      "rs_ratio": 102.27,
-      "rs_momentum": 103.08
+      "rs_ratio": 102.75,
+      "rs_momentum": 102.96
     }
   ],
   "fundamental_picks": [
-    {
-      "name": "Hero Motocorp",
-      "symbol": "HEROMOTOCO",
-      "industry": "2/3 Wheelers",
-      "score": 93.72
-    },
-    {
-      "name": "Eicher Motors",
-      "symbol": "EICHERMOT",
-      "industry": "2/3 Wheelers",
-      "score": 93.27
-    },
-    {
-      "name": "Bajaj Auto",
-      "symbol": "BAJAJ-AUTO",
-      "industry": "2/3 Wheelers",
-      "score": 86.49
-    },
-    {
-      "name": "TVS Motor Co.",
-      "symbol": "TVSMOTOR",
-      "industry": "2/3 Wheelers",
-      "score": 53.05
-    },
-    {
-      "name": "Delta Auto.",
-      "symbol": "DELTIC",
-      "industry": "2/3 Wheelers",
-      "score": 51.01
-    },
     {
       "name": "Hind.Aeronautics",
       "symbol": "HAL",
@@ -198,6 +158,36 @@
       "symbol": "BEL",
       "industry": "Aerospace & Defense",
       "score": 85.91
+    },
+    {
+      "name": "Garden Reach Sh.",
+      "symbol": "GRSE",
+      "industry": "Aerospace & Defense",
+      "score": 84.88
+    },
+    {
+      "name": "Astra Microwave",
+      "symbol": "ASTRAMICRO",
+      "industry": "Aerospace & Defense",
+      "score": 71.71
+    },
+    {
+      "name": "Transport Corp.",
+      "symbol": "TCI",
+      "industry": "Logistics Solution Provider",
+      "score": 73.84
+    },
+    {
+      "name": "Gateway Distri",
+      "symbol": "GATEWAY",
+      "industry": "Logistics Solution Provider",
+      "score": 71.38
+    },
+    {
+      "name": "Blue Dart Expres",
+      "symbol": "BLUEDART",
+      "industry": "Logistics Solution Provider",
+      "score": 62.38
     }
   ],
   "recent_nifty": [
@@ -239,9 +229,9 @@
     {
       "date": "2026-08-03",
       "open": 24572.7,
-      "high": 24609.5,
+      "high": 24774.3,
       "low": 24515.15,
-      "close": 24581.35
+      "close": 24774.3
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."

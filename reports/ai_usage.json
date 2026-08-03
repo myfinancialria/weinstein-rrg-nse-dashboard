@@ -1,6 +1,8 @@
 {
   "date": "2026-08-03",
   "used": {
-    "gemini": 4
+    "gemini": 1400,
+    "groq": 30,
+    "mistral": 3
   }
 }

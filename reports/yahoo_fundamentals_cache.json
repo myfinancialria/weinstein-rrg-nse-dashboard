@@ -3342,5 +3342,24 @@
     "pe_ratio": 76.18625,
     "pb_ratio": 1.813786,
     "peg_ratio": null
+  },
+  "GAEL.NS": {
+    "company_description": "Gujarat Ambuja Exports Limited primarily engages in the agro processing activities in India and internationally. It operates through the Agro, Spinning, Maize, and Power segments. The company offers starch derivatives, including maize starch, liquid glucose, dextrose monohydrate powder, maltodextrin, sorbitol 70% solution, dextrose anhydrous powder, pregelatinized starch, maltitol syrup, glucose syrup solids, high maltose corn syrup and dextrose syrup; soya derivatives that consist of defatted soya flour/flakes/grits, full fat soya flour/flakes/grits, liquid soya lecithin, and soya granules and soya nuggets; feed ingredients, such as corn gluten meal, cattle feed, rapeseed extraction meal, soybean meal, maize germ, corn steep liquor, maize fiber, and CSL fiber; edible oils, which include filtered groundnut, filtered mustard, refined corn, refined cotton seed, refined palm, refined soybean, and refined sunflower oils; and agro based products comprising bakery shortening, Vanaspati ghee, and wheat flour. The company also manufactures cotton and polyester yarn. In addition, it operates windmills with a capacity of 10 megawatts, solar plants with a capacity of 10 megawatts, biogas engines with a capacity of 8 megawatts, and rice husk boilers with a capacity of 16 megawatts. The company serves the pharmaceuticals, confectionery, bakery, animal feed, paint, baby food, cosmetic, toothpaste, paper, edible oil, textile, and industrial adhesive industries. Gujarat Ambuja Exports Limited was founded in 1986 and is based in Ahmedabad, India.",
+    "website": "https://www.ambujagroup.com",
+    "yahoo_sector": "Consumer Defensive",
+    "yahoo_industry": "Packaged Foods",
+    "promoter_or_insider_holding_pct": 70.17,
+    "eps": 6.63,
+    "gross_margin_pct": 27.73,
+    "operating_margin_pct": 12.46,
+    "net_margin_pct": 6.9,
+    "roe_pct": null,
+    "debt_to_equity": 13.384,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": 27.251884,
+    "pb_ratio": 2.5153484,
+    "peg_ratio": null
   }
 }
