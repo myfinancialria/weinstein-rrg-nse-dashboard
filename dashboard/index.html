@@ -241,9 +241,29 @@ function render(U,P,BLOG,DD){
       </div>
     </div>
 
+    <div id="oiBox"></div>
     ${seasonalityHTML(P&&P.seasonality)}
 
     <div class="foot">Screener over ${num(S.length)} NSE stocks · updated ${esc((U.generated_at||"").replace("T"," ").slice(0,16))}. Educational use only — not investment advice.</div>`;
+  loadOI();
+}
+async function loadOI(){
+  const box=document.getElementById("oiBox"); if(!box) return;
+  try{
+    const o=await (await fetch(API+"/api/market/oi")).json();
+    if(!o||o.available===false){ box.innerHTML=""; return; }
+    const read=o.pcr==null?"":(o.pcr>1?"put-heavy — downside protection being bought":o.pcr<0.7?"call-heavy — upside bets crowded":"balanced");
+    box.innerHTML=`<div class="card" style="margin-top:16px">
+      <div class="sect-title">NIFTY options · open interest${o.expiry?` · expiry ${esc(o.expiry)}`:""}</div>
+      <div style="display:flex;gap:28px;flex-wrap:wrap">
+        <div><div class="lbl">PCR</div><div class="big" style="font-size:1.5rem">${o.pcr??"—"}</div><div class="mut" style="font-size:.76rem">${read}</div></div>
+        <div><div class="lbl">Max pain</div><div class="big" style="font-size:1.5rem">${num(o.max_pain)}</div></div>
+        <div><div class="lbl">Spot</div><div class="big" style="font-size:1.5rem">${num(o.spot)}</div></div>
+        <div><div class="lbl">Call OI / Put OI</div><div style="font-weight:700;margin-top:8px;font-variant-numeric:tabular-nums">${num(o.total_call_oi)} / ${num(o.total_put_oi)}</div></div>
+      </div>
+      <div class="mut" style="font-size:.75rem;margin-top:8px">PCR = Put ÷ Call open interest (higher = more downside protection bought). Max pain = the strike where most options expire worthless; price often gravitates there near expiry.</div>
+    </div>`;
+  }catch(e){ box.innerHTML=""; }
 }
 </script>
 </body>
