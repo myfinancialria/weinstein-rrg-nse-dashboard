@@ -2448,20 +2448,20 @@
     "roe_pct": 21.4
   },
   "UNIVCABLES": {
-    "_scraped": "2026-07-11",
+    "_scraped": "2026-08-03",
     "debt_to_equity": 62.2,
-    "dividend_yield_pct": 0.35,
+    "dividend_yield_pct": 0.33,
     "eps": 47.01,
     "free_cash_flow_cr": -206.0,
     "net_margin_pct": 5.4,
     "operating_margin_pct": 9.0,
-    "pb_ratio": 2.07,
-    "pe_ratio": 24.0,
+    "pb_ratio": 2.56,
+    "pe_ratio": 29.6,
     "promoter_or_insider_holding_pct": 61.89,
     "qtr_profit_var_pct": 10.0,
     "qtr_sales_var_pct": 24.6,
     "roce": 11.7,
-    "roe_pct": 8.91
+    "roe_pct": 8.9
   },
   "UNOMINDA": {
     "_scraped": "2026-08-03",

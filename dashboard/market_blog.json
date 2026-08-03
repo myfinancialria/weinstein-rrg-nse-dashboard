@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-03 10:33:00 IST",
+  "generated_at": "2026-08-03 10:37:17 IST",
   "title": "Pre-market Technical Blog - 03 Aug 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
@@ -8,23 +8,23 @@
     "sideways": 9
   },
   "nifty": {
-    "close": 24573.45,
+    "close": 24573.1,
     "change_5d_pct": 2.41,
-    "change_20d_pct": 0.59,
-    "ma20": 24138.21,
+    "change_20d_pct": 0.58,
+    "ma20": 24138.19,
     "ma50": 23922.25,
-    "ma200": 24777.1,
-    "rsi14": 65.45
+    "ma200": 24777.09,
+    "rsi14": 65.44
   },
   "cpr": {
-    "pivot": 24560.35,
+    "pivot": 24560.23,
     "bc": 24553.8,
-    "tc": 24566.9,
-    "r1": 24605.55,
-    "r2": 24637.65,
-    "s1": 24528.25,
-    "s2": 24483.05,
-    "width_pct": 0.053
+    "tc": 24566.67,
+    "r1": 24605.32,
+    "r2": 24637.53,
+    "s1": 24528.02,
+    "s2": 24482.93,
+    "width_pct": 0.052
   },
   "gift_nifty": {
     "level": null,
@@ -60,8 +60,8 @@
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 63694.42,
-      "change_pct": -1.04
+      "level": 63727.69,
+      "change_pct": -0.99
     },
     {
       "name": "Hang Seng",
@@ -90,15 +90,15 @@
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4123.4,
+      "level": 4123.1,
       "change_pct": 1.83
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 2.41%, while last 20-session return is 0.59%.",
-    "CPR width is 0.053%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24566.9 and R1 24605.55; weakness increases below BC 24553.8 and S1 24528.25."
+    "Last 5-session return is 2.41%, while last 20-session return is 0.58%.",
+    "CPR width is 0.052%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24566.67 and R1 24605.32; weakness increases below BC 24553.8 and S1 24528.02."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24566.9, buyers have better control and the first upside zones are 24605.55 and 24637.65. Below CPR bottom 24553.8, sellers gain control and downside zones are 24528.25 and 24483.05. A sustained move around pivot 24560.35 can mean a range day."
+      "body": "Above CPR top 24566.67, buyers have better control and the first upside zones are 24605.32 and 24637.53. Below CPR bottom 24553.8, sellers gain control and downside zones are 24528.02 and 24482.93. A sustained move around pivot 24560.23 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -241,7 +241,7 @@
       "open": 24572.7,
       "high": 24592.45,
       "low": 24515.15,
-      "close": 24573.45
+      "close": 24573.1
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
