@@ -111,19 +111,54 @@ function seasonalityHTML(SEA){
     <div class="mut" style="font-size:.75rem;margin-top:8px">Historical averages, not a forecast — past patterns often don't repeat.</div>
   </div>`;
 }
-function adBreadthHTML(P){
-  const ad=(P&&P.adv_decline)||[]; if(ad.length<5) return "";
-  const net=ad.map(x=>x[1]-x[2]); const mx=Math.max(1,...net.map(Math.abs));
-  const W=760,H=140,bw=W/ad.length; let bars="";
-  ad.forEach((x,i)=>{ const n=x[1]-x[2], h=Math.abs(n)/mx*(H/2-6), y0=H/2;
-    bars+=`<rect x="${(i*bw).toFixed(1)}" y="${(n>=0?y0-h:y0).toFixed(1)}" width="${Math.max(0.5,bw*0.85).toFixed(2)}" height="${Math.max(0.5,h).toFixed(1)}" fill="${n>=0?'var(--up)':'var(--down)'}"><title>${x[0]}: ${x[1]} up / ${x[2]} down (net ${n>=0?'+':''}${n})</title></rect>`;
+let AD=[], ADCUM=[];
+function longRemark(U,P){
+  const B=(U&&U.breadth)||{}, above=B.pct_above_30w_ma;
+  const rising = ADCUM.length>21 && ADCUM[ADCUM.length-1] > ADCUM[ADCUM.length-21];
+  const sea=(P&&P.seasonality&&P.seasonality.monthly&&P.seasonality.current_month)?P.seasonality.monthly[P.seasonality.current_month]:null;
+  let msg;
+  if(above>=60 && rising) msg=`Breadth is broadly positive — ${above}% of stocks are above their 30-week average and the advance/decline line is rising. Historically, a broad, rising market like this has been a more favourable backdrop for going long.`;
+  else if(above!=null && above<40) msg=`Breadth is weak — only ${above}% of stocks are above their 30-week average. Historically a narrow, falling market has been a poorer time to go long; caution is warranted.`;
+  else msg=`Breadth is mixed${above!=null?` — ${above}% of stocks are above their 30-week average`:""}. Historically, selective and patient positioning has worked better than aggressive longs here.`;
+  if(sea) msg+=` Seasonally, this month has closed positive ${sea.win}% of the last ${sea.n} years.`;
+  return `<div style="margin-top:12px;font-size:.86rem;background:var(--soft);border-radius:10px;padding:11px 13px">
+    <b>Remark:</b> ${esc(msg)}<br><span class="mut" style="font-size:.76rem">Based on historical data only — not a trade recommendation.</span></div>`;
+}
+function adBreadthHTML(U,P){
+  AD=(P&&P.adv_decline)||[]; if(AD.length<5) return "";
+  let cum=0; ADCUM=AD.map(x=>(cum+=x[1]-x[2]));
+  const net=AD.map(x=>x[1]-x[2]), mx=Math.max(1,...net.map(Math.abs));
+  const W=760,H=150,bw=W/AD.length; let bars="";
+  AD.forEach((x,i)=>{ const n=x[1]-x[2], h=Math.abs(n)/mx*(H*0.26), y0=H*0.62;
+    bars+=`<rect x="${(i*bw).toFixed(1)}" y="${(n>=0?y0-h:y0).toFixed(1)}" width="${Math.max(0.5,bw*0.85).toFixed(2)}" height="${Math.max(0.5,h).toFixed(1)}" fill="${n>=0?'var(--up)':'var(--down)'}" opacity="0.5"/>`;
   });
-  const svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto" preserveAspectRatio="none"><line x1="0" x2="${W}" y1="${H/2}" y2="${H/2}" stroke="var(--line)"/>${bars}</svg>`;
+  const cmin=Math.min(...ADCUM),cmax=Math.max(...ADCUM),csp=(cmax-cmin)||1;
+  const cy=v=>8+(1-(v-cmin)/csp)*(H-16), cx=i=>i*bw+bw/2;
+  const cline=ADCUM.map((v,i)=>`${cx(i).toFixed(1)},${cy(v).toFixed(1)}`).join(" ");
+  const svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" preserveAspectRatio="none">
+    <line x1="0" x2="${W}" y1="${(H*0.62).toFixed(1)}" y2="${(H*0.62).toFixed(1)}" stroke="var(--line)"/>
+    ${bars}<polyline fill="none" stroke="var(--accent)" stroke-width="2" points="${cline}"/></svg>`;
   return `<div class="card" style="margin-top:16px">
-    <div class="sect-title">Market breadth · last year — advances minus declines (daily)</div>
-    ${svg}
-    <div class="mut" style="font-size:.75rem;margin-top:6px">Green bar = more stocks rose than fell that day; red = more fell. Long green stretches = broad strength; red clusters = broad weakness under the index.</div>
+    <div class="sect-title">Market breadth · last year — advance/decline line + daily net (hover anywhere for values)</div>
+    <div id="adChart" style="position:relative;cursor:crosshair">${svg}
+      <div class="adcross" style="display:none;position:absolute;top:0;bottom:0;width:1px;background:var(--ink);opacity:.35;pointer-events:none"></div>
+      <div id="adTip" style="display:none;position:absolute;top:2px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:.75rem;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.12);white-space:nowrap;z-index:5"></div>
+    </div>
+    <div class="mut" style="font-size:.75rem;margin-top:6px"><b style="color:var(--accent)">Blue line</b> = advance/decline line (running total of net advances; rising = broadening strength). Bars = each day's net (green up / red down).</div>
+    ${longRemark(U,P)}
   </div>`;
+}
+function setupBreadth(){
+  const box=document.getElementById("adChart"); if(!box||!AD.length) return;
+  const tip=document.getElementById("adTip"), cross=box.querySelector(".adcross");
+  box.addEventListener("mousemove",e=>{
+    const r=box.getBoundingClientRect(), fx=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
+    const i=Math.round(fx*(AD.length-1)), x=AD[i], net=x[1]-x[2];
+    tip.style.display="block"; tip.style.left=Math.min(r.width-150,Math.max(0,fx*r.width-70))+"px";
+    tip.innerHTML=`<b>${esc(x[0])}</b> · Up ${x[1]} / Down ${x[2]} · Net ${net>=0?'+':''}${net} · A/D ${ADCUM[i]}`;
+    cross.style.display="block"; cross.style.left=(fx*100)+"%";
+  });
+  box.addEventListener("mouseleave",()=>{tip.style.display="none";cross.style.display="none";});
 }
 function render(U,P,BLOG,DD){
   const wrap=document.getElementById("wrap");
@@ -156,12 +191,30 @@ function render(U,P,BLOG,DD){
   const gift = BLOG&&BLOG.gift_nifty ? BLOG.gift_nifty : null;
   const bt = DD&&DD.backtest&&DD.backtest.daily&&DD.backtest.daily.summary ? DD.backtest.daily.summary : null;
 
-  // rrg positions (map rs_ratio ~96..104 and rs_momentum ~96..104 to 0..100%)
-  const rrgPts = inds.map(i=>{
-    const x=Math.max(2,Math.min(98,(i.rr-96)/8*100)), y=Math.max(2,Math.min(98,(i.rm-96)/8*100));
-    return `<a class="pt" href="screener.html?q=${encodeURIComponent(i.name)}" style="left:${x}%;top:${(100-y)}%;background:${RRGC[q(i.rr,i.rm)]}" title="${esc(i.name)} — ${i.s2} in Stage 2 · click for its stocks"><span>${esc(i.name)}</span></a>`;
-  }).join("");
-  const legc={};["leading","improving","weakening","lagging"].forEach(k=>legc[k]=inds.filter(i=>q(i.rr,i.rm)===k).length);
+  // --- RRG: sub-sector rotation over the last ~20 trading days (from the backend trail) ---
+  const RSEC=(U.rrg_sectors&&U.rrg_sectors.length)?U.rrg_sectors
+    :inds.map(i=>({name:i.name,rr:i.rr,rm:i.rm,s2:i.s2,stocks:i.n,quad:q(i.rr,i.rm),from_quad:q(i.rr,i.rm),to_quad:q(i.rr,i.rm),trail:null}));
+  const RD=U.rrg_dates||[];
+  const cxp=v=>Math.max(2,Math.min(98,(v-96)/8*100));     // rr/rm ~96..104 -> 2..98%
+  const rrgTails=RSEC.map(s=>{ if(!s.trail) return "";
+      const pts=s.trail.filter(Boolean).map(p=>`${cxp(p[0]).toFixed(1)},${(100-cxp(p[1])).toFixed(1)}`);
+      return pts.length>1?`<polyline points="${pts.join(' ')}" fill="none" stroke="${RRGC[s.quad]}" stroke-width="0.7" opacity="0.38"/>`:"";
+    }).join("");
+  const rrgSvg=`<svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${rrgTails}</svg>`;
+  const rrgLabel=s=>s.stocks>=6||s.quad==="leading";
+  const smallDot=RSEC.length>28;
+  const rrgPts=RSEC.map(s=>{const x=cxp(s.rr),y=100-cxp(s.rm);
+      const mv=s.from_quad!==s.to_quad?` · ${s.from_quad} → ${s.to_quad}`:"";
+      const dz=smallDot?"width:8px;height:8px;":"";
+      return `<a class="pt" href="screener.html?q=${encodeURIComponent(s.name)}" style="left:${x}%;top:${y}%;background:${RRGC[s.quad]};${dz}" title="${esc(s.name)} — ${s.stocks} stocks, ${s.s2} in Stage 2${mv}">${rrgLabel(s)?`<span>${esc(s.name)}</span>`:""}</a>`;
+    }).join("");
+  const legc={};["leading","improving","weakening","lagging"].forEach(k=>legc[k]=RSEC.filter(s=>s.quad===k).length);
+  const rotN={leading:3,improving:2,weakening:1,lagging:0};
+  const rot=RSEC.filter(s=>s.from_quad!==s.to_quad)
+    .sort((a,b)=>((rotN[b.to_quad]-rotN[b.from_quad])-(rotN[a.to_quad]-rotN[a.from_quad])));
+  const rrgRotations=rot.length?`<div style="margin-top:10px;font-size:.78rem;line-height:1.9">
+      <b>Rotations over the last ${RD.length||20} sessions:</b> ${rot.slice(0,12).map(s=>`<span style="display:inline-block;margin:0 5px 4px 0;padding:1px 8px;border-radius:999px;background:var(--soft)"><b>${esc(s.name)}</b> <span class="mut">${s.from_quad} →</span> <span style="color:${RRGC[s.to_quad]};font-weight:600">${s.to_quad}</span></span>`).join("")}</div>`:"";
+  const rrgDatesHTML=RD.length?`<div class="mut" style="font-size:.7rem;margin:0 0 8px;line-height:1.65"><b>Trail — last ${RD.length} trading days:</b> ${RD.map(d=>d.slice(5)).join(" · ")}</div>`:"";
 
   wrap.innerHTML = `
     <div class="status"><span class="dot"></span> ${esc(mood)} · ${esc((U.generated_at||"").slice(0,10))} · post-close</div>
@@ -197,7 +250,9 @@ function render(U,P,BLOG,DD){
 
     <div class="grid g2" style="margin-top:16px">
       <div class="card">
-        <div class="sect-title">RRG · sectors vs the market <a href="sector-leadership.html" style="float:right;text-transform:none;letter-spacing:0;font-size:.72rem;font-weight:600">Full sector report →</a></div>
+        <div class="sect-title">RRG · sub-sectors vs the market <a href="sector-leadership.html" style="float:right;text-transform:none;letter-spacing:0;font-size:.72rem;font-weight:600">Full sector report →</a></div>
+        <div class="mut" style="font-size:.75rem;margin-bottom:6px">Each dot is a sub-sector; the faint tail is its path over the last ${RD.length||20} trading days — watch for a clockwise drift Improving → Leading. Click a dot for its stocks.</div>
+        ${rrgDatesHTML}
         <div class="rrg">
           <div class="ax" style="left:50%;top:0;bottom:0;width:1px"></div>
           <div class="ax" style="top:50%;left:0;right:0;height:1px"></div>
@@ -205,6 +260,7 @@ function render(U,P,BLOG,DD){
           <div class="q" style="left:0;top:0">Improving</div>
           <div class="q" style="left:0;bottom:0">Lagging</div>
           <div class="q" style="right:0;bottom:0">Weakening</div>
+          ${rrgSvg}
           ${rrgPts}
         </div>
         <div class="legend">
@@ -213,6 +269,7 @@ function render(U,P,BLOG,DD){
           <span><i style="background:${RRGC.weakening}"></i>Weakening ${legc.weakening}</span>
           <span><i style="background:${RRGC.lagging}"></i>Lagging ${legc.lagging}</span>
         </div>
+        ${rrgRotations}
       </div>
       <div class="card">
         <div class="sect-title">Top of the screen</div>
@@ -255,12 +312,13 @@ function render(U,P,BLOG,DD){
       </div>
     </div>
 
-    ${adBreadthHTML(P)}
+    ${adBreadthHTML(U,P)}
     <div id="oiBox"></div>
     ${seasonalityHTML(P&&P.seasonality)}
 
     <div class="foot">Screener over ${num(S.length)} NSE stocks · updated ${esc((U.generated_at||"").replace("T"," ").slice(0,16))}. Educational use only — not investment advice.</div>`;
   loadOI();
+  setupBreadth();
 }
 async function loadOI(){
   const box=document.getElementById("oiBox"); if(!box) return;

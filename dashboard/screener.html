@@ -76,7 +76,7 @@ function rows(tab){
   if(tab==="best") list=list.filter(s=>s.stage==="stage_2").sort((a,b)=>(b.score||0)-(a.score||0));
   else if(tab==="fundamental") list=list.filter(s=>s.pe!=null&&s.roce!=null).sort((a,b)=>fundScore(b)-fundScore(a));
   else if(tab==="high52") list=list.filter(s=>s.high_52w&&s.cmp>=s.high_52w*0.98).sort((a,b)=>(b.cmp/b.high_52w)-(a.cmp/a.high_52w));
-  if(Q){ const q=Q.toLowerCase(); list=list.filter(s=>(s.symbol+" "+(s.industry||"")).toLowerCase().includes(q)); }
+  if(Q){ const q=Q.toLowerCase(); list=list.filter(s=>(s.symbol+" "+(s.industry||"")+" "+(s.sub_sector||"")).toLowerCase().includes(q)); }
   return list;
 }
 const COLS={
