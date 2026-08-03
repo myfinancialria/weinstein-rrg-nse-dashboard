@@ -1,209 +1,99 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>India Sector Leadership Report &mdash; 2 August 2026</title>
-<meta name="description" content="India's strongest NSE industries ranked by combined RS-Ratio and RS-Momentum, with drivers, government schemes, Budget provisions and global forces.">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sector leadership · myfinancial</title>
 <style>
-  :root{
-    --ink:#16211d; --paper:#f3f4f0; --raised:#fbfbf9;
-    --teal:#0e5c4f; --teal-deep:#0a3f36; --amber:#a9670f;
-    --rule:#dcded6; --rule-soft:#e7e8e1; --muted:#59635d; --up:#1f7a4d;
-    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
-    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    --measure:66ch;
-  }
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#0f172a;--muted:#64748b;--faint:#94a3b8;--line:#e6e9ef;
+    --up:#16a34a;--down:#dc2626;--accent:#2563eb;--soft:#f1f5f9;}
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{background:var(--paper);color:var(--ink);font-family:var(--serif);
-    -webkit-font-smoothing:antialiased;line-height:1.62;margin:0}
-  .wrap{max-width:960px;margin:0 auto;padding:clamp(1.25rem,4vw,3.5rem) clamp(1.1rem,4vw,2.25rem) 5rem}
-  .col{max-width:var(--measure)}
-  .eyebrow{font-family:var(--sans);text-transform:uppercase;letter-spacing:.18em;
-    font-size:.7rem;font-weight:600;color:var(--teal)}
-  .num{font-variant-numeric:tabular-nums}
-  a{color:var(--teal);text-underline-offset:2px}
-
-  .back{font-family:var(--sans);font-size:.78rem;text-decoration:none;color:var(--muted);display:inline-block;margin-bottom:1rem}
-  .back:hover{color:var(--teal)}
-
-  .mast{border-top:3px solid var(--ink);padding-top:1.15rem;margin-bottom:2.6rem}
-  .mast h1{font-size:clamp(2.05rem,5.2vw,3.35rem);line-height:1.04;font-weight:600;
-    letter-spacing:-.012em;margin:.5rem 0 .35rem;text-wrap:balance;max-width:20ch}
-  .mast .dek{font-size:clamp(1.05rem,2.4vw,1.32rem);color:var(--muted);font-style:italic;
-    margin:0 0 1.15rem;max-width:52ch;text-wrap:balance}
-  .meta{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;font-family:var(--sans);
-    font-size:.78rem;color:var(--muted);border-top:1px solid var(--rule);padding-top:.8rem}
-  .meta b{color:var(--ink);font-weight:600}
-
-  h2.sec{font-size:.82rem;font-family:var(--sans);text-transform:uppercase;letter-spacing:.16em;
-    color:var(--muted);font-weight:600;margin:0 0 1.1rem;padding-bottom:.5rem;border-bottom:1px solid var(--rule)}
-  p{margin:0 0 1rem}
-  .lead-para{font-size:1.14rem}
-
-  .rank-wrap{overflow-x:auto;margin:1.6rem 0 0;border:1px solid var(--rule);border-radius:3px;background:var(--raised)}
-  table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:.86rem}
-  thead th{text-align:left;text-transform:uppercase;letter-spacing:.08em;font-size:.66rem;
-    color:var(--muted);font-weight:600;padding:.7rem .85rem;border-bottom:1.5px solid var(--rule);white-space:nowrap}
-  thead th.r{text-align:right}
-  tbody td{padding:.62rem .85rem;border-bottom:1px solid var(--rule-soft);vertical-align:middle}
-  tbody tr:last-child td{border-bottom:none}
-  tbody tr:hover{background:#eef0ea}
-  td.rk{font-variant-numeric:tabular-nums;color:var(--amber);font-weight:700;width:2.4rem}
-  td.nm{font-family:var(--serif);font-size:1rem;font-weight:600;min-width:15rem}
-  td.nm a{color:inherit;text-decoration:none}
-  td.nm a:hover{color:var(--teal)}
-  td.r{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
-  .bar{min-width:120px}
-  .bar .track{height:7px;background:#e4e6df;border-radius:4px;overflow:hidden}
-  .bar .fill{height:100%;background:linear-gradient(90deg,var(--teal),#2f8a76);border-radius:4px}
-  .bar .val{font-variant-numeric:tabular-nums;font-weight:600;font-size:.8rem;margin-bottom:.28rem;display:block}
-  .note{font-family:var(--sans);font-size:.74rem;color:var(--muted);margin-top:.6rem}
-
-  .leaders{margin-top:3.4rem;display:flex;flex-direction:column;gap:3.1rem}
-  .leader{scroll-margin-top:1rem}
-  .lhead{display:flex;align-items:baseline;gap:1rem;border-bottom:2px solid var(--ink);padding-bottom:.7rem}
-  .lhead .rk{font-family:var(--sans);font-weight:700;font-size:clamp(1.9rem,5vw,2.7rem);
-    color:var(--amber);line-height:.9;font-variant-numeric:tabular-nums;flex:none}
-  .lhead h3{font-size:clamp(1.4rem,3.2vw,1.9rem);font-weight:600;letter-spacing:-.01em;margin:0;line-height:1.1;text-wrap:balance}
-  .chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.85rem 0 1.4rem;font-family:var(--sans)}
-  .chip{display:inline-flex;align-items:baseline;gap:.4rem;border:1px solid var(--rule);
-    background:var(--raised);border-radius:100px;padding:.28rem .7rem;font-size:.72rem;color:var(--muted)}
-  .chip b{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700;font-size:.82rem}
-  .chip.hi{border-color:#bcd8cf;background:#eaf4f0}
-  .chip.hi b{color:var(--teal-deep)}
-  .scope{font-size:.95rem;color:var(--muted);border-left:2px solid var(--rule);padding-left:.9rem;margin-bottom:1.2rem}
-  .thin{font-family:var(--sans);font-size:.72rem;color:var(--amber);margin-bottom:1rem}
-
-  .dim{margin-top:1.25rem}
-  .dim .lab{font-family:var(--sans);text-transform:uppercase;letter-spacing:.13em;font-size:.68rem;
-    font-weight:600;color:var(--teal);display:flex;align-items:center;gap:.55rem;margin-bottom:.35rem}
-  .dim .lab::before{content:"";width:14px;height:1.5px;background:var(--amber);flex:none}
-  .dim p{max-width:var(--measure)}
-  .dim ul{margin:.2rem 0 1rem;padding-left:0;list-style:none;max-width:var(--measure)}
-  .dim li{position:relative;padding-left:1.15rem;margin-bottom:.5rem}
-  .dim li::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;background:var(--teal);border-radius:50%}
-
-  .synth{margin-top:3.6rem;border-top:3px solid var(--ink);padding-top:1.6rem}
-  .synth h2{font-size:clamp(1.5rem,3.5vw,2rem);font-weight:600;margin:.2rem 0 1.1rem;letter-spacing:-.01em}
-  .engines{display:grid;gap:1rem;grid-template-columns:1fr;margin:1.4rem 0}
-  @media(min-width:720px){.engines{grid-template-columns:repeat(3,1fr)}}
-  .engine{background:var(--raised);border:1px solid var(--rule);border-top:3px solid var(--teal);border-radius:3px;padding:1.05rem 1.1rem}
-  .engine .k{font-family:var(--sans);font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:var(--amber);font-weight:700;margin-bottom:.4rem}
-  .engine h4{margin:0 0 .5rem;font-size:1.12rem;font-weight:600}
-  .engine p{font-size:.92rem;margin:0;color:#39423d}
-  .pull{background:var(--raised);border:1px solid var(--rule);border-left:3px solid var(--teal);
-    border-radius:3px;padding:1.15rem 1.3rem;margin:1.6rem 0;max-width:var(--measure)}
-  .pull p{margin:0;font-size:1.02rem}
-
-  footer.disc{margin-top:3.4rem;border-top:1px solid var(--rule);padding-top:1.3rem;
-    font-family:var(--sans);font-size:.78rem;line-height:1.6;color:var(--muted);max-width:78ch}
-  footer.disc b{color:var(--ink)}
-
-  @media (prefers-reduced-motion:no-preference){
-    .leader,.mast,.rank-wrap,.synth{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
-    @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-  }
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55}
+  a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px 20px 70px}
+  .top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+  h1{font-size:1.6rem;font-weight:800;letter-spacing:-.02em;margin:0}
+  .lead{color:var(--muted);font-size:.9rem;margin:8px 0 18px;max-width:75ch}
+  .sc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+  .sc-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .sc-h .name{font-size:1.15rem;font-weight:750}
+  .pill{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 10px;border-radius:999px}
+  .pill.leading{background:#dcfce7;color:#166534}.pill.improving{background:#fef3c7;color:#92400e}
+  .pill.weakening{background:#e2e8f0;color:#475569}.pill.lagging{background:#fee2e2;color:#991b1b}
+  .stats{display:flex;gap:22px;flex-wrap:wrap;margin:10px 0}
+  .stat .l{font-size:.64rem;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:600}
+  .stat .v{font-weight:700;font-variant-numeric:tabular-nums}
+  .analysis{font-size:.9rem;margin:6px 0 12px}
+  .up{color:var(--up)}.down{color:var(--down)}.mut{color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:.83rem}
+  th,td{text-align:right;padding:6px 8px;border-top:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  th{color:var(--faint);font-size:.64rem;text-transform:uppercase;border-top:none;font-weight:600}
+  .sym{font-weight:700}
+  .loading{padding:60px 0;text-align:center;color:var(--muted)}
+  .foot{color:var(--faint);font-size:.75rem;margin-top:20px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="index.html">&larr; Back to dashboard</a>
-  <header class="mast">
-    <div class="eyebrow">NSE Industry Rotation &middot; Relative Strength Leaders</div>
-    <h1>India&rsquo;s Strongest Industries</h1>
-    <p class="dek">A momentum-ranked research analysis of the industry groups leading the market on combined RS-Ratio and RS-Momentum &mdash; and the fundamentals, policy and global forces behind each.</p>
-    <div class="meta">
-      <span><b>As of</b> 2 August 2026</span>
-      <span><b>Universe</b> 44 NSE industry groups vs. benchmark</span>
-      <span><b>Ranking</b> RS-Ratio + RS-Momentum (RRG)</span>
-      <span><b>Narrative</b> web-researched, last refreshed 2026-07-03</span>
-    </div>
-  </header>
-
-  <section>
-    <h2 class="sec">How the leaders were chosen</h2>
-    <div class="col">
-      <p class="lead-para">These are the 10 NSE industry groups ranking highest on a <b>combined Relative Strength score</b> &mdash; the sum of <b>RS-Ratio</b> (the trend of an industry&rsquo;s performance relative to the broad market) and <b>RS-Momentum</b> (the rate of change of that relative trend). A high combined score marks groups that are both <em>outperforming</em> the market and <em>accelerating</em>: the signature of sector leadership. <b>The ranking refreshes daily as leadership rotates.</b></p>
-    </div>
-    <div class="rank-wrap">
-      <table>
-        <thead><tr><th class="r">#</th><th>Industry</th><th class="r">RS-Ratio</th><th class="r">RS-Mom.</th><th>Combined strength</th></tr></thead>
-        <tbody><tr><td class="rk">1</td><td class="nm"><a href="#oil-equipment-services">Oil Equipment &amp; Services</a></td><td class="r num">102.27</td><td class="r num">103.08</td><td class="bar"><span class="val">205.35</span><div class="track"><div class="fill" style="width:95%"></div></div></td></tr><tr><td class="rk">2</td><td class="nm"><a href="#non-banking-financial-company-nbfc">Non Banking Financial Company (NBFC)</a></td><td class="r num">101.73</td><td class="r num">103.47</td><td class="bar"><span class="val">205.20</span><div class="track"><div class="fill" style="width:91%"></div></div></td></tr><tr><td class="rk">3</td><td class="nm"><a href="#consulting-services">Consulting Services</a></td><td class="r num">98.20</td><td class="r num">106.01</td><td class="bar"><span class="val">204.21</span><div class="track"><div class="fill" style="width:62%"></div></div></td></tr><tr><td class="rk">4</td><td class="nm"><a href="#offshore-support-solution-drilling">Offshore Support Solution Drilling</a></td><td class="r num">100.04</td><td class="r num">103.91</td><td class="bar"><span class="val">203.95</span><div class="track"><div class="fill" style="width:54%"></div></div></td></tr><tr><td class="rk">5</td><td class="nm"><a href="#cables-electricals">Cables - Electricals</a></td><td class="r num">99.14</td><td class="r num">104.72</td><td class="bar"><span class="val">203.86</span><div class="track"><div class="fill" style="width:51%"></div></div></td></tr><tr><td class="rk">6</td><td class="nm"><a href="#passenger-cars-utility-vehicles">Passenger Cars &amp; Utility Vehicles</a></td><td class="r num">100.71</td><td class="r num">103.07</td><td class="bar"><span class="val">203.78</span><div class="track"><div class="fill" style="width:49%"></div></div></td></tr><tr><td class="rk">7</td><td class="nm"><a href="#aluminium">Aluminium</a></td><td class="r num">99.22</td><td class="r num">104.18</td><td class="bar"><span class="val">203.40</span><div class="track"><div class="fill" style="width:38%"></div></div></td></tr><tr><td class="rk">8</td><td class="nm"><a href="#aerospace-defense">Aerospace &amp; Defense</a></td><td class="r num">100.98</td><td class="r num">102.10</td><td class="bar"><span class="val">203.08</span><div class="track"><div class="fill" style="width:28%"></div></div></td></tr><tr><td class="rk">9</td><td class="nm"><a href="#logistics-solution-provider">Logistics Solution Provider</a></td><td class="r num">101.25</td><td class="r num">101.76</td><td class="bar"><span class="val">203.01</span><div class="track"><div class="fill" style="width:26%"></div></div></td></tr><tr><td class="rk">10</td><td class="nm"><a href="#auto-components-equipments">Auto Components &amp; Equipments</a></td><td class="r num">101.44</td><td class="r num">101.42</td><td class="bar"><span class="val">202.86</span><div class="track"><div class="fill" style="width:22%"></div></div></td></tr></tbody>
-      </table>
-    </div>
-    <p class="note">Bars scale the combined score within the current top-ten band to make the spread legible; a reading above 100 on either axis denotes market outperformance.</p>
-  </section>
-
-  <div class="leaders">
-    <section class="leader" id="oil-equipment-services">
-      <div class="lhead"><span class="rk">1</span><h3>Oil Equipment &amp; Services</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>102.27</b></span><span class="chip">RS-Momentum <b>103.08</b></span><span class="chip hi">Combined <b>205.35</b></span></div>
-      <p class="thin">Summary from industry thesis; scheme/budget detail pending.</p><div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Rising domestic E&amp;P capex, gas infrastructure build-out and refinery expansion support oilfield equipment and services demand.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>City-gas and pipeline projects, offshore development, refinery upgrades and energy-transition infrastructure can extend order books.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li>Aided by energy-security push, gas-infrastructure expansion, HELP/OALP activity and Make in India domestic-sourcing preferences.</li></ul></div>
-    </section>
-    <section class="leader" id="non-banking-financial-company-nbfc">
-      <div class="lhead"><span class="rk">2</span><h3>Non Banking Financial Company (NBFC)</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>101.73</b></span><span class="chip">RS-Momentum <b>103.47</b></span><span class="chip hi">Combined <b>205.20</b></span></div>
-      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Powered by the <b>RBI&#x27;s rate-cutting cycle</b> — roughly <b>125 bps of repo cuts through 2025 to 5.25%</b>, held at the June 2026 MPC. Cheaper refinancing is expanding margins just as credit demand runs hot: NBFC credit grew <b>~20% in FY25 against banks&#x27; ~12%</b>, and NBFCs now originate <b>~41% of new personal-loan disbursements by value</b> (up from 27% two years earlier). Bajaj Finance returned +31.8% over the trailing year versus the Nifty&#x27;s +6.6%.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>Analysts see sector AUM <b>crossing ₹50 lakh crore by March 2027</b>, with NBFC MSME AUM alone passing <b>₹5.3 lakh crore by FY26</b> (~32% CAGR over FY21–24). Growth vectors: co-lending, digital lending, gold loans and affordable housing finance.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>RBI Scale-Based Regulation (SBR)</b> — the four-layer prudential framework; an SBR review was initiated in December 2025.</li><li><b>RBI Co-Lending Arrangements Directions, 2025</b> — in force 1 January 2026, extending co-lending beyond priority-sector loans (10% minimum retention, DLG up to 5%).</li><li><b>Risk-weight rollback (February 2025)</b> — the RBI cut the risk weight on bank loans to well-rated NBFCs by 25 ppt (effective 1 April 2025).</li><li>Revised <b>Priority-Sector-Lending Master Directions</b> (April 2025); SIDBI NBFC refinance of ₹64,189 crore at end-FY25.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> raised the MSME credit-guarantee cover from ₹5 crore to ₹10 crore and launched a ₹5 lakh micro-enterprise credit card — both channel demand through NBFCs. <b>FY2026-27</b> positioned an “NBFC roadmap” under Viksit Bharat and proposed restructuring the PSU NBFCs PFC and REC.</p></div><div class="dim"><div class="lab">Global forces</div><p>A US Fed easing bias is a tailwind for large dollar-bond issuers, but <b>West Asia tensions in early 2026 pushed hedging costs up 50–75 bps</b>, prompting several NBFCs to pause external commercial borrowing. Smaller NBFCs still face domestic funding stress.</p></div>
-    </section>
-    <section class="leader" id="consulting-services">
-      <div class="lhead"><span class="rk">3</span><h3>Consulting Services</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>98.20</b></span><span class="chip">RS-Momentum <b>106.01</b></span><span class="chip hi">Combined <b>204.21</b></span></div>
-      <p class="thin">Summary from industry thesis; scheme/budget detail pending.</p><div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Enterprise digital transformation, ESG, GCC (global capability centre) expansion and India&#x27;s services exports keep consulting demand firm.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>AI/analytics advisory, cloud and ERP transformation, ESG/sustainability consulting and mid-market outsourcing can extend growth.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li>Indirectly supported by services-export incentives, GCC-friendly state policies and ease-of-doing-business reforms.</li></ul></div>
-    </section>
-    <section class="leader" id="offshore-support-solution-drilling">
-      <div class="lhead"><span class="rk">4</span><h3>Offshore Support Solution Drilling</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>100.04</b></span><span class="chip">RS-Momentum <b>103.91</b></span><span class="chip hi">Combined <b>203.95</b></span></div>
-      <p class="thin">Summary from industry thesis; scheme/budget detail pending.</p><div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Offshore drilling and support demand rise with higher upstream capex and firm energy prices, a cyclical but high-operating-leverage theme.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>Higher day-rates, fleet utilisation, deepwater development and gas-focused offshore projects can drive an up-cycle.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li>Linked to national energy-security and domestic-production goals, HELP/OALP activity and offshore field development.</li></ul></div>
-    </section>
-    <section class="leader" id="cables-electricals">
-      <div class="lhead"><span class="rk">5</span><h3>Cables - Electricals</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>99.14</b></span><span class="chip">RS-Momentum <b>104.72</b></span><span class="chip hi">Combined <b>203.86</b></span></div>
-      <p class="thin">Summary from industry thesis; scheme/budget detail pending.</p><div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Power transmission, housing, data centers, renewables, railways, and industrial capex are driving wire and cable demand.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>Premium branded wires, EHV cables, railway/solar/data-center demand, and export opportunities can sustain growth.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li>Supported indirectly by infrastructure capex, housing, renewable energy targets, power grid expansion, and domestic manufacturing priorities.</li></ul></div>
-    </section>
-    <section class="leader" id="passenger-cars-utility-vehicles">
-      <div class="lhead"><span class="rk">6</span><h3>Passenger Cars &amp; Utility Vehicles</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>100.71</b></span><span class="chip">RS-Momentum <b>103.07</b></span><span class="chip hi">Combined <b>203.78</b></span></div>
-      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Riding <b>record volumes and a decisive mix shift to SUVs</b>. FY2025-26 domestic PV sales hit <b>~46.43 lakh units (+7.9% YoY)</b>, and April 2026 opened +25.4%. SUVs are now ~53–57% of PV sales, lifting realisations and margins. Exports set a record at 9.05 lakh units (+17.5%), Maruti alone ~4.48 lakh (~49% share). Passenger-car EV penetration is ~3.5–5% but growing 75–86% YoY.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>PV EV output is projected at <b>~1.33 million units — ~20% of PV production — by 2030</b>, alongside an export hub for Africa and the Gulf (top FY26 destinations South Africa, Saudi Arabia). Rising ADAS and electronics content per vehicle is a durable tailwind.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>PLI for Automobiles &amp; Auto Components — ₹25,938 crore</b> (FY23–FY27; ₹1,350.83 crore disbursed by November 2025).</li><li><b>PM E-DRIVE — ₹10,900 crore</b> (Sept 2024–March 2026, the FAME-II successor; e-cars excluded).</li><li><b>SPMEPCI</b> — cuts CBU import duty to 15% for OEMs investing ≥₹4,150 crore (capped 8,000 units/yr).</li><li>Vehicle Scrappage Policy and a rare-earth magnet incentive (₹7,280 crore, approved 2025).</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> fully exempted customs on cobalt powder, lithium-ion battery scrap and 12 critical minerals, and launched the <b>National Critical Mineral Mission (₹16,300 crore)</b>. <b>FY2026-27</b> raised the Auto PLI head to ₹5,939.87 crore and extended duty exemptions on critical-mineral processing capital goods.</p></div><div class="dim"><div class="lab">Global forces</div><p>The acute risk is <b>China&#x27;s rare-earth magnet export curbs (April 2025)</b> — SIAM warned inventories were near-exhausted by end-May 2025, with production-halt risk. Exports (+24% in H1 FY26) offset. Other headwinds: Chinese-EV competition, US/EU tariffs, a global EV softening and semiconductor tightness.</p></div>
-    </section>
-    <section class="leader" id="aluminium">
-      <div class="lhead"><span class="rk">7</span><h3>Aluminium</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>99.22</b></span><span class="chip">RS-Momentum <b>104.18</b></span><span class="chip hi">Combined <b>203.40</b></span></div>
-      <p class="thin">Summary from industry thesis; scheme/budget detail pending.</p><div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Aluminium is a key light-weighting and electrification metal; power, transport, packaging and renewables demand keep it strategically important.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>EV and solar demand, recycling, downstream value-added products and cost-curve advantages can support integrated producers.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li>Aided by infrastructure/renewables capex, import-duty structures and Make in India; power costs and global prices are key swing factors.</li></ul></div>
-    </section>
-    <section class="leader" id="aerospace-defense">
-      <div class="lhead"><span class="rk">8</span><h3>Aerospace &amp; Defense</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>100.98</b></span><span class="chip">RS-Momentum <b>102.10</b></span><span class="chip hi">Combined <b>203.08</b></span></div>
-      <p class="thin">Summary from industry thesis; scheme/budget detail pending.</p><div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Defence indigenisation, order books, exports, and electronics-heavy platforms make this one of the most policy-backed themes.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>Radars, avionics, simulators, drones, missiles, space components, and export orders can expand the opportunity set.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li>Government support is strong through Make in India, defence indigenisation, import embargo/positive lists, procurement preference, and rising defence production/export goals.</li></ul></div>
-    </section>
-    <section class="leader" id="logistics-solution-provider">
-      <div class="lhead"><span class="rk">9</span><h3>Logistics Solution Provider</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>101.25</b></span><span class="chip">RS-Momentum <b>101.76</b></span><span class="chip hi">Combined <b>203.01</b></span></div>
-      <p class="thin">Summary from industry thesis; scheme/budget detail pending.</p><div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Manufacturing shift, e-commerce, GST-led warehousing consolidation and multimodal freight demand keep logistics a structural theme.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>3PL/express, cold-chain, warehousing REIT-isation, port-led logistics, digital freight and multimodal corridors can drive growth.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li>Strongly supported by PM Gati Shakti, the National Logistics Policy, dedicated freight corridors and multimodal infrastructure push.</li></ul></div>
-    </section>
-    <section class="leader" id="auto-components-equipments">
-      <div class="lhead"><span class="rk">10</span><h3>Auto Components &amp; Equipments</h3></div>
-      <div class="chips"><span class="chip">RS-Ratio <b>101.44</b></span><span class="chip">RS-Momentum <b>101.42</b></span><span class="chip hi">Combined <b>202.86</b></span></div>
-      <div class="dim"><div class="lab">Why it&rsquo;s leading</div><p>Compounds the same SUV/premiumisation wave as the OEMs, with an added kicker — <b>content per vehicle is rising 20–25%</b>. ACMA reports FY25 industry turnover of <b>₹6.73 lakh crore (USD 80.2bn, +9.6% YoY)</b>, a near-doubling over five years. Exports rose ~8% to <b>USD 22.9bn</b> (North America 32%, Europe 29.5%); the aftermarket reached ~₹99,948 crore.</p></div><div class="dim"><div class="lab">Future opportunities</div><p>The <b>EV-component market is projected to grow from USD 7.8bn (2025) to USD 28.5bn (2030), ~29.6% CAGR</b>, and ACMA targets USD 100bn of exports by 2030. China+1 localisation, rising ADAS/semiconductor content, and precision-forging leaders (Bharat Forge, Sona BLW, Uno Minda) drive it.</p></div><div class="dim"><div class="lab">Government schemes &amp; support</div><ul><li><b>PLI Auto &amp; Components (₹25,938 crore)</b> with a dedicated Component Champion track for advanced technologies.</li><li><b>PLI ACC Battery scheme (₹18,100 crore for 50 GWh)</b> — awardees include Reliance New Energy, Ola and Hyundai Global Motors.</li><li><b>PM E-DRIVE (₹10,900 crore)</b> and the <b>National Critical Mineral Mission (₹16,300 crore)</b>.</li></ul></div><div class="dim"><div class="lab">Budget highlights</div><p><b>FY2025-26</b> exempted basic customs on cobalt, lithium-ion battery scrap, lead, zinc and 12 critical minerals (25 minerals to zero duty). <b>FY2026-27</b> added capital-goods exemptions for lithium-cell manufacturing and announced rare-earth corridors (Odisha, Kerala, Andhra Pradesh, Tamil Nadu) and a ₹10,000 crore SME Growth Fund (the last two are single-trade-source — plausible, not officially confirmed).</p></div><div class="dim"><div class="lab">Global forces</div><p>Two external forces dominate: <b>China&#x27;s April-2025 rare-earth licensing</b> on seven elements could raise EV-motor costs 18–25%; and the <b>US Section 232 25% tariff on autos and parts (March 2025)</b> hits ~USD 6.5bn of Indian parts exports, with proposed relief to 18% under a US-India deal.</p></div>
-    </section></div>
-
-  <section class="synth">
-    <div class="eyebrow">Reading across the leaders</div>
-    <h2>Three engines drive the leadership board</h2>
-    <div class="engines">
-      <div class="engine"><div class="k">Engine 01</div><h4>The credit cycle</h4><p>The RBI&rsquo;s ~125 bps of 2025 easing to 5.25% lifts margins, and a supportive regulatory turn does the rest &mdash; with microfinance adding a turnaround as asset quality normalises.</p></div>
-      <div class="engine"><div class="k">Engine 02</div><h4>Consumption &amp; formalisation</h4><p>GST rationalisation and a wave of BIS Quality Control Orders transfer share from the unorganised sector to listed players, atop premiumisation and a housing/infra upcycle.</p></div>
-      <div class="engine"><div class="k">Engine 03</div><h4>Capex &amp; China+1</h4><p>The PLI architecture, the National Critical Mineral Mission and rising technology content per unit anchor the manufacturing-investment leg of leadership.</p></div>
-    </div>
-    <div class="pull"><p><b>The common policy tailwind.</b> Almost every leader touches record public capital expenditure (&#8377;12.22 lakh crore in FY2026-27), the PLI incentive stack, and formalisation via GST and BIS Quality Control Orders.</p></div>
-    <div class="pull" style="border-left-color:var(--amber)"><p><b>The common global risk.</b> Two threads recur: <b>US tariff policy</b> (a 2025 spike toward ~50%, cut to ~18% via the February-2026 US-India deal) and <b>critical-mineral dependence on China</b>. Both are being mitigated but neither is fully resolved.</p></div>
-  </section>
-
-  <footer class="disc">
-    <p><b>Methodology.</b> Rankings are derived from the NSE industry-group Relative Rotation Graph, combining RS-Ratio and RS-Momentum versus the benchmark; they reflect price-relative strength as of 2 August 2026 and rotate over time. The per-industry narrative was web-verified from government (PIB, indiabudget.gov.in, RBI, DAHD, BIS), rating-agency (CareEdge, CRISIL) and industry-body (SIAM, ACMA, MFIN, MPEDA) sources and was last refreshed on 2026-07-03; market-size and multi-year projections are third-party estimates and directional.</p>
-    <p style="margin-top:.7rem"><b>Disclaimer.</b> This is a research and educational analysis, not investment advice. Relative-strength leadership is a momentum signal, not a valuation or quality judgement.</p>
-  </footer>
+  <div class="top"><h1>Sector leadership</h1><div style="font-size:.84rem;color:var(--muted)"><a href="index.html">← Overview</a> · <a href="screener.html">Screener</a></div></div>
+  <div class="lead">Which parts of the market are strongest right now — and which are weak — measured by how each sector's stocks are doing versus the whole market (RS) and how many are in a healthy uptrend (Stage 2). Strongest first.</div>
+  <div id="view"><div class="loading">Loading sectors…</div></div>
+  <div class="foot" id="foot"></div>
 </div>
+
+<script src="./api_config.js"></script>
+<script>
+const API=(window.API_BASE||"").replace(/\/$/,"");
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const num=n=>(n==null||isNaN(n))?"—":Number(n).toLocaleString("en-IN",{maximumFractionDigits:2});
+const pct=n=>(n==null||isNaN(n))?"—":(n>=0?"+":"")+Number(n).toFixed(2)+"%";
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const q=(rr,rm)=>rr>=100?(rm>=100?"leading":"weakening"):(rm>=100?"improving":"lagging");
+const ANALYSIS={
+  leading:"Strong and getting stronger — this is where the market's money is flowing. The healthiest place to look for ideas.",
+  improving:"Weak but turning up — early signs money is rotating in. Watch for the strongest names to break out first.",
+  weakening:"Still ahead of the market but momentum is fading — leaders here may be maturing; be selective.",
+  lagging:"Weak and lagging the market — mostly downtrends. Best avoided until it starts to improve.",
+};
+
+fetch(API+"/api/universe/screen").then(r=>r.json()).then(d=>render(d)).catch(e=>{
+  document.getElementById("view").innerHTML=`<div class="loading">Couldn't load. ${esc(e.message)}</div>`;});
+
+function render(d){
+  const S=(d&&d.stocks)||[];
+  if(!S.length){ document.getElementById("view").innerHTML='<div class="loading">The screener hasn\'t run on the server yet.</div>'; return; }
+  const byI={}; S.forEach(s=>{const i=s.industry||"Other";(byI[i]=byI[i]||[]).push(s);});
+  const inds=Object.entries(byI).map(([name,a])=>({name,arr:a,n:a.length,
+    rr:avg(a.map(s=>s.rs_ratio).filter(v=>v!=null)),
+    rm:avg(a.map(s=>s.rs_momentum).filter(v=>v!=null)),
+    chg:avg(a.map(s=>s.chg_pct).filter(v=>v!=null)),
+    s2:a.filter(s=>s.stage==="stage_2").length})).filter(i=>i.rr!=null).sort((x,y)=>y.rr-x.rr);
+  document.getElementById("view").innerHTML=inds.map(i=>{
+    const qd=q(i.rr,i.rm);
+    const top=i.arr.slice().sort((a,b)=>(b.score||0)-(a.score||0)).slice(0,5);
+    const rows=top.map(s=>`<tr>
+      <td><a class="sym" href="stock.html?symbol=${encodeURIComponent(s.symbol)}">${esc(s.symbol)}</a></td>
+      <td>${num(s.cmp)}</td><td class="${(s.chg_pct||0)>=0?'up':'down'}">${pct(s.chg_pct)}</td>
+      <td>${s.rs_ratio!=null?s.rs_ratio.toFixed(1):"—"}</td>
+      <td>${s.stage==="stage_2"?'<span class="pill leading">Stage 2</span>':'<span class="mut">—</span>'}</td></tr>`).join("");
+    const news=`https://news.google.com/search?q=${encodeURIComponent(i.name+" sector India stocks")}&hl=en-IN&gl=IN`;
+    return `<div class="sc">
+      <div class="sc-h"><div class="name">${esc(i.name)}</div><span class="pill ${qd}">${qd[0].toUpperCase()+qd.slice(1)}</span></div>
+      <div class="stats">
+        <div class="stat"><div class="l">Stocks</div><div class="v">${i.n}</div></div>
+        <div class="stat"><div class="l">In Stage 2</div><div class="v">${i.s2} <span class="mut">(${Math.round(i.s2/i.n*100)}%)</span></div></div>
+        <div class="stat"><div class="l">Strength (RS)</div><div class="v">${i.rr.toFixed(1)}</div></div>
+        <div class="stat"><div class="l">Momentum</div><div class="v">${i.rm!=null?i.rm.toFixed(1):"—"}</div></div>
+        <div class="stat"><div class="l">Avg move today</div><div class="v ${i.chg>=0?'up':'down'}">${pct(i.chg)}</div></div>
+      </div>
+      <div class="analysis">${ANALYSIS[qd]}</div>
+      <table><thead><tr><th>Top names</th><th>LTP</th><th>Chg</th><th>RS</th><th>Stage</th></tr></thead><tbody>${rows}</tbody></table>
+      <div style="margin-top:10px;font-size:.82rem"><a href="${news}" target="_blank" rel="noopener">Latest ${esc(i.name)} news ↗</a></div>
+    </div>`;
+  }).join("");
+  document.getElementById("foot").textContent=`${inds.length} sectors · ${S.length.toLocaleString("en-IN")} stocks · updated ${(d.generated_at||"").replace("T"," ").slice(0,16)}. Educational use only — not investment advice.`;
+}
+</script>
 </body>
 </html>
