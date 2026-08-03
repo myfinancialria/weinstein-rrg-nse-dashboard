@@ -87,6 +87,30 @@ function sparkline(pairs){
   return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><polyline fill="none" stroke="${c}" stroke-width="2" points="${pts}"/></svg>`;
 }
 
+function seasonalityHTML(SEA){
+  if(!SEA||!SEA.monthly||!Object.keys(SEA.monthly).length) return "";
+  const MN=["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const cm=SEA.current_month, cur=SEA.monthly[cm];
+  const mx=Math.max(0.1,...Object.values(SEA.monthly).map(m=>Math.abs(m.avg)));
+  const W=560,H=120; let bars="";
+  for(let i=1;i<=12;i++){ const m=SEA.monthly[i]; const v=m?m.avg:0; const bw=W/12;
+    const h=Math.abs(v)/mx*44, y0=H/2-8, x=(i-1)*bw+bw*0.18;
+    const col=i===cm?"#2563eb":(v>=0?"#16a34a":"#dc2626");
+    bars+=`<rect x="${x.toFixed(1)}" y="${(v>=0?y0-h:y0).toFixed(1)}" width="${(bw*0.64).toFixed(1)}" height="${Math.max(1,h).toFixed(1)}" rx="2" fill="${col}"><title>${MN[i]}: avg ${v>=0?'+':''}${v}% · up ${m?m.win:'—'}% of years</title></rect>`;
+    bars+=`<text x="${(x+bw*0.32).toFixed(1)}" y="${H-4}" text-anchor="middle" font-size="9" fill="var(--faint)">${MN[i]}</text>`;
+  }
+  const svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto"><line x1="0" x2="${W}" y1="${(H/2-8)}" y2="${(H/2-8)}" stroke="var(--line)"/>${bars}</svg>`;
+  const dow=SEA.dow||{};
+  const dowh=Object.entries(dow).map(([k,v])=>`<span style="display:inline-block;margin-right:18px;font-size:.82rem"><b>${k}</b> <span class="${v.avg>=0?'up':'down'}">${v.avg>=0?'+':''}${v.avg}%</span> <span class="mut">up ${v.win}%</span></span>`).join("");
+  return `<div class="card" style="margin-top:16px">
+    <div class="sect-title">Seasonality · what usually happens (${SEA.years||"—"} yrs of NIFTY)</div>
+    ${cur?`<div style="font-size:.95rem;margin-bottom:8px"><b>${MN[cm]}</b> historically: NIFTY finished up <b class="${cur.win>=50?'up':'down'}">${cur.win}%</b> of the last ${cur.n} years, average <b class="${cur.avg>=0?'up':'down'}">${cur.avg>=0?'+':''}${cur.avg}%</b>.</div>`:""}
+    <div class="lbl" style="margin-bottom:2px">Average monthly return · blue = this month</div>
+    ${svg}
+    <div style="margin-top:10px"><span class="lbl" style="margin-right:10px">By weekday (10y)</span>${dowh}</div>
+    <div class="mut" style="font-size:.75rem;margin-top:8px">Historical averages, not a forecast — past patterns often don't repeat.</div>
+  </div>`;
+}
 function render(U,P,BLOG,DD){
   const wrap=document.getElementById("wrap");
   if(!U||!U.stocks||!U.stocks.length){ wrap.innerHTML=`<div class="loading">The market screener hasn't run yet on the server. Once <code>stock360 screen</code> completes, this fills in.</div>`; return; }
@@ -212,6 +236,8 @@ function render(U,P,BLOG,DD){
         <a href="app-v2.html" style="font-size:.82rem">Full market blog →</a>
       </div>
     </div>
+
+    ${seasonalityHTML(P&&P.seasonality)}
 
     <div class="foot">Screener over ${num(S.length)} NSE stocks · updated ${esc((U.generated_at||"").replace("T"," ").slice(0,16))}. Educational use only — not investment advice.</div>`;
 }
