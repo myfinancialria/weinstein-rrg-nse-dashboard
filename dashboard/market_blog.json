@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-08-02 23:57:59 IST",
-  "title": "Pre-market Technical Blog - 02 Aug 2026",
+  "generated_at": "2026-08-03 10:33:00 IST",
+  "title": "Pre-market Technical Blog - 03 Aug 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 59,
-    "down": 32,
+    "up": 55,
+    "down": 36,
     "sideways": 9
   },
   "nifty": {
-    "close": 24383.6,
-    "change_5d_pct": 2.59,
-    "change_20d_pct": 0.46,
-    "ma20": 24131.06,
-    "ma50": 23903.88,
-    "ma200": 24779.46,
-    "rsi14": 55.21
+    "close": 24573.45,
+    "change_5d_pct": 2.41,
+    "change_20d_pct": 0.59,
+    "ma20": 24138.21,
+    "ma50": 23922.25,
+    "ma200": 24777.1,
+    "rsi14": 65.45
   },
   "cpr": {
-    "pivot": 24370.9,
-    "bc": 24364.55,
-    "tc": 24377.25,
-    "r1": 24442.1,
-    "r2": 24500.6,
-    "s1": 24312.4,
-    "s2": 24241.2,
-    "width_pct": 0.052
+    "pivot": 24560.35,
+    "bc": 24553.8,
+    "tc": 24566.9,
+    "r1": 24605.55,
+    "r2": 24637.65,
+    "s1": 24528.25,
+    "s2": 24483.05,
+    "width_pct": 0.053
   },
   "gift_nifty": {
     "level": null,
@@ -60,26 +60,26 @@
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 64362.02,
-      "change_pct": 4.03
+      "level": 63694.42,
+      "change_pct": -1.04
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 25884.43,
-      "change_pct": 0.1
+      "level": 25895.44,
+      "change_pct": 0.04
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3832.26,
-      "change_pct": 0.72
+      "level": 3809.65,
+      "change_pct": -0.59
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 95.39,
-      "change_pct": -0.31
+      "level": 95.15,
+      "change_pct": -0.56
     },
     {
       "name": "Brent Crude",
@@ -90,15 +90,15 @@
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4107.0,
-      "change_pct": 0.17
+      "level": 4123.4,
+      "change_pct": 1.83
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 2.59%, while last 20-session return is 0.46%.",
-    "CPR width is 0.052%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24377.25 and R1 24442.1; weakness increases below BC 24364.55 and S1 24312.4."
+    "Last 5-session return is 2.41%, while last 20-session return is 0.59%.",
+    "CPR width is 0.053%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24566.9 and R1 24605.55; weakness increases below BC 24553.8 and S1 24528.25."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24377.25, buyers have better control and the first upside zones are 24442.1 and 24500.6. Below CPR bottom 24364.55, sellers gain control and downside zones are 24312.4 and 24241.2. A sustained move around pivot 24370.9 can mean a range day."
+      "body": "Above CPR top 24566.9, buyers have better control and the first upside zones are 24605.55 and 24637.65. Below CPR bottom 24553.8, sellers gain control and downside zones are 24528.25 and 24483.05. A sustained move around pivot 24560.35 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -202,13 +202,6 @@
   ],
   "recent_nifty": [
     {
-      "date": "2026-07-24",
-      "open": 23666.35,
-      "high": 23823.6,
-      "low": 23606.3,
-      "close": 23767.45
-    },
-    {
       "date": "2026-07-27",
       "open": 23928.4,
       "high": 24011.6,
@@ -242,6 +235,13 @@
       "high": 24429.4,
       "low": 24299.7,
       "close": 24383.6
+    },
+    {
+      "date": "2026-08-03",
+      "open": 24572.7,
+      "high": 24592.45,
+      "low": 24515.15,
+      "close": 24573.45
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
