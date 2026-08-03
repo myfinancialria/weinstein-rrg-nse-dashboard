@@ -136,6 +136,9 @@ function render(U,P,BLOG,DD){
   const niftyLine = P&&P.indices&&P.indices.nifty ? P.indices.nifty : [];
   const niftyLast = niftyLine.length?niftyLine[niftyLine.length-1][1]:null;
   const niftyChg = niftyLine.length>1?((niftyLast/niftyLine[niftyLine.length-2][1]-1)*100):null;
+  const sxLine = P&&P.indices&&P.indices.sensex ? P.indices.sensex : [];
+  const sxLast = sxLine.length?sxLine[sxLine.length-1][1]:null;
+  const sxChg = sxLine.length>1?((sxLast/sxLine[sxLine.length-2][1]-1)*100):null;
   const gift = BLOG&&BLOG.gift_nifty ? BLOG.gift_nifty : null;
   const bt = DD&&DD.backtest&&DD.backtest.daily&&DD.backtest.daily.summary ? DD.backtest.daily.summary : null;
 
@@ -158,6 +161,7 @@ function render(U,P,BLOG,DD){
         <div class="lbl">NIFTY 50</div>
         <div class="big">${num(niftyLast)} ${niftyChg!=null?`<span style="font-size:1rem" class="${niftyChg>=0?'up':'down'}">${pct(niftyChg)}</span>`:""}</div>
         ${sparkline(niftyLine)}
+        <div class="row"><span class="k">Sensex</span><span class="v ${(sxChg||0)>=0?'up':'down'}">${num(sxLast)}${sxChg!=null?` ${pct(sxChg)}`:""}</span></div>
         <div class="row"><span class="k">Gift Nifty</span><span class="v ${gift&&gift.change_pct>=0?'up':'down'}">${gift?num(gift.level):"—"}</span></div>
       </div>
       <div class="card">
