@@ -84,7 +84,7 @@ const COLS={
   high52:[["symbol","Symbol"],["industry","Sector"],["cmp","LTP"],["high_52w","52W High"],["_fromhi","% from high"],["chg_pct","Chg"],["stage","Stage"]],
 };
 function cell(s,key){
-  if(key==="symbol") return `<td><a class="sym" href="stock.html?symbol=${encodeURIComponent(s.symbol)}">${esc(s.symbol)}</a></td>`;
+  if(key==="symbol") return `<td><a class="sym" href="app-v2.html?symbol=${encodeURIComponent(s.symbol)}">${esc(s.symbol)}</a></td>`;
   if(key==="industry") return `<td class="sec mut">${esc(s.industry||"—")}</td>`;
   if(key==="chg_pct") return `<td class="${(s.chg_pct||0)>=0?'up':'down'}">${pct(s.chg_pct)}</td>`;
   if(key==="stage") return `<td>${s.stage==="stage_2"?'<span class="pill s2">Stage 2</span>':'<span class="pill no">—</span>'}</td>`;

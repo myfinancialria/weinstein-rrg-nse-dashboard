@@ -2311,10 +2311,20 @@
           renderKpis();
           renderIndustryOptions();
           render();
+          // Deep-link: ?symbol=XYZ opens that stock's drawer; unknown symbols fall
+          // back to the full Stock 360 page.
+          const sp = new URLSearchParams(location.search).get("symbol");
+          if (sp) {
+            const up = sp.toUpperCase();
+            const st = (state.data.stocks || []).find((s) =>
+              (s.display_symbol || "").toUpperCase() === up ||
+              (s.symbol || "").toUpperCase() === up ||
+              (s.symbol || "").toUpperCase() === up + ".NS");
+            if (st) openStockDrawer(st);
+            else location.replace("stock.html?symbol=" + encodeURIComponent(sp));
+          }
         })
-        .catch((error) => {
-          el("generatedAt").textContent = `Could not load dashboard_data.json: ${error.message}`;
-        });
+        .catch(() => {});
       fetch("./market_blog.json")
         .then((response) => response.ok ? response.json() : null)
         .then((blog) => renderMarketBlog(blog))

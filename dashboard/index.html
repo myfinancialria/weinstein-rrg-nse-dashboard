@@ -204,7 +204,7 @@ function render(U,P,BLOG,DD){
         <div class="sect-title">Top of the screen</div>
         <table><thead><tr><th>Symbol</th><th>Sector</th><th>LTP</th><th>RS</th><th>Chg</th><th>Stage</th></tr></thead>
           <tbody>${top.map(s=>`<tr>
-            <td><span class="star">☆</span> <a class="sym" href="stock.html?symbol=${encodeURIComponent(s.symbol)}">${esc(s.symbol)}</a></td>
+            <td><span class="star">☆</span> <a class="sym" href="app-v2.html?symbol=${encodeURIComponent(s.symbol)}">${esc(s.symbol)}</a></td>
             <td class="mut">${esc(s.industry||"—")}</td>
             <td>${num(s.cmp)}</td>
             <td>${s.rs_ratio!=null?s.rs_ratio.toFixed(1):"—"}</td>
