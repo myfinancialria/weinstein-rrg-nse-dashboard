@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-08-03 10:37:17 IST",
+  "generated_at": "2026-08-03 11:05:34 IST",
   "title": "Pre-market Technical Blog - 03 Aug 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 55,
-    "down": 36,
+    "up": 53,
+    "down": 38,
     "sideways": 9
   },
   "nifty": {
-    "close": 24573.1,
-    "change_5d_pct": 2.41,
-    "change_20d_pct": 0.58,
-    "ma20": 24138.19,
-    "ma50": 23922.25,
-    "ma200": 24777.09,
-    "rsi14": 65.44
+    "close": 24596.55,
+    "change_5d_pct": 2.5,
+    "change_20d_pct": 0.68,
+    "ma20": 24139.37,
+    "ma50": 23922.71,
+    "ma200": 24777.21,
+    "rsi14": 65.91
   },
   "cpr": {
-    "pivot": 24560.23,
-    "bc": 24553.8,
-    "tc": 24566.67,
-    "r1": 24605.32,
-    "r2": 24637.53,
-    "s1": 24528.02,
-    "s2": 24482.93,
-    "width_pct": 0.052
+    "pivot": 24571.15,
+    "bc": 24558.45,
+    "tc": 24583.85,
+    "r1": 24627.15,
+    "r2": 24657.75,
+    "s1": 24540.55,
+    "s2": 24484.55,
+    "width_pct": 0.103
   },
   "gift_nifty": {
     "level": null,
@@ -60,26 +60,26 @@
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 63727.69,
-      "change_pct": -0.99
+      "level": 63593.77,
+      "change_pct": -1.19
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 25895.44,
-      "change_pct": 0.04
+      "level": 25863.53,
+      "change_pct": -0.08
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3809.65,
-      "change_pct": -0.59
+      "level": 3802.25,
+      "change_pct": -0.78
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 95.15,
-      "change_pct": -0.56
+      "level": 95.17,
+      "change_pct": -0.54
     },
     {
       "name": "Brent Crude",
@@ -90,15 +90,15 @@
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4123.1,
-      "change_pct": 1.83
+      "level": 4114.7,
+      "change_pct": 1.62
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 2.41%, while last 20-session return is 0.58%.",
-    "CPR width is 0.052%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24566.67 and R1 24605.32; weakness increases below BC 24553.8 and S1 24528.02."
+    "Last 5-session return is 2.5%, while last 20-session return is 0.68%.",
+    "CPR width is 0.103%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24583.85 and R1 24627.15; weakness increases below BC 24558.45 and S1 24540.55."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24566.67, buyers have better control and the first upside zones are 24605.32 and 24637.53. Below CPR bottom 24553.8, sellers gain control and downside zones are 24528.02 and 24482.93. A sustained move around pivot 24560.23 can mean a range day."
+      "body": "Above CPR top 24583.85, buyers have better control and the first upside zones are 24627.15 and 24657.75. Below CPR bottom 24558.45, sellers gain control and downside zones are 24540.55 and 24484.55. A sustained move around pivot 24571.15 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -239,9 +239,9 @@
     {
       "date": "2026-08-03",
       "open": 24572.7,
-      "high": 24592.45,
+      "high": 24601.75,
       "low": 24515.15,
-      "close": 24573.1
+      "close": 24596.55
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
