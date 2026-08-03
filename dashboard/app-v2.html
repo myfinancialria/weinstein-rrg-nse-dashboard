@@ -2302,6 +2302,43 @@
         document.addEventListener("click", (e) => { if (!box.contains(e.target)) close(); });
       })();
 
+      // Open ANY NSE stock in the drawer: enriched names use the local data;
+      // everything else is mapped from the Stock 360 API into the drawer's shape.
+      function mapApiToStock(d) {
+        const R = {}; (d.ratios || []).forEach((r) => {
+          const v = parseFloat(String(r.company_value).replace(/[^0-9.\-]/g, ""));
+          R[(r.name || "").toUpperCase()] = isNaN(v) ? null : v; });
+        const it = d.interpretation || {}, p = d.profile || {};
+        return {
+          name: d.name, symbol: d.symbol, display_symbol: d.symbol, parent: (p.sector || ""),
+          common_product_business: p.company_profile || "", company_description: p.company_profile || "",
+          pros: it.positives || [], red_flags: (it.warnings || []).map((w) => w.title || w.detail).filter(Boolean),
+          swot: it.swot || null, pe_ratio: R["P/E"], pb_ratio: R["P/B"], roce: R["ROCE"], roe_pct: R["ROE"],
+          _api: true,
+        };
+      }
+      function openBySymbol(sym) {
+        const up = String(sym).toUpperCase();
+        const st = (state.data.stocks || []).find((s) =>
+          (s.display_symbol || "").toUpperCase() === up ||
+          (s.symbol || "").toUpperCase() === up || (s.symbol || "").toUpperCase() === up + ".NS");
+        if (st) { openStockDrawer(st); return; }
+        const base = (window.API_BASE || "").replace(/\/$/, "");
+        fetch(base + "/api/stock/" + encodeURIComponent(sym)).then((r) => r.json()).then((d) => {
+          if (!d || d.detail) { location.replace("stock.html?symbol=" + encodeURIComponent(sym)); return; }
+          const syn = mapApiToStock(d);
+          if (d.interpretation && d.interpretation.overview) {
+            AI_WRITEUPS.stocks = AI_WRITEUPS.stocks || {};
+            AI_WRITEUPS.stocks[syn.display_symbol] = d.interpretation.overview;
+          }
+          openStockDrawer(syn);
+          setTimeout(() => ["segmentChart", "upstoxSections", "stockChart"].forEach((id) => {
+            const e = document.getElementById(id);
+            if (e) e.innerHTML = `<div class="seg-note" style="padding:10px">For full charts, Upstox financials &amp; options, open the <a href="stock.html?symbol=${encodeURIComponent(sym)}">Stock 360 page ↗</a>.</div>`;
+          }), 400);
+        }).catch(() => location.replace("stock.html?symbol=" + encodeURIComponent(sym)));
+      }
+
       fetch("./dashboard_data.json")
         .then((response) => response.json())
         .then((data) => {
@@ -2314,15 +2351,7 @@
           // Deep-link: ?symbol=XYZ opens that stock's drawer; unknown symbols fall
           // back to the full Stock 360 page.
           const sp = new URLSearchParams(location.search).get("symbol");
-          if (sp) {
-            const up = sp.toUpperCase();
-            const st = (state.data.stocks || []).find((s) =>
-              (s.display_symbol || "").toUpperCase() === up ||
-              (s.symbol || "").toUpperCase() === up ||
-              (s.symbol || "").toUpperCase() === up + ".NS");
-            if (st) openStockDrawer(st);
-            else location.replace("stock.html?symbol=" + encodeURIComponent(sp));
-          }
+          if (sp) openBySymbol(sp);
         })
         .catch(() => {});
       fetch("./market_blog.json")

@@ -55,11 +55,12 @@ const num=n=>(n==null||isNaN(n))?"—":Number(n).toLocaleString("en-IN",{maximum
 const pct=n=>(n==null||isNaN(n))?"—":(n>=0?"+":"")+Number(n).toFixed(2)+"%";
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 
-let ALL=[], TAB="best", Q="", sortKey=null, sortDir=-1;
+let ALL=[], TAB="best", Q=(new URLSearchParams(location.search).get("q")||""), sortKey=null, sortDir=-1;
 const TABS=[["best","Best stocks"],["industries","Industries"],["fundamental","Fundamental picks"],["high52","52-week-high crossing"]];
 
 fetch(API+"/api/universe/screen").then(r=>r.json()).then(d=>{
   ALL=(d&&d.stocks)||[];
+  const qi=document.getElementById("q"); if(qi&&Q) qi.value=Q;
   document.getElementById("foot").textContent = ALL.length
     ? `${ALL.length.toLocaleString("en-IN")} NSE stocks · updated ${(d.generated_at||"").replace("T"," ").slice(0,16)}. Educational use only — not investment advice.`
     : "";

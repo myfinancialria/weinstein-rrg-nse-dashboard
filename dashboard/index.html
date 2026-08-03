@@ -111,6 +111,20 @@ function seasonalityHTML(SEA){
     <div class="mut" style="font-size:.75rem;margin-top:8px">Historical averages, not a forecast — past patterns often don't repeat.</div>
   </div>`;
 }
+function adBreadthHTML(P){
+  const ad=(P&&P.adv_decline)||[]; if(ad.length<5) return "";
+  const net=ad.map(x=>x[1]-x[2]); const mx=Math.max(1,...net.map(Math.abs));
+  const W=760,H=140,bw=W/ad.length; let bars="";
+  ad.forEach((x,i)=>{ const n=x[1]-x[2], h=Math.abs(n)/mx*(H/2-6), y0=H/2;
+    bars+=`<rect x="${(i*bw).toFixed(1)}" y="${(n>=0?y0-h:y0).toFixed(1)}" width="${Math.max(0.5,bw*0.85).toFixed(2)}" height="${Math.max(0.5,h).toFixed(1)}" fill="${n>=0?'var(--up)':'var(--down)'}"><title>${x[0]}: ${x[1]} up / ${x[2]} down (net ${n>=0?'+':''}${n})</title></rect>`;
+  });
+  const svg=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto" preserveAspectRatio="none"><line x1="0" x2="${W}" y1="${H/2}" y2="${H/2}" stroke="var(--line)"/>${bars}</svg>`;
+  return `<div class="card" style="margin-top:16px">
+    <div class="sect-title">Market breadth · last year — advances minus declines (daily)</div>
+    ${svg}
+    <div class="mut" style="font-size:.75rem;margin-top:6px">Green bar = more stocks rose than fell that day; red = more fell. Long green stretches = broad strength; red clusters = broad weakness under the index.</div>
+  </div>`;
+}
 function render(U,P,BLOG,DD){
   const wrap=document.getElementById("wrap");
   if(!U||!U.stocks||!U.stocks.length){ wrap.innerHTML=`<div class="loading">The market screener hasn't run yet on the server. Once <code>stock360 screen</code> completes, this fills in.</div>`; return; }
@@ -145,7 +159,7 @@ function render(U,P,BLOG,DD){
   // rrg positions (map rs_ratio ~96..104 and rs_momentum ~96..104 to 0..100%)
   const rrgPts = inds.map(i=>{
     const x=Math.max(2,Math.min(98,(i.rr-96)/8*100)), y=Math.max(2,Math.min(98,(i.rm-96)/8*100));
-    return `<div class="pt" style="left:${x}%;top:${(100-y)}%;background:${RRGC[q(i.rr,i.rm)]}" title="${esc(i.name)}"><span>${esc(i.name)}</span></div>`;
+    return `<a class="pt" href="screener.html?q=${encodeURIComponent(i.name)}" style="left:${x}%;top:${(100-y)}%;background:${RRGC[q(i.rr,i.rm)]}" title="${esc(i.name)} — ${i.s2} in Stage 2 · click for its stocks"><span>${esc(i.name)}</span></a>`;
   }).join("");
   const legc={};["leading","improving","weakening","lagging"].forEach(k=>legc[k]=inds.filter(i=>q(i.rr,i.rm)===k).length);
 
@@ -241,6 +255,7 @@ function render(U,P,BLOG,DD){
       </div>
     </div>
 
+    ${adBreadthHTML(P)}
     <div id="oiBox"></div>
     ${seasonalityHTML(P&&P.seasonality)}
 
