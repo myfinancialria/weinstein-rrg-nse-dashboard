@@ -355,9 +355,10 @@ function stmtTable(rows, cats, label){
 function balTable(bal){
   const h=(bal.history||[]).slice(0,5);
   if(!h.length) return '<div class="muted">—</div>';
+  const keys=Object.keys(h[0]).filter(k=>k!=="period" && h.some(x=>typeof x[k]==="number"));
   const head=`<tr><th>Item</th>${h.map(x=>`<th>${esc(x.period)}</th>`).join("")}</tr>`;
-  const row=(lbl,k)=>`<tr><td>${lbl}</td>${h.map(x=>`<td>${fmtCr(x[k])}</td>`).join("")}</tr>`;
-  return `<table><thead>${head}</thead><tbody>${row("Total assets","total_asset")}${row("Total liabilities","total_liability")}</tbody></table>`;
+  const rows=keys.map(k=>`<tr><td>${esc(k.replace(/_/g," "))}</td>${h.map(x=>`<td>${fmtCr(x[k])}</td>`).join("")}</tr>`).join("");
+  return `<table><thead>${head}</thead><tbody>${rows}</tbody></table>`;
 }
 function holdings(list){
   if(!list||!list.length) return `<div class="muted">No shareholding data.</div>`;
@@ -734,7 +735,9 @@ async function renderStock(sym){
     <section><h2>Detailed financials · ₹ ${esc(inc.units_in||"crore")}</h2>
       <div class="muted" style="font-size:.74rem;margin:-4px 0 8px">Exact yearly figures behind the charts above.</div>
       ${stmtTable(inc.income_statement, null, "Income statement")||'<div class="muted">—</div>'}
+      ${(d.income_statement_quarterly&&d.income_statement_quarterly.income_statement)?`<div style="margin-top:12px"><b class="muted" style="font-size:.72rem;text-transform:uppercase;letter-spacing:.04em">Quarterly results</b>${stmtTable(d.income_statement_quarterly.income_statement, null, "Quarter")}</div>`:""}
       <div style="height:14px"></div>
+      <b class="muted" style="font-size:.72rem;text-transform:uppercase;letter-spacing:.04em">Balance sheet</b>
       ${balTable(bal)}</section>
 
     <div class="cols">
