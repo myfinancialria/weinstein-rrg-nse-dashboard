@@ -71,13 +71,30 @@ const pct=n=>(n==null||isNaN(n))?"—":(n>=0?"+":"")+Number(n).toFixed(2)+"%";
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 const RRGC={leading:"#16a34a",improving:"#d97706",weakening:"#94a3b8",lagging:"#dc2626"};
 
+// Critical path: only the small, fast payloads block first paint.
+// dashboard_data.json is ~4 MB (backtest tile only) — loaded lazily AFTER render.
 Promise.all([
   fetch(API+"/api/universe/screen").then(r=>r.json()).catch(()=>null),
   fetch(API+"/api/market/pulse").then(r=>r.json()).catch(()=>null),
   fetch("market_blog.json?_="+Date.now()).then(r=>r.json()).catch(()=>null),
-  fetch("dashboard_data.json?_="+Date.now()).then(r=>r.json()).catch(()=>null),
-]).then(([U,P,BLOG,DD])=>render(U,P,BLOG,DD))
+]).then(([U,P,BLOG])=>{ render(U,P,BLOG,null); loadBacktest(); })
   .catch(e=>{document.getElementById("wrap").innerHTML=`<div class="loading">Couldn't load. ${esc(e.message)}</div>`;});
+
+function btRows(bt){
+  if(!bt) return '<div class="mut">Backtest unavailable.</div>';
+  return `<div class="row"><span class="k">Win rate</span><span class="v">${bt.win_rate_pct}%</span></div>
+    <div class="row"><span class="k">Total P&amp;L</span><span class="v ${(bt.total_pnl||0)>=0?'up':'down'}">₹${num(Math.round(bt.total_pnl))}</span></div>
+    <div class="row"><span class="k">Max drawdown</span><span class="v down">₹${num(Math.round(bt.max_drawdown))}</span></div>
+    <div class="row"><span class="k">Trades</span><span class="v">${bt.trade_count}</span></div>
+    ${bt.avg_r_multiple!=null?`<div class="row"><span class="k">Avg reward : risk</span><span class="v">${Number(bt.avg_r_multiple).toFixed(2)}×</span></div>`:""}`;
+}
+function loadBacktest(){
+  const box=document.getElementById("btBox"); if(!box) return;
+  fetch("dashboard_data.json?_="+Date.now()).then(r=>r.json()).then(DD=>{
+    const bt=DD&&DD.backtest&&DD.backtest.daily&&DD.backtest.daily.summary;
+    box.innerHTML=btRows(bt||null);
+  }).catch(()=>{box.innerHTML='<div class="mut">Backtest unavailable.</div>';});
+}
 
 function sparkline(pairs){
   if(!pairs||pairs.length<2) return "";
@@ -296,11 +313,7 @@ function render(U,P,BLOG,DD){
       </div>
       <div class="card">
         <div class="sect-title">Backtest · Stage-2 strategy</div>
-        ${bt?`<div class="row"><span class="k">Win rate</span><span class="v">${bt.win_rate_pct}%</span></div>
-        <div class="row"><span class="k">Total P&amp;L</span><span class="v ${(bt.total_pnl||0)>=0?'up':'down'}">₹${num(Math.round(bt.total_pnl))}</span></div>
-        <div class="row"><span class="k">Max drawdown</span><span class="v down">₹${num(Math.round(bt.max_drawdown))}</span></div>
-        <div class="row"><span class="k">Trades</span><span class="v">${bt.trade_count}</span></div>
-        ${bt.avg_r_multiple!=null?`<div class="row"><span class="k">Avg reward : risk</span><span class="v">${Number(bt.avg_r_multiple).toFixed(2)}×</span></div>`:""}`:'<div class="mut">Backtest data loads from the daily build.</div>'}
+        <div id="btBox">${bt?btRows(bt):'<div class="mut">Loading backtest…</div>'}</div>
       </div>
       <div class="card">
         <div class="sect-title">Morning brief</div>
