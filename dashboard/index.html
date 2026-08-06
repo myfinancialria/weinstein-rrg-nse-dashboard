@@ -50,6 +50,8 @@
   .rrg .ax{position:absolute;background:var(--line)}
   .rrg .pt{position:absolute;width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);border:2px solid #fff}
   .rrg .pt span{position:absolute;left:14px;top:-4px;font-size:.66rem;white-space:nowrap;color:var(--ink);font-weight:600}
+  .rbtn{padding:4px 10px;border:1px solid var(--line);background:var(--card);border-radius:999px;font-size:.75rem;font-weight:600;color:var(--faint);cursor:pointer}
+  .rbtn.on{background:var(--ink);color:#fff;border-color:var(--ink)}
   .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.74rem;color:var(--muted);margin-top:10px}
   .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:4px}
   .sect2{display:flex;gap:16px;flex-wrap:wrap}
@@ -177,6 +179,104 @@ function setupBreadth(){
   });
   box.addEventListener("mouseleave",()=>{tip.style.display="none";cross.style.display="none";});
 }
+
+// ===== RRG interactive: timeframe toggle + industry tick/untick =====
+let RRG={all:[],tf:"d",sel:new Set(),dates:{d:[],w:[]}};
+function rrgInit(U,inds,qf){
+  const raw=(U.rrg_sectors&&U.rrg_sectors.length)?U.rrg_sectors:null;
+  const mk=o=>o?{trail:o.trail||null,rr:o.rr,rm:o.rm,quad:o.quad,from_quad:o.from_quad,to_quad:o.to_quad}:null;
+  let list;
+  if(raw){
+    list=raw.map(s=>{
+      let d=mk(s.d),w=mk(s.w);
+      if(!d&&!w&&s.rr!=null){ const qd=s.quad||qf(s.rr,s.rm);
+        d={trail:s.trail||null,rr:s.rr,rm:s.rm,quad:qd,from_quad:s.from_quad||qd,to_quad:s.to_quad||qd}; }
+      return {name:s.name,macro:s.macro||"Other",stocks:s.stocks||0,s2:s.s2||0,d,w};
+    });
+  } else {
+    list=inds.filter(i=>i.rr!=null).map(i=>({name:i.name,macro:i.name,stocks:i.n,s2:i.s2,
+      d:{trail:null,rr:i.rr,rm:i.rm,quad:qf(i.rr,i.rm),from_quad:qf(i.rr,i.rm),to_quad:qf(i.rr,i.rm)},w:null}));
+  }
+  RRG.all=list;
+  RRG.dates=(U.rrg_dates&&!Array.isArray(U.rrg_dates))?U.rrg_dates:{d:(Array.isArray(U.rrg_dates)?U.rrg_dates:[]),w:[]};
+  RRG.tf=list.some(s=>s.d)?"d":"w";
+  RRG.sel=rrgDefaultSel();
+}
+function rrgVisibleAll(){ return RRG.all.filter(s=>s[RRG.tf]); }
+function rrgDefaultSel(){
+  const tf=RRG.tf, arr=RRG.all.filter(s=>s[tf]);
+  const movers=arr.filter(s=>s[tf].from_quad!==s[tf].to_quad);
+  const leading=arr.filter(s=>s[tf].quad==="leading");
+  let names=[...new Set([...movers,...leading].map(s=>s.name))];
+  if(names.length>16) names=[...movers].sort((a,b)=>Math.abs(b[tf].rm-100)-Math.abs(a[tf].rm-100)).slice(0,16).map(s=>s.name);
+  if(!names.length) names=[...arr].sort((a,b)=>b[tf].rr-a[tf].rr).slice(0,12).map(s=>s.name);
+  return new Set(names);
+}
+function renderRRG(){
+  const plot=document.getElementById("rrgPlot"); if(!plot) return;
+  const tf=RRG.tf, cxp=v=>Math.max(2,Math.min(98,(v-96)/8*100));
+  const chosen=RRG.all.filter(s=>s[tf]&&RRG.sel.has(s.name));
+  const tails=chosen.map(s=>{const t=s[tf].trail; if(!t) return "";
+      const pts=t.filter(Boolean).map(p=>`${cxp(p[0]).toFixed(1)},${(100-cxp(p[1])).toFixed(1)}`);
+      return pts.length>1?`<polyline points="${pts.join(' ')}" fill="none" stroke="${RRGC[s[tf].quad]}" stroke-width="0.8" opacity="0.45"/>`:"";
+    }).join("");
+  const small=chosen.length>22;
+  const dots=chosen.map(s=>{const o=s[tf],x=cxp(o.rr),y=100-cxp(o.rm);
+      const mv=o.from_quad!==o.to_quad?` · ${o.from_quad} → ${o.to_quad}`:"";
+      const dz=small?"width:8px;height:8px;":"", lab=(!small||o.quad==="leading");
+      return `<a class="pt" href="screener.html?q=${encodeURIComponent(s.name)}" style="left:${x}%;top:${y}%;background:${RRGC[o.quad]};${dz}" title="${esc(s.name)} — ${s.stocks} stocks, ${s.s2} in Stage 2${mv}">${lab?`<span>${esc(s.name)}</span>`:""}</a>`;
+    }).join("");
+  plot.innerHTML=`<svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${tails}</svg>${dots}`;
+  const legc={};["leading","improving","weakening","lagging"].forEach(k=>legc[k]=chosen.filter(s=>s[tf].quad===k).length);
+  const lg=document.getElementById("rrgLegend");
+  if(lg) lg.innerHTML=["leading","improving","weakening","lagging"].map(k=>`<span><i style="background:${RRGC[k]}"></i>${k[0].toUpperCase()+k.slice(1)} ${legc[k]}</span>`).join("");
+  const rotN={leading:3,improving:2,weakening:1,lagging:0};
+  const rot=chosen.filter(s=>s[tf].from_quad!==s[tf].to_quad).sort((a,b)=>((rotN[b[tf].to_quad]-rotN[b[tf].from_quad])-(rotN[a[tf].to_quad]-rotN[a[tf].from_quad])));
+  const win=tf==="w"?`${RRG.dates.w.length||30} weeks`:`${RRG.dates.d.length||20} sessions`;
+  const rc=document.getElementById("rrgRotations");
+  if(rc) rc.innerHTML=rot.length?`<div style="margin-top:10px;font-size:.78rem;line-height:1.9"><b>Rotations over the last ${win}:</b> ${rot.slice(0,14).map(s=>`<span style="display:inline-block;margin:0 5px 4px 0;padding:1px 8px;border-radius:999px;background:var(--soft)"><b>${esc(s.name)}</b> <span class="mut">${s[tf].from_quad} →</span> <span style="color:${RRGC[s[tf].to_quad]};font-weight:600">${s[tf].to_quad}</span></span>`).join("")}</div>`:"";
+  const ds=(tf==="w"?RRG.dates.w:RRG.dates.d)||[];
+  const dd=document.getElementById("rrgDates");
+  if(dd) dd.innerHTML=ds.length?`<b>${tf==="w"?"Week-ending":"Trading"} dates (${ds.length}):</b> ${ds.map(d=>d.slice(5)).join(" · ")}`:"";
+  const bar=document.getElementById("rrgBar");
+  if(bar){ const hasW=RRG.all.some(s=>s.w),hasD=RRG.all.some(s=>s.d);
+    bar.innerHTML=`${hasD?`<button class="rbtn ${tf==='d'?'on':''}" data-tf="d">Daily · 20 sessions</button>`:""}${hasW?`<button class="rbtn ${tf==='w'?'on':''}" data-tf="w">Weekly · 30 weeks</button>`:""}<span class="mut" style="font-size:.72rem">${chosen.length} of ${rrgVisibleAll().length} industries shown</span>`;
+    bar.querySelectorAll("[data-tf]").forEach(b=>b.addEventListener("click",()=>{ if(RRG.tf!==b.dataset.tf){RRG.tf=b.dataset.tf; RRG.sel=rrgDefaultSel(); renderRRGPicker(); renderRRG();} }));
+  }
+}
+function renderRRGPicker(){
+  const body=document.getElementById("rrgPickBody"); if(!body) return;
+  const tf=RRG.tf, arr=rrgVisibleAll(), groups={};
+  arr.forEach(s=>{(groups[s.macro]=groups[s.macro]||[]).push(s);});
+  const quick=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      <button class="rbtn" data-q="all">All</button><button class="rbtn" data-q="none">None</button>
+      <button class="rbtn" data-q="movers">Movers</button><button class="rbtn" data-q="leading">Leading</button>
+      <input id="rrgSearch" placeholder="filter…" style="flex:1;min-width:120px;padding:4px 8px;border:1px solid var(--line);border-radius:8px;font-size:.78rem"></div>`;
+  const gh=Object.keys(groups).sort().map(m=>{
+      const items=groups[m].sort((a,b)=>b[tf].rr-a[tf].rr);
+      const rows=items.map(s=>`<label class="rrow" data-name="${esc(s.name)}" style="display:flex;align-items:center;gap:6px;font-size:.77rem;padding:2px 0;cursor:pointer">
+          <input type="checkbox" ${RRG.sel.has(s.name)?"checked":""} data-name="${esc(s.name)}"><span style="width:9px;height:9px;border-radius:50%;background:${RRGC[s[tf].quad]};display:inline-block;flex:none"></span>
+          <span style="flex:1">${esc(s.name)}</span><span class="mut" style="font-size:.68rem">${s.stocks}</span></label>`).join("");
+      return `<div class="rgroup" style="margin-bottom:6px"><div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:var(--faint);font-weight:700;margin:4px 0 2px">${esc(m)}</div>${rows}</div>`;
+    }).join("");
+  body.innerHTML=quick+`<div style="max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:8px;padding:8px">${gh}</div>`;
+  body.querySelectorAll('input[type=checkbox][data-name]').forEach(cb=>cb.addEventListener("change",()=>{
+      if(cb.checked) RRG.sel.add(cb.dataset.name); else RRG.sel.delete(cb.dataset.name); renderRRG();
+    }));
+  body.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click",()=>{
+      const a=rrgVisibleAll();
+      if(b.dataset.q==="all") RRG.sel=new Set(a.map(s=>s.name));
+      else if(b.dataset.q==="none") RRG.sel=new Set();
+      else if(b.dataset.q==="movers") RRG.sel=new Set(a.filter(s=>s[tf].from_quad!==s[tf].to_quad).map(s=>s.name));
+      else if(b.dataset.q==="leading") RRG.sel=new Set(a.filter(s=>s[tf].quad==="leading").map(s=>s.name));
+      renderRRGPicker(); renderRRG();
+    }));
+  const se=document.getElementById("rrgSearch");
+  if(se) se.addEventListener("input",()=>{const qq=se.value.toLowerCase();
+      body.querySelectorAll(".rrow").forEach(r=>{r.style.display=r.dataset.name.toLowerCase().includes(qq)?"":"none";});
+      body.querySelectorAll(".rgroup").forEach(g=>{g.style.display=[...g.querySelectorAll(".rrow")].some(r=>r.style.display!=="none")?"":"none";});
+    });
+}
 function render(U,P,BLOG,DD){
   const wrap=document.getElementById("wrap");
   if(!U||!U.stocks||!U.stocks.length){ wrap.innerHTML=`<div class="loading">The market screener hasn't run yet on the server. Once <code>stock360 screen</code> completes, this fills in.</div>`; return; }
@@ -208,30 +308,8 @@ function render(U,P,BLOG,DD){
   const gift = BLOG&&BLOG.gift_nifty ? BLOG.gift_nifty : null;
   const bt = DD&&DD.backtest&&DD.backtest.daily&&DD.backtest.daily.summary ? DD.backtest.daily.summary : null;
 
-  // --- RRG: sub-sector rotation over the last ~20 trading days (from the backend trail) ---
-  const RSEC=(U.rrg_sectors&&U.rrg_sectors.length)?U.rrg_sectors
-    :inds.map(i=>({name:i.name,rr:i.rr,rm:i.rm,s2:i.s2,stocks:i.n,quad:q(i.rr,i.rm),from_quad:q(i.rr,i.rm),to_quad:q(i.rr,i.rm),trail:null}));
-  const RD=U.rrg_dates||[];
-  const cxp=v=>Math.max(2,Math.min(98,(v-96)/8*100));     // rr/rm ~96..104 -> 2..98%
-  const rrgTails=RSEC.map(s=>{ if(!s.trail) return "";
-      const pts=s.trail.filter(Boolean).map(p=>`${cxp(p[0]).toFixed(1)},${(100-cxp(p[1])).toFixed(1)}`);
-      return pts.length>1?`<polyline points="${pts.join(' ')}" fill="none" stroke="${RRGC[s.quad]}" stroke-width="0.7" opacity="0.38"/>`:"";
-    }).join("");
-  const rrgSvg=`<svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${rrgTails}</svg>`;
-  const rrgLabel=s=>s.stocks>=6||s.quad==="leading";
-  const smallDot=RSEC.length>28;
-  const rrgPts=RSEC.map(s=>{const x=cxp(s.rr),y=100-cxp(s.rm);
-      const mv=s.from_quad!==s.to_quad?` · ${s.from_quad} → ${s.to_quad}`:"";
-      const dz=smallDot?"width:8px;height:8px;":"";
-      return `<a class="pt" href="screener.html?q=${encodeURIComponent(s.name)}" style="left:${x}%;top:${y}%;background:${RRGC[s.quad]};${dz}" title="${esc(s.name)} — ${s.stocks} stocks, ${s.s2} in Stage 2${mv}">${rrgLabel(s)?`<span>${esc(s.name)}</span>`:""}</a>`;
-    }).join("");
-  const legc={};["leading","improving","weakening","lagging"].forEach(k=>legc[k]=RSEC.filter(s=>s.quad===k).length);
-  const rotN={leading:3,improving:2,weakening:1,lagging:0};
-  const rot=RSEC.filter(s=>s.from_quad!==s.to_quad)
-    .sort((a,b)=>((rotN[b.to_quad]-rotN[b.from_quad])-(rotN[a.to_quad]-rotN[a.from_quad])));
-  const rrgRotations=rot.length?`<div style="margin-top:10px;font-size:.78rem;line-height:1.9">
-      <b>Rotations over the last ${RD.length||20} sessions:</b> ${rot.slice(0,12).map(s=>`<span style="display:inline-block;margin:0 5px 4px 0;padding:1px 8px;border-radius:999px;background:var(--soft)"><b>${esc(s.name)}</b> <span class="mut">${s.from_quad} →</span> <span style="color:${RRGC[s.to_quad]};font-weight:600">${s.to_quad}</span></span>`).join("")}</div>`:"";
-  const rrgDatesHTML=RD.length?`<div class="mut" style="font-size:.7rem;margin:0 0 8px;line-height:1.65"><b>Trail — last ${RD.length} trading days:</b> ${RD.map(d=>d.slice(5)).join(" · ")}</div>`:"";
+  // --- RRG: interactive sub-sector rotation — state set here, drawn by renderRRG() after paint ---
+  rrgInit(U, inds, q);
 
   wrap.innerHTML = `
     <div class="status"><span class="dot"></span> ${esc(mood)} · ${esc((U.generated_at||"").slice(0,10))} · post-close</div>
@@ -268,8 +346,13 @@ function render(U,P,BLOG,DD){
     <div class="grid g2" style="margin-top:16px">
       <div class="card">
         <div class="sect-title">RRG · sub-sectors vs the market <a href="sector-leadership.html" style="float:right;text-transform:none;letter-spacing:0;font-size:.72rem;font-weight:600">Full sector report →</a></div>
-        <div class="mut" style="font-size:.75rem;margin-bottom:6px">Each dot is a sub-sector; the faint tail is its path over the last ${RD.length||20} trading days — watch for a clockwise drift Improving → Leading. Click a dot for its stocks.</div>
-        ${rrgDatesHTML}
+        <div class="mut" style="font-size:.75rem;margin-bottom:8px">Each dot is a sub-sector; the faint tail is its path over the chosen window — watch for a clockwise drift Improving → Leading. Pick which industries to plot below; click a dot for its stocks.</div>
+        <div id="rrgBar" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px"></div>
+        <details id="rrgPick" style="margin-bottom:10px">
+          <summary style="cursor:pointer;font-size:.8rem;font-weight:600;color:var(--accent)">Choose industries to plot ▾</summary>
+          <div id="rrgPickBody" style="margin-top:8px"></div>
+        </details>
+        <div id="rrgDates" class="mut" style="font-size:.7rem;margin:0 0 8px;line-height:1.6"></div>
         <div class="rrg">
           <div class="ax" style="left:50%;top:0;bottom:0;width:1px"></div>
           <div class="ax" style="top:50%;left:0;right:0;height:1px"></div>
@@ -277,16 +360,10 @@ function render(U,P,BLOG,DD){
           <div class="q" style="left:0;top:0">Improving</div>
           <div class="q" style="left:0;bottom:0">Lagging</div>
           <div class="q" style="right:0;bottom:0">Weakening</div>
-          ${rrgSvg}
-          ${rrgPts}
+          <div id="rrgPlot" style="position:absolute;inset:0"></div>
         </div>
-        <div class="legend">
-          <span><i style="background:${RRGC.leading}"></i>Leading ${legc.leading}</span>
-          <span><i style="background:${RRGC.improving}"></i>Improving ${legc.improving}</span>
-          <span><i style="background:${RRGC.weakening}"></i>Weakening ${legc.weakening}</span>
-          <span><i style="background:${RRGC.lagging}"></i>Lagging ${legc.lagging}</span>
-        </div>
-        ${rrgRotations}
+        <div class="legend" id="rrgLegend"></div>
+        <div id="rrgRotations"></div>
       </div>
       <div class="card">
         <div class="sect-title">Top of the screen</div>
@@ -332,6 +409,8 @@ function render(U,P,BLOG,DD){
     <div class="foot">Screener over ${num(S.length)} NSE stocks · updated ${esc((U.generated_at||"").replace("T"," ").slice(0,16))}. Educational use only — not investment advice.</div>`;
   loadOI();
   setupBreadth();
+  renderRRGPicker();
+  renderRRG();
 }
 async function loadOI(){
   const box=document.getElementById("oiBox"); if(!box) return;
