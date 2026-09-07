@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-08-05 22:37:08 IST",
-  "title": "Pre-market Technical Blog - 05 Aug 2026",
-  "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
+  "generated_at": "2026-09-08 00:55:54 IST",
+  "title": "Pre-market Technical Blog - 08 Sep 2026",
+  "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 55,
-    "down": 36,
+    "up": 27,
+    "down": 64,
     "sideways": 9
   },
   "nifty": {
-    "close": 24624.65,
-    "change_5d_pct": 1.54,
-    "change_20d_pct": 3.11,
-    "ma20": 24196.2,
-    "ma50": 23956.04,
-    "ma200": 24771.96,
-    "rsi14": 63.62
+    "close": 23897.7,
+    "change_5d_pct": -1.15,
+    "change_20d_pct": -2.74,
+    "ma20": 24205.38,
+    "ma50": 24204.27,
+    "ma200": 24611.87,
+    "rsi14": 33.57
   },
   "cpr": {
-    "pivot": 24600.07,
-    "bc": 24587.77,
-    "tc": 24612.36,
-    "r1": 24702.18,
-    "r2": 24779.72,
-    "s1": 24522.53,
-    "s2": 24420.42,
-    "width_pct": 0.1
+    "pivot": 23933.1,
+    "bc": 23915.4,
+    "tc": 23950.8,
+    "r1": 23970.35,
+    "r2": 24043.0,
+    "s1": 23860.45,
+    "s2": 23823.2,
+    "width_pct": 0.148
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7734.89,
-      "change_pct": -0.02
+      "level": 7718.6,
+      "change_pct": -0.38
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 54526.11,
-      "change_pct": 0.81
+      "level": 53414.25,
+      "change_pct": -0.51
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 26462.65,
-      "change_pct": -0.46
+      "level": 26506.99,
+      "change_pct": -0.29
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10888.3,
-      "change_pct": 0.08
+      "level": 10822.13,
+      "change_pct": -0.08
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 63957.53,
-      "change_pct": 0.32
+      "level": 65020.94,
+      "change_pct": 1.26
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 25852.92,
-      "change_pct": -0.6
+      "level": 25650.87,
+      "change_pct": 1.74
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3822.28,
-      "change_pct": 0.33
+      "level": 3930.12,
+      "change_pct": -0.3
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 95.11,
-      "change_pct": -0.24
+      "level": 94.47,
+      "change_pct": -0.02
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 79.19,
-      "change_pct": -0.21
+      "level": 96.28,
+      "change_pct": 0.0
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4300.6,
-      "change_pct": 5.01
+      "level": 4476.6,
+      "change_pct": 1.06
     }
   ],
   "pattern_notes": [
-    "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 1.54%, while last 20-session return is 3.11%.",
-    "CPR width is 0.1%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 24612.36 and R1 24702.18; weakness increases below BC 24587.77 and S1 24522.53."
+    "Nifty is below 20 DMA, below 50 DMA, and below 200 DMA.",
+    "Last 5-session return is -1.15%, while last 20-session return is -2.74%.",
+    "CPR width is 0.148%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 23950.8 and R1 23970.35; weakness increases below BC 23915.4 and S1 23860.45."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 24612.36, buyers have better control and the first upside zones are 24702.18 and 24779.72. Below CPR bottom 24587.77, sellers gain control and downside zones are 24522.53 and 24420.42. A sustained move around pivot 24600.07 can mean a range day."
+      "body": "Above CPR top 23950.8, buyers have better control and the first upside zones are 23970.35 and 24043.0. Below CPR bottom 23915.4, sellers gain control and downside zones are 23860.45 and 23823.2. A sustained move around pivot 23933.1 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -120,138 +120,138 @@
   ],
   "leading_industries": [
     {
-      "name": "2/3 Wheelers",
-      "rs_ratio": 103.04,
-      "rs_momentum": 101.48
-    },
-    {
-      "name": "Abrasives & Bearings",
-      "rs_ratio": 100.34,
-      "rs_momentum": 101.55
-    },
-    {
       "name": "Aerospace & Defense",
-      "rs_ratio": 101.73,
-      "rs_momentum": 102.47
+      "rs_ratio": 101.81,
+      "rs_momentum": 100.29
     },
     {
-      "name": "Aluminium",
-      "rs_ratio": 100.34,
-      "rs_momentum": 102.95
+      "name": "Asset Management Company",
+      "rs_ratio": 101.06,
+      "rs_momentum": 102.58
     },
     {
-      "name": "Aluminium, Copper & Zinc Products",
-      "rs_ratio": 100.63,
-      "rs_momentum": 101.86
+      "name": "General Insurance",
+      "rs_ratio": 100.67,
+      "rs_momentum": 103.32
     },
     {
-      "name": "Auto Components & Equipments",
-      "rs_ratio": 102.84,
-      "rs_momentum": 102.16
+      "name": "LPG/CNG/PNG/LNG Supplier",
+      "rs_ratio": 101.33,
+      "rs_momentum": 102.83
     },
     {
-      "name": "Breweries & Distilleries",
-      "rs_ratio": 101.19,
-      "rs_momentum": 100.02
+      "name": "Logistics Solution Provider",
+      "rs_ratio": 101.23,
+      "rs_momentum": 103.14
     },
     {
-      "name": "Lubricants",
-      "rs_ratio": 101.85,
-      "rs_momentum": 100.46
+      "name": "Oil Equipment & Services",
+      "rs_ratio": 102.23,
+      "rs_momentum": 100.6
+    },
+    {
+      "name": "Oil Exploration & Production",
+      "rs_ratio": 103.29,
+      "rs_momentum": 101.31
+    },
+    {
+      "name": "Other Agricultural Products",
+      "rs_ratio": 101.69,
+      "rs_momentum": 100.37
     }
   ],
   "fundamental_picks": [
     {
-      "name": "Hero Motocorp",
-      "symbol": "HEROMOTOCO",
-      "industry": "2/3 Wheelers",
-      "score": 93.72
+      "name": "HAL",
+      "symbol": "HAL",
+      "industry": "Aerospace & Defense",
+      "score": 89.84
     },
     {
-      "name": "Eicher Motors",
-      "symbol": "EICHERMOT",
-      "industry": "2/3 Wheelers",
-      "score": 93.27
+      "name": "BEL",
+      "symbol": "BEL",
+      "industry": "Aerospace & Defense",
+      "score": 85.91
     },
     {
-      "name": "Bajaj Auto",
-      "symbol": "BAJAJ-AUTO",
-      "industry": "2/3 Wheelers",
-      "score": 86.49
+      "name": "GRSE",
+      "symbol": "GRSE",
+      "industry": "Aerospace & Defense",
+      "score": 84.88
     },
     {
-      "name": "TVS Motor Co.",
-      "symbol": "TVSMOTOR",
-      "industry": "2/3 Wheelers",
-      "score": 53.05
+      "name": "SIGMAADV",
+      "symbol": "SIGMAADV",
+      "industry": "Aerospace & Defense",
+      "score": 72.64
     },
     {
-      "name": "Delta Auto.",
-      "symbol": "DELTIC",
-      "industry": "2/3 Wheelers",
-      "score": 51.01
+      "name": "BDL",
+      "symbol": "BDL",
+      "industry": "Aerospace & Defense",
+      "score": 70.11
     },
     {
-      "name": "SKF India Indus.",
-      "symbol": "SKFINDUS",
-      "industry": "Abrasives & Bearings",
-      "score": 82.07
+      "name": "CRAMC",
+      "symbol": "CRAMC",
+      "industry": "Asset Management Company",
+      "score": 92.71
     },
     {
-      "name": "Grindwell Norton",
-      "symbol": "GRINDWELL",
-      "industry": "Abrasives & Bearings",
-      "score": 71.45
+      "name": "HDFCAMC",
+      "symbol": "HDFCAMC",
+      "industry": "Asset Management Company",
+      "score": 89.81
     },
     {
-      "name": "SKF India",
-      "symbol": "SKFINDIA",
-      "industry": "Abrasives & Bearings",
-      "score": 68.29
+      "name": "NAM-INDIA",
+      "symbol": "NAM-INDIA",
+      "industry": "Asset Management Company",
+      "score": 89.06
     }
   ],
   "recent_nifty": [
     {
-      "date": "2026-07-29",
-      "open": 24176.65,
-      "high": 24283.55,
-      "low": 24136.75,
-      "close": 24250.2
+      "date": "2026-08-28",
+      "open": 24122.6,
+      "high": 24188.3,
+      "low": 24076.85,
+      "close": 24175.65
     },
     {
-      "date": "2026-07-30",
-      "open": 24249.55,
-      "high": 24342.95,
-      "low": 24187.1,
-      "close": 24317.15
+      "date": "2026-08-31",
+      "open": 24117.55,
+      "high": 24128.7,
+      "low": 23993.6,
+      "close": 24080.4
     },
     {
-      "date": "2026-07-31",
-      "open": 24361.45,
-      "high": 24429.4,
-      "low": 24299.7,
-      "close": 24383.6
+      "date": "2026-09-01",
+      "open": 24077.55,
+      "high": 24143.15,
+      "low": 23952.55,
+      "close": 24055.8
     },
     {
-      "date": "2026-08-03",
-      "open": 24572.7,
-      "high": 24774.3,
-      "low": 24515.15,
-      "close": 24774.3
+      "date": "2026-09-02",
+      "open": 23858.0,
+      "high": 23914.45,
+      "low": 23786.8,
+      "close": 23914.45
     },
     {
-      "date": "2026-08-04",
-      "open": 24703.9,
-      "high": 24703.9,
-      "low": 24427.95,
-      "close": 24614.9
+      "date": "2026-09-03",
+      "open": 23997.95,
+      "high": 24025.4,
+      "low": 23873.45,
+      "close": 23873.45
     },
     {
-      "date": "2026-08-05",
-      "open": 24669.2,
-      "high": 24677.6,
-      "low": 24497.95,
-      "close": 24624.65
+      "date": "2026-09-04",
+      "open": 23910.9,
+      "high": 24005.75,
+      "low": 23895.85,
+      "close": 23897.7
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
