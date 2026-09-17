@@ -4824,5 +4824,24 @@
     "pe_ratio": 8.551761,
     "pb_ratio": 0.62029856,
     "peg_ratio": null
+  },
+  "OPTIMYSTIX.NS": {
+    "company_description": "",
+    "website": "",
+    "yahoo_sector": "",
+    "yahoo_industry": "",
+    "promoter_or_insider_holding_pct": null,
+    "eps": null,
+    "gross_margin_pct": null,
+    "operating_margin_pct": null,
+    "net_margin_pct": null,
+    "roe_pct": null,
+    "debt_to_equity": null,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": null,
+    "pb_ratio": null,
+    "peg_ratio": null
   }
 }
