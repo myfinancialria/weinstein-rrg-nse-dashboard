@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-19 00:10:11 IST",
-  "title": "Pre-market Technical Blog - 19 Sep 2026",
+  "generated_at": "2026-09-22 01:40:57 IST",
+  "title": "Pre-market Technical Blog - 22 Sep 2026",
   "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
     "up": 27,
@@ -8,23 +8,23 @@
     "sideways": 9
   },
   "nifty": {
-    "close": 23270.6,
-    "change_5d_pct": -0.69,
-    "change_20d_pct": -3.35,
-    "ma20": 23833.1,
-    "ma50": 24091.33,
-    "ma200": 24508.56,
-    "rsi14": 21.42
+    "close": 23346.4,
+    "change_5d_pct": -0.56,
+    "change_20d_pct": -3.65,
+    "ma20": 23788.83,
+    "ma50": 24079.01,
+    "ma200": 24494.26,
+    "rsi14": 20.92
   },
   "cpr": {
-    "pivot": 23275.93,
-    "bc": 23273.27,
-    "tc": 23278.6,
-    "r1": 23358.22,
-    "r2": 23445.83,
-    "s1": 23188.32,
-    "s2": 23106.03,
-    "width_pct": 0.023
+    "pivot": 23340.72,
+    "bc": 23337.88,
+    "tc": 23343.56,
+    "r1": 23394.83,
+    "r2": 23443.27,
+    "s1": 23292.28,
+    "s2": 23238.17,
+    "width_pct": 0.024
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7633.46,
-      "change_pct": -0.06
+      "level": 7764.7,
+      "change_pct": 1.49
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51662.71,
-      "change_pct": -0.22
+      "level": 52048.83,
+      "change_pct": 0.71
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 26423.87,
-      "change_pct": 0.02
+      "level": 27122.09,
+      "change_pct": 2.26
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10659.13,
-      "change_pct": -1.45
+      "level": 10739.01,
+      "change_pct": 0.75
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 64136.25,
-      "change_pct": 0.33
+      "level": 65018.95,
+      "change_pct": 1.38
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24604.29,
-      "change_pct": -0.44
+      "level": 24750.78,
+      "change_pct": 0.6
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3875.6,
-      "change_pct": -0.41
+      "level": 3911.87,
+      "change_pct": 0.94
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 95.86,
-      "change_pct": -0.28
+      "level": 95.81,
+      "change_pct": 0.01
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 99.22,
-      "change_pct": -5.34
+      "level": 96.14,
+      "change_pct": -7.44
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4428.5,
-      "change_pct": 0.65
+      "level": 4380.1,
+      "change_pct": -1.01
     }
   ],
   "pattern_notes": [
     "Nifty is below 20 DMA, below 50 DMA, and below 200 DMA.",
-    "Last 5-session return is -0.69%, while last 20-session return is -3.35%.",
-    "CPR width is 0.023%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 23278.6 and R1 23358.22; weakness increases below BC 23273.27 and S1 23188.32."
+    "Last 5-session return is -0.56%, while last 20-session return is -3.65%.",
+    "CPR width is 0.024%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 23343.56 and R1 23394.83; weakness increases below BC 23337.88 and S1 23292.28."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 23278.6, buyers have better control and the first upside zones are 23358.22 and 23445.83. Below CPR bottom 23273.27, sellers gain control and downside zones are 23188.32 and 23106.03. A sustained move around pivot 23275.93 can mean a range day."
+      "body": "Above CPR top 23343.56, buyers have better control and the first upside zones are 23394.83 and 23443.27. Below CPR bottom 23337.88, sellers gain control and downside zones are 23292.28 and 23238.17. A sustained move around pivot 23340.72 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -121,23 +121,43 @@
   "leading_industries": [
     {
       "name": "Abrasives & Bearings",
-      "rs_ratio": 100.71,
-      "rs_momentum": 102.15
+      "rs_ratio": 101.29,
+      "rs_momentum": 102.85
+    },
+    {
+      "name": "Aerospace & Defense",
+      "rs_ratio": 101.85,
+      "rs_momentum": 100.46
+    },
+    {
+      "name": "Amusement Parks/ Other Recreation",
+      "rs_ratio": 101.68,
+      "rs_momentum": 100.61
+    },
+    {
+      "name": "Auto Components & Equipments",
+      "rs_ratio": 101.26,
+      "rs_momentum": 101.92
     },
     {
       "name": "LPG/CNG/PNG/LNG Supplier",
-      "rs_ratio": 101.19,
-      "rs_momentum": 100.75
+      "rs_ratio": 103.14,
+      "rs_momentum": 102.22
     },
     {
       "name": "Media & Entertainment",
-      "rs_ratio": 100.78,
-      "rs_momentum": 103.35
+      "rs_ratio": 102.24,
+      "rs_momentum": 103.59
     },
     {
-      "name": "Real Estate Investment Trusts (REITs)",
-      "rs_ratio": 102.35,
-      "rs_momentum": 101.92
+      "name": "Medical Equipment & Supplies",
+      "rs_ratio": 102.06,
+      "rs_momentum": 101.29
+    },
+    {
+      "name": "Other Construction Materials",
+      "rs_ratio": 100.65,
+      "rs_momentum": 100.44
     }
   ],
   "fundamental_picks": [
@@ -172,32 +192,25 @@
       "score": 53.62
     },
     {
-      "name": "Gujarat Energy",
-      "symbol": "GUJENERGY",
-      "industry": "LPG/CNG/PNG/LNG Supplier",
-      "score": 78.91
+      "name": "Hind.Aeronautics",
+      "symbol": "HAL",
+      "industry": "Aerospace & Defense",
+      "score": 89.84
     },
     {
-      "name": "Petronet LNG",
-      "symbol": "PETRONET",
-      "industry": "LPG/CNG/PNG/LNG Supplier",
-      "score": 76.2
+      "name": "Bharat Electron",
+      "symbol": "BEL",
+      "industry": "Aerospace & Defense",
+      "score": 85.91
     },
     {
-      "name": "Indraprastha Gas",
-      "symbol": "IGL",
-      "industry": "LPG/CNG/PNG/LNG Supplier",
-      "score": 64.49
+      "name": "Garden Reach Sh.",
+      "symbol": "GRSE",
+      "industry": "Aerospace & Defense",
+      "score": 84.88
     }
   ],
   "recent_nifty": [
-    {
-      "date": "2026-09-09",
-      "open": 23522.05,
-      "high": 23571.55,
-      "low": 23431.5,
-      "close": 23431.5
-    },
     {
       "date": "2026-09-10",
       "open": 23446.6,
@@ -232,6 +245,13 @@
       "high": 23363.55,
       "low": 23193.65,
       "close": 23270.6
+    },
+    {
+      "date": "2026-09-18",
+      "open": 23334.7,
+      "high": 23389.15,
+      "low": 23286.6,
+      "close": 23346.4
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
