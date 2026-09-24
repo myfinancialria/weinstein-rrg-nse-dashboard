@@ -4900,5 +4900,43 @@
     "pe_ratio": 47.37711,
     "pb_ratio": 1.7978274,
     "peg_ratio": null
+  },
+  "CUBEXTUB.NS": {
+    "company_description": "Cubex Tubings Limited manufactures and fabricates copper and copper based alloy products in India and internationally. It offers copper products, such as DLP, DHP, ETP, and medical gas copper tubes; copper round and bus bars; and copper wires and profiles. The company also provides copper alloy products, including admiralty brass and aluminum brass tubes, as well as copper nickel tubes; copper-nickel fittings and flanges; and nickel-copper alloy tubes. In addition, it offers copper based alloys, such as cupronickel, admiralty brass, aluminum brass, etc. The company serves the offshore, desalination, defense, chemical, power generation, electrical equipment, ship building, automobile, HVAC, and marine industries, as well as manufacturers of power plants, switchgears, refineries, furnace manufacturers, and sugar and nuclear plants. Cubex Tubings Limited was incorporated in 1979 and is based in Hyderabad, India.",
+    "website": "https://www.cubextubings.com",
+    "yahoo_sector": "Basic Materials",
+    "yahoo_industry": "Copper",
+    "promoter_or_insider_holding_pct": 47.39,
+    "eps": 5.27,
+    "gross_margin_pct": 2.87,
+    "operating_margin_pct": 1.67,
+    "net_margin_pct": 2.49,
+    "roe_pct": null,
+    "debt_to_equity": 52.119,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": 26.261858,
+    "pb_ratio": 2.3788242,
+    "peg_ratio": null
+  },
+  "ONEPOINT.NS": {
+    "company_description": "One Point One Solutions Limited engages in the customer life cycle management, business process management, and technology servicing activities in India. The company provides customer experience management services, including omnichannel, multilingual customer support across email, chat, voice and digital platforms; digital transformation and automation services; finance and accounting outsourcing services comprising payroll management, budgeting, bookkeeping, forecasting, and compliance services; trust and safety services that include fraud detection, user-generated content, moderation, and brand review content moderation and review; supply chain and operations management; creator economy support services, such as brand partnerships, content production, audience growth, and IP management; and medical records and litigation support services. It serves banking and financial, telecom, insurance, airlines, consumer durables, FMCG, retail, e-commerce, travel, and hospitality industries. The company was incorporated in 2008 and is headquartered in Navi Mumbai, India.",
+    "website": "https://www.1point1.in",
+    "yahoo_sector": "Industrials",
+    "yahoo_industry": "Specialty Business Services",
+    "promoter_or_insider_holding_pct": 60.2,
+    "eps": 1.71,
+    "gross_margin_pct": 37.8,
+    "operating_margin_pct": 15.77,
+    "net_margin_pct": 11.21,
+    "roe_pct": null,
+    "debt_to_equity": 47.642,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": 40.53216,
+    "pb_ratio": 4.1072593,
+    "peg_ratio": null
   }
 }
