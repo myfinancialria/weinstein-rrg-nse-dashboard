@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-26 01:01:26 IST",
-  "title": "Pre-market Technical Blog - 26 Sep 2026",
+  "generated_at": "2026-09-29 02:52:38 IST",
+  "title": "Pre-market Technical Blog - 29 Sep 2026",
   "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
     "up": 27,
@@ -8,23 +8,23 @@
     "sideways": 9
   },
   "nifty": {
-    "close": 23063.1,
-    "change_5d_pct": -0.89,
-    "change_20d_pct": -4.73,
-    "ma20": 23600.82,
-    "ma50": 24013.1,
-    "ma200": 24437.4,
-    "rsi14": 27.22
+    "close": 23140.5,
+    "change_5d_pct": -0.88,
+    "change_20d_pct": -3.94,
+    "ma20": 23553.3,
+    "ma50": 23994.46,
+    "ma200": 24423.17,
+    "rsi14": 29.33
   },
   "cpr": {
-    "pivot": 23130.4,
-    "bc": 23096.75,
-    "tc": 23164.05,
-    "r1": 23214.65,
-    "r2": 23366.2,
-    "s1": 22978.85,
-    "s2": 22894.6,
-    "width_pct": 0.292
+    "pivot": 23108.05,
+    "bc": 23091.82,
+    "tc": 23124.27,
+    "r1": 23195.15,
+    "r2": 23249.8,
+    "s1": 23053.4,
+    "s2": 22966.3,
+    "width_pct": 0.14
   },
   "gift_nifty": {
     "level": null,
@@ -36,38 +36,38 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7733.41,
-      "change_pct": 0.38
+      "level": 7683.69,
+      "change_pct": -0.77
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51762.14,
-      "change_pct": 0.8
+      "level": 51481.51,
+      "change_pct": -0.67
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 27038.22,
-      "change_pct": 0.37
+      "level": 26820.38,
+      "change_pct": -0.92
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10695.25,
-      "change_pct": 0.14
+      "level": 10684.88,
+      "change_pct": -0.1
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 65513.99,
-      "change_pct": 0.76
+      "level": 66364.2,
+      "change_pct": 1.3
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24761.13,
-      "change_pct": -0.29
+      "level": 24510.09,
+      "change_pct": -1.01
     },
     {
       "name": "Shanghai",
@@ -78,27 +78,27 @@
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 95.8,
-      "change_pct": 0.06
+      "level": 95.97,
+      "change_pct": -0.2
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 97.83,
-      "change_pct": -8.23
+      "level": 98.56,
+      "change_pct": -5.52
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4327.4,
-      "change_pct": 0.68
+      "level": 4148.5,
+      "change_pct": -4.0
     }
   ],
   "pattern_notes": [
     "Nifty is below 20 DMA, below 50 DMA, and below 200 DMA.",
-    "Last 5-session return is -0.89%, while last 20-session return is -4.73%.",
-    "CPR width is 0.292%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 23164.05 and R1 23214.65; weakness increases below BC 23096.75 and S1 22978.85."
+    "Last 5-session return is -0.88%, while last 20-session return is -3.94%.",
+    "CPR width is 0.14%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 23124.27 and R1 23195.15; weakness increases below BC 23091.82 and S1 23053.4."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 23164.05, buyers have better control and the first upside zones are 23214.65 and 23366.2. Below CPR bottom 23096.75, sellers gain control and downside zones are 22978.85 and 22894.6. A sustained move around pivot 23130.4 can mean a range day."
+      "body": "Above CPR top 23124.27, buyers have better control and the first upside zones are 23195.15 and 23249.8. Below CPR bottom 23091.82, sellers gain control and downside zones are 23053.4 and 22966.3. A sustained move around pivot 23108.05 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -121,43 +121,43 @@
   "leading_industries": [
     {
       "name": "Abrasives & Bearings",
-      "rs_ratio": 103.56,
-      "rs_momentum": 102.76
-    },
-    {
-      "name": "Aerospace & Defense",
-      "rs_ratio": 102.15,
-      "rs_momentum": 100.09
+      "rs_ratio": 102.73,
+      "rs_momentum": 101.16
     },
     {
       "name": "Aluminium, Copper & Zinc Products",
-      "rs_ratio": 102.35,
-      "rs_momentum": 101.14
+      "rs_ratio": 102.61,
+      "rs_momentum": 101.57
     },
     {
       "name": "Amusement Parks/ Other Recreation",
-      "rs_ratio": 102.72,
-      "rs_momentum": 101.96
+      "rs_ratio": 102.87,
+      "rs_momentum": 102.63
     },
     {
       "name": "Auto Components & Equipments",
-      "rs_ratio": 101.27,
-      "rs_momentum": 100.74
+      "rs_ratio": 101.24,
+      "rs_momentum": 101.03
     },
     {
       "name": "Cables - Electricals",
-      "rs_ratio": 100.84,
-      "rs_momentum": 101.3
+      "rs_ratio": 101.09,
+      "rs_momentum": 101.39
     },
     {
       "name": "Consulting Services",
-      "rs_ratio": 103.03,
-      "rs_momentum": 101.29
+      "rs_ratio": 103.61,
+      "rs_momentum": 101.59
     },
     {
-      "name": "Media & Entertainment",
-      "rs_ratio": 101.31,
-      "rs_momentum": 100.43
+      "name": "Medical Equipment & Supplies",
+      "rs_ratio": 102.34,
+      "rs_momentum": 102.81
+    },
+    {
+      "name": "Other Construction Materials",
+      "rs_ratio": 101.07,
+      "rs_momentum": 100.69
     }
   ],
   "fundamental_picks": [
@@ -192,32 +192,25 @@
       "score": 53.62
     },
     {
-      "name": "Hind.Aeronautics",
-      "symbol": "HAL",
-      "industry": "Aerospace & Defense",
-      "score": 89.84
+      "name": "ANB Metal",
+      "symbol": "AMCL",
+      "industry": "Aluminium, Copper & Zinc Products",
+      "score": 80.29
     },
     {
-      "name": "Bharat Electron",
-      "symbol": "BEL",
-      "industry": "Aerospace & Defense",
-      "score": 85.91
+      "name": "Sunlite Recycli.",
+      "symbol": "SUNLITE",
+      "industry": "Aluminium, Copper & Zinc Products",
+      "score": 71.9
     },
     {
-      "name": "Garden Reach Sh.",
-      "symbol": "GRSE",
-      "industry": "Aerospace & Defense",
-      "score": 84.88
+      "name": "Vidya Wires",
+      "symbol": "VIDYAWIRES",
+      "industry": "Aluminium, Copper & Zinc Products",
+      "score": 68.3
     }
   ],
   "recent_nifty": [
-    {
-      "date": "2026-09-17",
-      "open": 23195.25,
-      "high": 23363.55,
-      "low": 23193.65,
-      "close": 23270.6
-    },
     {
       "date": "2026-09-18",
       "open": 23334.7,
@@ -252,6 +245,13 @@
       "high": 23281.95,
       "low": 23046.15,
       "close": 23063.1
+    },
+    {
+      "date": "2026-09-25",
+      "open": 23035.0,
+      "high": 23162.7,
+      "low": 23020.95,
+      "close": 23140.5
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."

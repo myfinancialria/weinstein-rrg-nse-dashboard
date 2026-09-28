@@ -1,8 +1,7 @@
 {
-  "date": "2026-09-25",
+  "date": "2026-09-28",
   "used": {
     "gemini": 1400,
-    "deepseek": 50,
-    "openrouter": 3
+    "deepseek": 50
   }
 }
