@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-29 02:52:38 IST",
-  "title": "Pre-market Technical Blog - 29 Sep 2026",
+  "generated_at": "2026-09-30 01:43:04 IST",
+  "title": "Pre-market Technical Blog - 30 Sep 2026",
   "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
     "up": 27,
@@ -8,23 +8,23 @@
     "sideways": 9
   },
   "nifty": {
-    "close": 23140.5,
-    "change_5d_pct": -0.88,
-    "change_20d_pct": -3.94,
-    "ma20": 23553.3,
-    "ma50": 23994.46,
-    "ma200": 24423.17,
-    "rsi14": 29.33
+    "close": 22780.25,
+    "change_5d_pct": -2.71,
+    "change_20d_pct": -5.77,
+    "ma20": 23483.53,
+    "ma50": 23963.37,
+    "ma200": 24406.9,
+    "rsi14": 25.91
   },
   "cpr": {
-    "pivot": 23108.05,
-    "bc": 23091.82,
-    "tc": 23124.27,
-    "r1": 23195.15,
-    "r2": 23249.8,
-    "s1": 23053.4,
-    "s2": 22966.3,
-    "width_pct": 0.14
+    "pivot": 22874.23,
+    "bc": 22827.24,
+    "tc": 22921.22,
+    "r1": 22986.27,
+    "r2": 23192.28,
+    "s1": 22668.22,
+    "s2": 22556.18,
+    "width_pct": 0.413
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7683.69,
-      "change_pct": -0.77
+      "level": 7670.84,
+      "change_pct": -0.17
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51481.51,
-      "change_pct": -0.67
+      "level": 51349.92,
+      "change_pct": -0.26
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 26820.38,
-      "change_pct": -0.92
+      "level": 26797.54,
+      "change_pct": -0.09
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10684.88,
-      "change_pct": -0.1
+      "level": 10636.71,
+      "change_pct": -0.45
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 66364.2,
-      "change_pct": 1.3
+      "level": 65877.62,
+      "change_pct": -0.73
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24510.09,
-      "change_pct": -1.01
+      "level": 24642.51,
+      "change_pct": 0.54
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3888.37,
-      "change_pct": -1.22
+      "level": 3823.62,
+      "change_pct": -1.67
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
       "level": 95.97,
-      "change_pct": -0.2
+      "change_pct": 0.19
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 98.56,
-      "change_pct": -5.52
+      "level": 95.73,
+      "change_pct": -9.07
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4148.5,
-      "change_pct": -4.0
+      "level": 4206.6,
+      "change_pct": -2.65
     }
   ],
   "pattern_notes": [
     "Nifty is below 20 DMA, below 50 DMA, and below 200 DMA.",
-    "Last 5-session return is -0.88%, while last 20-session return is -3.94%.",
-    "CPR width is 0.14%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 23124.27 and R1 23195.15; weakness increases below BC 23091.82 and S1 23053.4."
+    "Last 5-session return is -2.71%, while last 20-session return is -5.77%.",
+    "CPR width is 0.413%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 22921.22 and R1 22986.27; weakness increases below BC 22827.24 and S1 22668.22."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 23124.27, buyers have better control and the first upside zones are 23195.15 and 23249.8. Below CPR bottom 23091.82, sellers gain control and downside zones are 23053.4 and 22966.3. A sustained move around pivot 23108.05 can mean a range day."
+      "body": "Above CPR top 22921.22, buyers have better control and the first upside zones are 22986.27 and 23192.28. Below CPR bottom 22827.24, sellers gain control and downside zones are 22668.22 and 22556.18. A sustained move around pivot 22874.23 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -120,77 +120,47 @@
   ],
   "leading_industries": [
     {
-      "name": "Abrasives & Bearings",
-      "rs_ratio": 102.73,
-      "rs_momentum": 101.16
-    },
-    {
       "name": "Aluminium, Copper & Zinc Products",
-      "rs_ratio": 102.61,
-      "rs_momentum": 101.57
+      "rs_ratio": 102.85,
+      "rs_momentum": 101.73
     },
     {
       "name": "Amusement Parks/ Other Recreation",
-      "rs_ratio": 102.87,
-      "rs_momentum": 102.63
+      "rs_ratio": 102.35,
+      "rs_momentum": 102.01
     },
     {
       "name": "Auto Components & Equipments",
-      "rs_ratio": 101.24,
-      "rs_momentum": 101.03
-    },
-    {
-      "name": "Cables - Electricals",
-      "rs_ratio": 101.09,
-      "rs_momentum": 101.39
+      "rs_ratio": 101.03,
+      "rs_momentum": 101.06
     },
     {
       "name": "Consulting Services",
-      "rs_ratio": 103.61,
-      "rs_momentum": 101.59
+      "rs_ratio": 102.87,
+      "rs_momentum": 101.43
+    },
+    {
+      "name": "Lubricants",
+      "rs_ratio": 101.2,
+      "rs_momentum": 100.56
     },
     {
       "name": "Medical Equipment & Supplies",
-      "rs_ratio": 102.34,
-      "rs_momentum": 102.81
+      "rs_ratio": 102.68,
+      "rs_momentum": 103.37
     },
     {
-      "name": "Other Construction Materials",
-      "rs_ratio": 101.07,
-      "rs_momentum": 100.69
+      "name": "Plastic Products - Industrial",
+      "rs_ratio": 101.14,
+      "rs_momentum": 100.57
+    },
+    {
+      "name": "Real Estate Investment Trusts (REITs)",
+      "rs_ratio": 102.52,
+      "rs_momentum": 100.89
     }
   ],
   "fundamental_picks": [
-    {
-      "name": "SKF India Indus.",
-      "symbol": "SKFINDUS",
-      "industry": "Abrasives & Bearings",
-      "score": 79.97
-    },
-    {
-      "name": "Grindwell Norton",
-      "symbol": "GRINDWELL",
-      "industry": "Abrasives & Bearings",
-      "score": 71.45
-    },
-    {
-      "name": "SKF India",
-      "symbol": "SKFINDIA",
-      "industry": "Abrasives & Bearings",
-      "score": 68.11
-    },
-    {
-      "name": "Timken India",
-      "symbol": "TIMKEN",
-      "industry": "Abrasives & Bearings",
-      "score": 65.86
-    },
-    {
-      "name": "Wendt India",
-      "symbol": "WENDT",
-      "industry": "Abrasives & Bearings",
-      "score": 53.62
-    },
     {
       "name": "ANB Metal",
       "symbol": "AMCL",
@@ -208,16 +178,39 @@
       "symbol": "VIDYAWIRES",
       "industry": "Aluminium, Copper & Zinc Products",
       "score": 68.3
+    },
+    {
+      "name": "Prec. Wires (I)",
+      "symbol": "PRECWIRE",
+      "industry": "Aluminium, Copper & Zinc Products",
+      "score": 61.57
+    },
+    {
+      "name": "Baheti Recycling",
+      "symbol": "BAHETI",
+      "industry": "Aluminium, Copper & Zinc Products",
+      "score": 57.06
+    },
+    {
+      "name": "Wonderla Holiday",
+      "symbol": "WONDERLA",
+      "industry": "Amusement Parks/ Other Recreation",
+      "score": 54.72
+    },
+    {
+      "name": "Nicco Parks",
+      "symbol": "NICCOPAR",
+      "industry": "Amusement Parks/ Other Recreation",
+      "score": 38.9
+    },
+    {
+      "name": "Delta Corp",
+      "symbol": "DELTACORP",
+      "industry": "Amusement Parks/ Other Recreation",
+      "score": 34.7
     }
   ],
   "recent_nifty": [
-    {
-      "date": "2026-09-18",
-      "open": 23334.7,
-      "high": 23389.15,
-      "low": 23286.6,
-      "close": 23346.4
-    },
     {
       "date": "2026-09-21",
       "open": 23330.2,
@@ -252,6 +245,13 @@
       "high": 23162.7,
       "low": 23020.95,
       "close": 23140.5
+    },
+    {
+      "date": "2026-09-28",
+      "open": 23064.9,
+      "high": 23080.25,
+      "low": 22762.2,
+      "close": 22780.25
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
