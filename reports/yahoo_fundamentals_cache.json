@@ -5052,5 +5052,43 @@
     "pe_ratio": null,
     "pb_ratio": null,
     "peg_ratio": null
+  },
+  "SAHASRA.NS": {
+    "company_description": "",
+    "website": "",
+    "yahoo_sector": "",
+    "yahoo_industry": "",
+    "promoter_or_insider_holding_pct": null,
+    "eps": null,
+    "gross_margin_pct": null,
+    "operating_margin_pct": null,
+    "net_margin_pct": null,
+    "roe_pct": null,
+    "debt_to_equity": null,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": null,
+    "pb_ratio": null,
+    "peg_ratio": null
+  },
+  "BOSCH-HCIL.NS": {
+    "company_description": "Bosch Home Comfort India Limited manufactures and distributes air conditioners, chillers, refrigerators, air purifiers, and variable refrigerant flow systems in India and internationally. It operates through Cooling Products for Comfort and Commercial Use; and Design and Development Services segments. The company offers inverter and non-inverter, fixed speed, split, non-inverter, hot and cold, packaged, window, and cassette air conditioners (AC); ducted and ductless air conditioners; centralized AC and room AC controllers; and water- and air-cooled screw chillers, and centrifugal chillers, as well as air quality solutions, and AC apps and controllers. It also provides wall mounted inverter and non-inverter AC; cassette AC; VRF systems; and after-sales services. It offers its products under the Hitachi brand for residential and commercial use. The company was formerly known as Johnson Controls-Hitachi Air Conditioning India Limited and changed its name to Bosch Home Comfort India Limited in November 2025. Johnson Controls-Hitachi Air Conditioning India Limited was incorporated in 1984 and is headquartered in Kadi, India. Johnson Controls-Hitachi Air Conditioning India Limited operates as a subsidiary of JCHAC India Holdco Limited.",
+    "website": "https://www.hitachiaircon.com/in",
+    "yahoo_sector": "Consumer Cyclical",
+    "yahoo_industry": "Furnishings, Fixtures & Appliances",
+    "promoter_or_insider_holding_pct": 75.25,
+    "eps": 1.55,
+    "gross_margin_pct": 30.48,
+    "operating_margin_pct": 2.54,
+    "net_margin_pct": 0.16,
+    "roe_pct": null,
+    "debt_to_equity": 16.319,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": 1210.7742,
+    "pb_ratio": 10.216335,
+    "peg_ratio": null
   }
 }
