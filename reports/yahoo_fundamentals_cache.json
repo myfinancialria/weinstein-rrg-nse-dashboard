@@ -5090,5 +5090,43 @@
     "pe_ratio": 1210.7742,
     "pb_ratio": 10.216335,
     "peg_ratio": null
+  },
+  "AXIOMGAS.NS": {
+    "company_description": "",
+    "website": "",
+    "yahoo_sector": "",
+    "yahoo_industry": "",
+    "promoter_or_insider_holding_pct": null,
+    "eps": null,
+    "gross_margin_pct": null,
+    "operating_margin_pct": null,
+    "net_margin_pct": null,
+    "roe_pct": null,
+    "debt_to_equity": null,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": null,
+    "pb_ratio": null,
+    "peg_ratio": null
+  },
+  "GSPLTRANS.NS": {
+    "company_description": "GSPL Transmission Limited owns and operates a gas transmission business. The company engages in the business of transportation of natural gas through pipelines connecting various supply and demand centers in India. The company has pipeline network of about 2692 km across the state of Gujarat. It is developing energy transportation infrastructure and connecting natural gas supply sources, including LNG terminals. It serves industries, such as power, fertilizer, steel, chemical plants, glass industries, refineries, textiles, and local gas distribution companies. The company was incorporated in 1998 and is based in Gandhinagar, India.",
+    "website": "https://ves.gspl.asia",
+    "yahoo_sector": "Energy",
+    "yahoo_industry": "Oil & Gas Midstream",
+    "promoter_or_insider_holding_pct": null,
+    "eps": null,
+    "gross_margin_pct": 0.0,
+    "operating_margin_pct": 0.0,
+    "net_margin_pct": 0.0,
+    "roe_pct": null,
+    "debt_to_equity": null,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": null,
+    "pb_ratio": null,
+    "peg_ratio": null
   }
 }
