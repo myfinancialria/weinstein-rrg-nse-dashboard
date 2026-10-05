@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-02 20:09:14",
+  "generated_at": "2026-10-05 22:13:22",
   "models": {
     "gemini": "gemini-2.5-flash",
     "groq": "llama-3.3-70b-versatile",
@@ -13,6 +13,7 @@
     "Abrasives & Bearings": "The Abrasives & Bearings industry stands out due to its strong demand driven by industrial capex, manufacturing, railways, autos, and infrastructure projects. This industry provides essential components, such as bearings and abrasives, which are used in various sectors, leading to a steady demand. The sector's financial health is reflected in its outperformance of the overall market, with accelerating momentum, indicating its strength. With a total of 8 companies in the group, the industry is supported by government policies like Make in India, infrastructure capex, and railway modernization, which can further boost growth. The industry's growth possibilities are also driven by higher domestic manufacturing, replacement demand, and industrial automation. However, a key risk to consider is the potential disruption in global supply chains, which could impact the industry's ability to meet demand.",
     "Advertising & Media Agencies": "The Advertising & Media Agencies sector appears strong due to several factors.\n\n*   Ad spending closely follows",
     "Aerospace & Defense": "The Aerospace & Defense sector stands out due to robust government policy support for domestic manufacturing. This",
+    "Aluminium": "The Aluminium sector shows several attractive characteristics currently.\n\n*   Aluminium is crucial for modern industries",
     "Aluminium, Copper & Zinc Products": "The \"Aluminium, Copper & Zinc Products\" industry appears strong due to rising demand from",
     "Amusement Parks/ Other Recreation": "The Amusement Parks/ Other Recreation sector currently shows strength.\n\n*   Demand is rising",
     "Animal Feed": "The Animal Feed industry shows structural demand growth driven by changing consumption patterns. Rising protein consumption in India fuels",
@@ -54,21 +55,17 @@
     "Telecom - Infrastructure": "The Telecom Infrastructure sector currently shows strong momentum. It is strategically important due to rising data consumption"
   },
   "stocks": {
-    "CARBORUNIV": "Carborundum Universal (CARBORUNIV) shows several attractive characteristics.\n\n*   The",
-    "TIMKEN": "Timken India benefits from strong demand across key industrial sectors. Its core business of manufacturing bearings and power",
-    "GRINDWELL": "Grindwell Norton is currently outperforming the broader market, positioned in the 'Leading",
-    "SKFINDUS": "SKF India Indus. appears attractive due to its strong financial efficiency and positive market trend.",
-    "SKFINDIA": "SKF India, a supplier of bearings and engineering solutions, shows strong financial health.",
-    "WENDT": "Wendt India manufactures super abrasives and precision grinding tools, essential for various manufacturing industries.",
+    "CARBORUNIV": "Carborundum Universal (CARBORUNIV) shows strong relative strength, currently outperforming the N",
+    "GRINDWELL": "Grindwell Norton appears attractive due to its strong market performance and robust financials.",
+    "SKFINDUS": "SKF India Industrial Limited appears attractive due to its strong financial efficiency and market positioning.**\n\n*",
+    "SKFINDIA": "SKF India looks attractive due to its strong operational efficiency and financial health.\n\n*   The company",
+    "WENDT": "Wendt India manufactures super abrasives and precision grinding tools, essential consumables for various manufacturing industries.",
+    "SKP": "Here's why SKP Bearing might draw attention:\n\n*   SKP Bearing is currently out",
     "NIBL": "Here's why NRB Industrial Bearings (NIBL) might stand out right now:",
-    "HAL": "Hindustan Aeronautics (HAL) looks attractive due to strong government support and healthy financials.\n\n*",
-    "BEL": "Bharat Electronics (BEL) benefits significantly from strong government support for India's defense sector. The",
-    "BDL": "Here's why Bharat Dynamics (BDL) looks attractive:\n\n*   Bharat Dynamics",
-    "GRSE": "Garden Reach Shipbuilders & Engineers (GRSE) benefits significantly from India's defence ind",
-    "DATAPATTNS": "Data Patterns (India) Limited operates in the Aerospace & Defense sector, providing specialized electronics solutions.",
-    "SIGMAADV": "Sigma Advanced System operates in aerospace and defence electronics, a sector with strong policy support.",
-    "AEQUS": "Aequs looks attractive due to strong market performance and a supportive industry environment.\n\n*   The",
-    "APOLLO": "Apollo Micro Systems designs and develops electronic systems for India's defence and aerospace sectors. This",
-    "CMRGREEN": "CMR Green Tech. (CMRGREEN) shows strong relative momentum against the broader market."
+    "HAL": "Hindustan Aeronautics (HAL) looks attractive due to strong government support and robust financial performance.",
+    "BEL": "Bharat Electronics (BEL) looks attractive due to strong government support for its core business.\n\n*",
+    "BDL": "Bharat Dynamics (BDL) appears attractive due to strong government support for its sector.\n\n*",
+    "GRSE": "Garden Reach Shipbuilders & Engineers (GRSE) benefits significantly from India's defence indigen",
+    "DATAPATTNS": "Data Patterns (India) Limited is a defense and aerospace electronics solutions provider, designing and"
   }
 }
