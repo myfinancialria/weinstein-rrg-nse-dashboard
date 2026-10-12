@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-10-10 01:48:47 IST",
-  "title": "Pre-market Technical Blog - 10 Oct 2026",
+  "generated_at": "2026-10-13 04:06:53 IST",
+  "title": "Pre-market Technical Blog - 13 Oct 2026",
   "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 27,
-    "down": 64,
+    "up": 33,
+    "down": 58,
     "sideways": 9
   },
   "nifty": {
-    "close": 22231.8,
-    "change_5d_pct": -1.72,
-    "change_20d_pct": -5.94,
-    "ma20": 23017.99,
-    "ma50": 23761.06,
-    "ma200": 24287.94,
-    "rsi14": 28.58
+    "close": 22520.45,
+    "change_5d_pct": 0.44,
+    "change_20d_pct": -3.89,
+    "ma20": 22972.44,
+    "ma50": 23726.47,
+    "ma200": 24271.24,
+    "rsi14": 34.34
   },
   "cpr": {
-    "pivot": 22336.92,
-    "bc": 22284.36,
-    "tc": 22389.48,
-    "r1": 22493.93,
-    "r2": 22756.07,
-    "s1": 22074.78,
-    "s2": 21917.77,
-    "width_pct": 0.473
+    "pivot": 22465.32,
+    "bc": 22437.75,
+    "tc": 22492.88,
+    "r1": 22635.88,
+    "r2": 22751.32,
+    "s1": 22349.88,
+    "s2": 22179.32,
+    "width_pct": 0.245
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7811.54,
-      "change_pct": 0.59
+      "level": 7807.24,
+      "change_pct": -0.06
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51654.95,
-      "change_pct": 0.83
+      "level": 51850.55,
+      "change_pct": 0.38
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 27366.17,
-      "change_pct": 0.64
+      "level": 27245.9,
+      "change_pct": -0.44
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10552.05,
-      "change_pct": 1.06
+      "level": 10656.28,
+      "change_pct": 0.99
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 69042.11,
-      "change_pct": -1.42
+      "level": 69030.92,
+      "change_pct": -0.02
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 23785.79,
-      "change_pct": -1.43
+      "level": 24211.35,
+      "change_pct": 1.79
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3811.9,
-      "change_pct": -0.79
+      "level": 3813.79,
+      "change_pct": 0.05
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 96.76,
-      "change_pct": 0.0
+      "level": 95.76,
+      "change_pct": -1.1
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 104.43,
-      "change_pct": 0.14
+      "level": 106.03,
+      "change_pct": 1.25
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4220.0,
-      "change_pct": 1.52
+      "level": 4196.8,
+      "change_pct": -0.46
     }
   ],
   "pattern_notes": [
     "Nifty is below 20 DMA, below 50 DMA, and below 200 DMA.",
-    "Last 5-session return is -1.72%, while last 20-session return is -5.94%.",
-    "CPR width is 0.473%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 22389.48 and R1 22493.93; weakness increases below BC 22284.36 and S1 22074.78."
+    "Last 5-session return is 0.44%, while last 20-session return is -3.89%.",
+    "CPR width is 0.245%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 22492.88 and R1 22635.88; weakness increases below BC 22437.75 and S1 22349.88."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 22389.48, buyers have better control and the first upside zones are 22493.93 and 22756.07. Below CPR bottom 22284.36, sellers gain control and downside zones are 22074.78 and 21917.77. A sustained move around pivot 22336.92 can mean a range day."
+      "body": "Above CPR top 22492.88, buyers have better control and the first upside zones are 22635.88 and 22751.32. Below CPR bottom 22437.75, sellers gain control and downside zones are 22349.88 and 22179.32. A sustained move around pivot 22465.32 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -121,43 +121,28 @@
   "leading_industries": [
     {
       "name": "Aluminium",
-      "rs_ratio": 102.03,
-      "rs_momentum": 101.93
-    },
-    {
-      "name": "Cables - Electricals",
-      "rs_ratio": 101.47,
-      "rs_momentum": 101.47
-    },
-    {
-      "name": "Consulting Services",
-      "rs_ratio": 102.22,
-      "rs_momentum": 100.8
+      "rs_ratio": 101.86,
+      "rs_momentum": 101.62
     },
     {
       "name": "Film Production, Distribution & Exhibition",
-      "rs_ratio": 102.59,
-      "rs_momentum": 102.21
+      "rs_ratio": 101.87,
+      "rs_momentum": 101.31
     },
     {
       "name": "Lubricants",
-      "rs_ratio": 101.95,
-      "rs_momentum": 102.01
-    },
-    {
-      "name": "Oil Equipment & Services",
-      "rs_ratio": 101.63,
-      "rs_momentum": 102.29
-    },
-    {
-      "name": "Other Bank",
-      "rs_ratio": 101.0,
-      "rs_momentum": 101.34
+      "rs_ratio": 101.9,
+      "rs_momentum": 101.81
     },
     {
       "name": "Plastic Products - Industrial",
-      "rs_ratio": 101.71,
-      "rs_momentum": 102.85
+      "rs_ratio": 101.08,
+      "rs_momentum": 102.56
+    },
+    {
+      "name": "Telecom - Infrastructure",
+      "rs_ratio": 101.78,
+      "rs_momentum": 101.74
     }
   ],
   "fundamental_picks": [
@@ -192,32 +177,25 @@
       "score": 56.75
     },
     {
-      "name": "Polycab India",
-      "symbol": "POLYCAB",
-      "industry": "Cables - Electricals",
-      "score": 84.17
+      "name": "Sunshine Picture",
+      "symbol": "SUNSHINE",
+      "industry": "Film Production, Distribution & Exhibition",
+      "score": 96.0
     },
     {
-      "name": "R R Kabel",
-      "symbol": "RRKABEL",
-      "industry": "Cables - Electricals",
-      "score": 83.89
+      "name": "Connplex Cinemas",
+      "symbol": "CONNPLEX",
+      "industry": "Film Production, Distribution & Exhibition",
+      "score": 83.79
     },
     {
-      "name": "Lumino Inds",
-      "symbol": "LUMINO",
-      "industry": "Cables - Electricals",
-      "score": 77.92
+      "name": "UFO Moviez",
+      "symbol": "UFO",
+      "industry": "Film Production, Distribution & Exhibition",
+      "score": 47.23
     }
   ],
   "recent_nifty": [
-    {
-      "date": "2026-09-30",
-      "open": 22665.0,
-      "high": 22809.35,
-      "low": 22595.2,
-      "close": 22620.45
-    },
     {
       "date": "2026-10-01",
       "open": 22543.7,
@@ -252,6 +230,13 @@
       "high": 22599.05,
       "low": 22179.9,
       "close": 22231.8
+    },
+    {
+      "date": "2026-10-09",
+      "open": 22314.95,
+      "high": 22580.75,
+      "low": 22294.75,
+      "close": 22520.45
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
