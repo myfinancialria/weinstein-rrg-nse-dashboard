@@ -787,15 +787,15 @@
     "roe_pct": 10.5
   },
   "CUBEXTUB": {
-    "_scraped": "2026-10-06",
+    "_scraped": "2026-10-14",
     "debt_to_equity": 51.8,
     "dividend_yield_pct": 0.0,
     "eps": 5.27,
     "free_cash_flow_cr": 4.0,
     "net_margin_pct": 2.6,
     "operating_margin_pct": 1.9,
-    "pb_ratio": 2.58,
-    "pe_ratio": 28.6,
+    "pb_ratio": 3.45,
+    "pe_ratio": 38.4,
     "promoter_or_insider_holding_pct": 44.42,
     "qtr_profit_var_pct": 7.3,
     "qtr_sales_var_pct": 30.3,
