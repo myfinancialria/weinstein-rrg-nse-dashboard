@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-10-17 00:28:25 IST",
-  "title": "Pre-market Technical Blog - 17 Oct 2026",
-  "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
+  "generated_at": "2026-10-20 02:14:50 IST",
+  "title": "Pre-market Technical Blog - 20 Oct 2026",
+  "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 37,
-    "down": 54,
+    "up": 47,
+    "down": 44,
     "sideways": 9
   },
   "nifty": {
-    "close": 22997.35,
-    "change_5d_pct": 3.44,
-    "change_20d_pct": -0.95,
-    "ma20": 22847.1,
-    "ma50": 23578.78,
-    "ma200": 24205.9,
-    "rsi14": 48.89
+    "close": 23146.15,
+    "change_5d_pct": 2.78,
+    "change_20d_pct": -0.53,
+    "ma20": 22840.88,
+    "ma50": 23549.21,
+    "ma200": 24190.75,
+    "rsi14": 50.09
   },
   "cpr": {
-    "pivot": 22897.05,
-    "bc": 22846.9,
-    "tc": 22947.2,
-    "r1": 23156.7,
-    "r2": 23316.05,
-    "s1": 22737.7,
-    "s2": 22478.05,
-    "width_pct": 0.436
+    "pivot": 23069.93,
+    "bc": 23031.83,
+    "tc": 23108.04,
+    "r1": 23226.07,
+    "r2": 23305.98,
+    "s1": 22990.02,
+    "s2": 22833.88,
+    "width_pct": 0.329
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7639.66,
-      "change_pct": -1.35
+      "level": 7690.73,
+      "change_pct": 0.41
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51874.39,
-      "change_pct": -0.58
+      "level": 51966.03,
+      "change_pct": -0.07
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 26064.32,
-      "change_pct": -2.43
+      "level": 26430.89,
+      "change_pct": 1.11
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10881.9,
-      "change_pct": 0.38
+      "level": 10764.69,
+      "change_pct": -1.08
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 64425.95,
-      "change_pct": -4.9
+      "level": 65324.29,
+      "change_pct": 1.39
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24062.72,
-      "change_pct": -1.03
+      "level": 24186.83,
+      "change_pct": 0.52
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3707.48,
-      "change_pct": -1.59
+      "level": 3716.28,
+      "change_pct": 0.24
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 94.95,
-      "change_pct": -0.21
+      "level": 94.92,
+      "change_pct": 0.41
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 109.92,
-      "change_pct": 3.78
+      "level": 109.36,
+      "change_pct": -0.46
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4178.6,
-      "change_pct": 0.2
+      "level": 4158.5,
+      "change_pct": -0.54
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, below 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 3.44%, while last 20-session return is -0.95%.",
-    "CPR width is 0.436%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 22947.2 and R1 23156.7; weakness increases below BC 22846.9 and S1 22737.7."
+    "Last 5-session return is 2.78%, while last 20-session return is -0.53%.",
+    "CPR width is 0.329%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 23108.04 and R1 23226.07; weakness increases below BC 23031.83 and S1 22990.02."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 22947.2, buyers have better control and the first upside zones are 23156.7 and 23316.05. Below CPR bottom 22846.9, sellers gain control and downside zones are 22737.7 and 22478.05. A sustained move around pivot 22897.05 can mean a range day."
+      "body": "Above CPR top 23108.04, buyers have better control and the first upside zones are 23226.07 and 23305.98. Below CPR bottom 23031.83, sellers gain control and downside zones are 22990.02 and 22833.88. A sustained move around pivot 23069.93 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -121,18 +121,23 @@
   "leading_industries": [
     {
       "name": "Consulting Services",
-      "rs_ratio": 101.87,
-      "rs_momentum": 100.2
+      "rs_ratio": 101.34,
+      "rs_momentum": 100.16
+    },
+    {
+      "name": "Film Production, Distribution & Exhibition",
+      "rs_ratio": 101.37,
+      "rs_momentum": 100.11
     },
     {
       "name": "Meat Products including Poultry",
-      "rs_ratio": 100.23,
-      "rs_momentum": 100.52
+      "rs_ratio": 100.33,
+      "rs_momentum": 100.6
     },
     {
       "name": "Other Agricultural Products",
-      "rs_ratio": 101.11,
-      "rs_momentum": 100.6
+      "rs_ratio": 100.91,
+      "rs_momentum": 100.75
     }
   ],
   "fundamental_picks": [
@@ -167,32 +172,25 @@
       "score": 10.0
     },
     {
-      "name": "SKM Egg Prod.",
-      "symbol": "SKMEGGPROD",
-      "industry": "Meat Products including Poultry",
-      "score": 95.21
+      "name": "Sunshine Picture",
+      "symbol": "SUNSHINE",
+      "industry": "Film Production, Distribution & Exhibition",
+      "score": 96.0
     },
     {
-      "name": "Venky's (India)",
-      "symbol": "VENKEYS",
-      "industry": "Meat Products including Poultry",
-      "score": 70.46
+      "name": "Connplex Cinemas",
+      "symbol": "CONNPLEX",
+      "industry": "Film Production, Distribution & Exhibition",
+      "score": 83.79
     },
     {
-      "name": "HMA Agro Inds.",
-      "symbol": "HMAAGRO",
-      "industry": "Meat Products including Poultry",
-      "score": 63.2
+      "name": "UFO Moviez",
+      "symbol": "UFO",
+      "industry": "Film Production, Distribution & Exhibition",
+      "score": 47.23
     }
   ],
   "recent_nifty": [
-    {
-      "date": "2026-10-08",
-      "open": 22599.05,
-      "high": 22599.05,
-      "low": 22179.9,
-      "close": 22231.8
-    },
     {
       "date": "2026-10-09",
       "open": 22314.95,
@@ -227,6 +225,13 @@
       "high": 23056.4,
       "low": 22637.4,
       "close": 22997.35
+    },
+    {
+      "date": "2026-10-16",
+      "open": 23065.1,
+      "high": 23149.85,
+      "low": 22913.8,
+      "close": 23146.15
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
