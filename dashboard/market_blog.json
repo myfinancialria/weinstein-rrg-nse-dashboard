@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-10-20 02:14:50 IST",
-  "title": "Pre-market Technical Blog - 20 Oct 2026",
-  "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
+  "generated_at": "2026-10-21 01:03:18 IST",
+  "title": "Pre-market Technical Blog - 21 Oct 2026",
+  "headline": "Nifty pre-market bias is negative, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 47,
-    "down": 44,
+    "up": 44,
+    "down": 47,
     "sideways": 9
   },
   "nifty": {
-    "close": 23146.15,
-    "change_5d_pct": 2.78,
-    "change_20d_pct": -0.53,
-    "ma20": 22840.88,
-    "ma50": 23549.21,
-    "ma200": 24190.75,
-    "rsi14": 50.09
+    "close": 22888.95,
+    "change_5d_pct": 2.35,
+    "change_20d_pct": -1.96,
+    "ma20": 22818.01,
+    "ma50": 23514.27,
+    "ma200": 24174.48,
+    "rsi14": 51.85
   },
   "cpr": {
-    "pivot": 23069.93,
-    "bc": 23031.83,
-    "tc": 23108.04,
-    "r1": 23226.07,
-    "r2": 23305.98,
-    "s1": 22990.02,
-    "s2": 22833.88,
-    "width_pct": 0.329
+    "pivot": 22969.73,
+    "bc": 22929.34,
+    "tc": 23010.12,
+    "r1": 23094.47,
+    "r2": 23299.98,
+    "s1": 22764.22,
+    "s2": 22639.48,
+    "width_pct": 0.353
   },
   "gift_nifty": {
     "level": null,
@@ -36,32 +36,32 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7690.73,
-      "change_pct": 0.41
+      "level": 7710.07,
+      "change_pct": 0.25
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51966.03,
-      "change_pct": -0.07
+      "level": 52451.06,
+      "change_pct": 0.93
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 26430.89,
-      "change_pct": 1.11
+      "level": 26421.42,
+      "change_pct": -0.04
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10764.69,
-      "change_pct": -1.08
+      "level": 10733.0,
+      "change_pct": -0.29
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 65324.29,
-      "change_pct": 1.39
+      "level": 64916.7,
+      "change_pct": -0.62
     },
     {
       "name": "Hang Seng",
@@ -72,33 +72,33 @@
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3716.28,
-      "change_pct": 0.24
+      "level": 3730.92,
+      "change_pct": 0.39
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 94.92,
-      "change_pct": 0.41
+      "level": 94.7,
+      "change_pct": -0.29
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 109.36,
-      "change_pct": -0.46
+      "level": 109.21,
+      "change_pct": -0.31
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4158.5,
-      "change_pct": -0.54
+      "level": 4139.2,
+      "change_pct": -0.5
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, below 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 2.78%, while last 20-session return is -0.53%.",
-    "CPR width is 0.329%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 23108.04 and R1 23226.07; weakness increases below BC 23031.83 and S1 22990.02."
+    "Last 5-session return is 2.35%, while last 20-session return is -1.96%.",
+    "CPR width is 0.353%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 23010.12 and R1 23094.47; weakness increases below BC 22929.34 and S1 22764.22."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 23108.04, buyers have better control and the first upside zones are 23226.07 and 23305.98. Below CPR bottom 23031.83, sellers gain control and downside zones are 22990.02 and 22833.88. A sustained move around pivot 23069.93 can mean a range day."
+      "body": "Above CPR top 23010.12, buyers have better control and the first upside zones are 23094.47 and 23299.98. Below CPR bottom 22929.34, sellers gain control and downside zones are 22764.22 and 22639.48. A sustained move around pivot 22969.73 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -120,57 +120,17 @@
   ],
   "leading_industries": [
     {
-      "name": "Consulting Services",
-      "rs_ratio": 101.34,
-      "rs_momentum": 100.16
-    },
-    {
       "name": "Film Production, Distribution & Exhibition",
-      "rs_ratio": 101.37,
-      "rs_momentum": 100.11
+      "rs_ratio": 101.63,
+      "rs_momentum": 101.36
     },
     {
       "name": "Meat Products including Poultry",
-      "rs_ratio": 100.33,
-      "rs_momentum": 100.6
-    },
-    {
-      "name": "Other Agricultural Products",
-      "rs_ratio": 100.91,
-      "rs_momentum": 100.75
+      "rs_ratio": 100.93,
+      "rs_momentum": 101.82
     }
   ],
   "fundamental_picks": [
-    {
-      "name": "Marc Technocrats",
-      "symbol": "MARC",
-      "industry": "Consulting Services",
-      "score": 70.93
-    },
-    {
-      "name": "Mitcon Consult.",
-      "symbol": "MITCON",
-      "industry": "Consulting Services",
-      "score": 55.56
-    },
-    {
-      "name": "Manglam Infra",
-      "symbol": "MIEL",
-      "industry": "Consulting Services",
-      "score": 48.2
-    },
-    {
-      "name": "AAA Technologies",
-      "symbol": "AAATECH",
-      "industry": "Consulting Services",
-      "score": 42.03
-    },
-    {
-      "name": "EKI Energy",
-      "symbol": "EKI",
-      "industry": "Consulting Services",
-      "score": 10.0
-    },
     {
       "name": "Sunshine Picture",
       "symbol": "SUNSHINE",
@@ -188,16 +148,39 @@
       "symbol": "UFO",
       "industry": "Film Production, Distribution & Exhibition",
       "score": 47.23
+    },
+    {
+      "name": "PVR Inox",
+      "symbol": "PVRINOX",
+      "industry": "Film Production, Distribution & Exhibition",
+      "score": 39.3
+    },
+    {
+      "name": "Media Matrix",
+      "symbol": "MMWL",
+      "industry": "Film Production, Distribution & Exhibition",
+      "score": 39.23
+    },
+    {
+      "name": "SKM Egg Prod.",
+      "symbol": "SKMEGGPROD",
+      "industry": "Meat Products including Poultry",
+      "score": 95.21
+    },
+    {
+      "name": "Venky's (India)",
+      "symbol": "VENKEYS",
+      "industry": "Meat Products including Poultry",
+      "score": 70.46
+    },
+    {
+      "name": "HMA Agro Inds.",
+      "symbol": "HMAAGRO",
+      "industry": "Meat Products including Poultry",
+      "score": 63.2
     }
   ],
   "recent_nifty": [
-    {
-      "date": "2026-10-09",
-      "open": 22314.95,
-      "high": 22580.75,
-      "low": 22294.75,
-      "close": 22520.45
-    },
     {
       "date": "2026-10-12",
       "open": 22593.2,
@@ -232,6 +215,13 @@
       "high": 23149.85,
       "low": 22913.8,
       "close": 23146.15
+    },
+    {
+      "date": "2026-10-19",
+      "open": 23150.85,
+      "high": 23175.25,
+      "low": 22845.0,
+      "close": 22888.95
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
