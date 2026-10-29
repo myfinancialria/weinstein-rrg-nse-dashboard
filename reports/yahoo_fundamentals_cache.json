@@ -5299,5 +5299,24 @@
     "pe_ratio": 25.455927,
     "pb_ratio": 1.4022133,
     "peg_ratio": null
+  },
+  "IIRM.NS": {
+    "company_description": "IIRM Holdings India Limited engages in the provision of professional and consultancy services in India and internationally. It also offers corporate insurance solutions, including property, energy, engineering, and employee benefits insurance; retail insurance, such as health, motor, and life products for individuals; and reinsurance comprising facultative, treaty, retro, facilities, and risk modelling solutions. It also provides cyber insurance, M&A insurance, bonds insurance, and financial institutions cover products; and wellness programs, self-funded schemes, and claims processing support solutions. The company was formerly known as Sudev Industries Limited and changed its name to IIRM Holdings India Limited in October 2023. IIRM Holdings India Limited was incorporated in 1992 and is based in Hyderabad, India.",
+    "website": "https://www.iirmholdings.in",
+    "yahoo_sector": "Financial Services",
+    "yahoo_industry": "Insurance Brokers",
+    "promoter_or_insider_holding_pct": 73.44,
+    "eps": 3.6,
+    "gross_margin_pct": 100.3,
+    "operating_margin_pct": 19.21,
+    "net_margin_pct": 9.53,
+    "roe_pct": null,
+    "debt_to_equity": 60.354,
+    "current_ratio": null,
+    "quick_ratio": null,
+    "free_cash_flow_cr": null,
+    "pe_ratio": 28.461111,
+    "pb_ratio": 4.4522657,
+    "peg_ratio": null
   }
 }
