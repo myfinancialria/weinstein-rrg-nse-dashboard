@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-30 20:02:38",
+  "generated_at": "2026-11-02 23:14:25",
   "models": {
     "gemini": "gemini-2.5-flash",
     "groq": "llama-3.3-70b-versatile",
@@ -12,15 +12,15 @@
     "2/3 Wheelers": "The 2/3 Wheelers sector currently demonstrates strong relative strength. It is outperforming the broader",
     "Abrasives & Bearings": "The Abrasives & Bearings sector sees strong demand from core industrial activities.\nIndustrial capital",
     "Advertising & Media Agencies": "The Advertising & Media Agencies industry stands out because ad spends typically track nominal GDP, and the shift to digital advertising is benefiting agencies as brands formalize their marketing and move budgets online. This industry is part of the broader Media, Entertainment & Publication sector. The demand for digital advertising services is driving growth, with potential areas like programmatic advertising, retail media, and data-led targeting offering opportunities to increase margins. The industry's financial health is influenced by its ability to adapt to these digital trends. Although the industry is not currently outperforming the overall market, it is aided by government policies like Digital India, which promotes digital economy growth and rising internet and smartphone penetration. One risk to this industry is that its growth pace may slow if the shift to digital advertising happens more slowly than expected.",
-    "Aerospace & Defense": "Here's why the Aerospace & Defense sector looks attractive right now:\n\n*   Government policy",
+    "Aerospace & Defense": "The Aerospace & Defense sector is significantly supported by strong government policies. This includes initiatives like '",
     "Aluminium": "The Aluminium sector is strategically important due to its diverse demand drivers. Aluminium is crucial for light-weight",
-    "Aluminium, Copper & Zinc Products": "The \"Aluminium, Copper & Zinc Products\" industry is currently seeing strong demand. This is primarily",
+    "Aluminium, Copper & Zinc Products": "The Aluminium, Copper & Zinc Products industry is seeing strong demand driven by India's infrastructure push",
     "Amusement Parks/ Other Recreation": "The Amusement Parks and Other Recreation sector shows underlying drivers for future strength.\n\n*   Rising",
     "Animal Feed": "The Animal Feed industry shows structural demand growth driven by changing consumption patterns. Rising protein consumption in India fuels",
-    "Asset Management Company": "The Asset Management Company (AMC) sector shows structural attractiveness due to several long-term trends",
+    "Asset Management Company": "Here's why the Asset Management Company (AMC) sector looks attractive:\n\n*   The sector",
     "Auto Components & Equipments": "The Auto Components & Equipments sector looks attractive due to several key factors.\n\n*   **Growing",
     "Breweries & Distilleries": "The Breweries & Distilleries sector shows long-term attractiveness due to fundamental demand drivers. A",
-    "Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO)": "Here is why the Business Process Outsourcing (BPO) and Knowledge Process Outsourcing (",
+    "Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO)": "India's Business Process Outsourcing (BPO) and Knowledge Process Outsourcing (K",
     "Cables - Electricals": "The Cables - Electricals industry is currently benefiting from robust demand across multiple sectors.\nSignificant infrastructure",
     "Cigarettes & Tobacco Products": "The Cigarettes & Tobacco Products industry demonstrates resilient demand, a key characteristic of Fast Moving Consumer Goods.",
     "Consulting Services": "Here's why the Consulting Services industry looks attractive right now:\n\n*   Demand for consulting",
@@ -34,7 +34,7 @@
     "Logistics Solution Provider": "The Logistics Solution Provider industry shows strong structural tailwinds.\nThe shift in manufacturing and growth of",
     "Lubricants": "The Lubricants sector offers steady, brand-led cash flows, driven by consistent demand from vehicle usage",
     "Meat Products including Poultry": "The Meat Products including Poultry sector is seeing increased demand as protein consumption rises with growing incomes. Urbanization",
-    "Media & Entertainment": "The Media & Entertainment sector is seeing strong demand driven by rising discretionary spending in India.",
+    "Media & Entertainment": "The Media & Entertainment sector looks attractive due to several key trends.\n\n*   Rising",
     "Medical Equipment & Supplies": "The Medical Equipment & Supplies sector shows structural strength driven by increasing healthcare spending in India. Demand is",
     "Microfinance Institutions": "Microfinance Institutions (MFIs) are currently relevant due to strong demand for credit in rural India.",
     "Non Banking Financial Company (NBFC)": "The Non-Banking Financial Company (NBFC) sector looks attractive due to its crucial role",
@@ -55,9 +55,10 @@
     "Telecom - Infrastructure": "The Telecom Infrastructure sector is strategically important due to surging data consumption and the ongoing 5G rollout."
   },
   "stocks": {
-    "EICHERMOT": "Eicher Motors, known for its Royal Enfield motorcycles, shows strong financial health and market positioning.",
-    "EBIX": "Here's why Ebix might look attractive right now:\n\n*   Ebix's",
-    "WARDINMOBI": "Here's why Wardwizard Innovations & Mobility might be of interest:\n\n*   The",
-    "DELTIC": "Delta Auto. operates in the Indian two- and three-wheeler segment, a vital part"
+    "BAJAJ-AUTO": "Here's why Bajaj Auto looks attractive based on current information:\n\n*   Bajaj Auto demonstrates",
+    "TVSMOTOR": "TVS Motor Company looks attractive due to several factors.\n\n*   The stock is currently",
+    "EICHERMOT": "Eicher Motors appears attractive due to its strong profitability and market position.\n\n*   The company",
+    "HEROMOTOCO": "Hero Motocorp looks attractive due to its strong financial performance and market position.\n\n*",
+    "EBIX": "Here's why Ebix might look attractive right now:\n\n*   Ebix's"
   }
 }
