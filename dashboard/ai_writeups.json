@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03 21:14:58",
+  "generated_at": "2026-11-04 21:28:57",
   "models": {
     "gemini": "gemini-2.5-flash",
     "groq": "llama-3.3-70b-versatile",
@@ -10,8 +10,8 @@
   "version": "v2",
   "industries": {
     "2/3 Wheelers": "The 2/3 Wheelers sector currently demonstrates strong relative strength. It is outperforming the broader",
-    "Abrasives & Bearings": "The Abrasives & Bearings sector sees strong demand from core industrial activities.\nIndustrial capital",
-    "Advertising & Media Agencies": "The Advertising & Media Agencies industry stands out because ad spends typically track nominal GDP, and the shift to digital advertising is benefiting agencies as brands formalize their marketing efforts and move their budgets online. This industry is part of the broader Media, Entertainment & Publication sector. The demand for digital advertising services is driving growth, with potential areas of expansion including programmatic advertising, retail media, and data-led targeting. The industry's financial health is improving, as indicated by its \"improving\" quadrant status, and momentum is accelerating. The government's Digital India initiative and rising internet and smartphone penetration are also indirectly supporting the industry's growth. However, one risk to consider is that the industry's growth may be impacted if the overall economy slows down, affecting nominal GDP and subsequently ad spends.",
+    "Abrasives & Bearings": "The Abrasives & Bearings sector shows accelerating momentum, indicating growing interest from investors. Demand for",
+    "Advertising & Media Agencies": "The Advertising & Media Agencies industry stands out because ad spends typically track nominal GDP, and the shift to digital advertising is benefiting agencies as brands formalize their marketing and move budgets online. This industry is part of the broader Media, Entertainment & Publication sector. The demand for digital advertising services is driving growth, with potential areas like programmatic advertising, retail media, and data-led targeting offering opportunities to increase margins. The industry's financial health is influenced by its ability to adapt to these digital trends. Although the industry is not currently outperforming the overall market, it is aided by government policies like Digital India, which promotes digital economy growth and rising internet and smartphone penetration. One risk to this industry is that its growth pace may slow if the shift to digital advertising happens more slowly than expected.",
     "Aerospace & Defense": "The Aerospace & Defense sector is significantly supported by strong government policies. This includes initiatives like '",
     "Aluminium": "The Aluminium sector is strategically important due to its diverse demand drivers. Aluminium is crucial for light-weight",
     "Aluminium, Copper & Zinc Products": "The \"Aluminium, Copper & Zinc Products\" industry is currently seeing strong demand. This is primarily",
@@ -22,8 +22,8 @@
     "Breweries & Distilleries": "The Breweries & Distilleries sector shows long-term attractiveness due to fundamental demand drivers. A",
     "Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO)": "India's Business Process Outsourcing (BPO) and Knowledge Process Outsourcing (K",
     "Cables - Electricals": "The Cables - Electricals industry is currently benefiting from robust demand across multiple sectors.\nSignificant infrastructure",
-    "Cigarettes & Tobacco Products": "The Cigarettes & Tobacco Products industry demonstrates resilient demand, a key characteristic of Fast Moving Consumer Goods.",
-    "Consulting Services": "Here's why the Consulting Services industry looks attractive right now:\n\n*   Demand for consulting",
+    "Cigarettes & Tobacco Products": "The Cigarettes & Tobacco Products industry, part of the Fast Moving Consumer Goods (FMCG",
+    "Consulting Services": "The Consulting Services sector shows consistent demand driven by enterprise digital transformation initiatives. Companies are also seeking advice on",
     "E-Learning": "The E-Learning industry stands out due to its structural relevance, driven by digital adoption, skilling needs, test-prep demand, and enterprise upskilling. \nIt operates in the Consumer Services sector, providing online education services. \nThe industry has momentum accelerating, indicating its growth is picking up speed. \nIts financial health and growth potential are supported by government policies, including the NEP 2020's digital-education push and initiatives like Digital India. \nThe industry has future possibilities for expansion, such as vernacular content and AI tutoring. \nHowever, one risk to consider is that the industry's growth may be impacted if digital adoption slows down or if alternative education models gain traction.",
     "Film Production, Distribution & Exhibition": "The Film Production, Distribution & Exhibition industry is currently seeing a strong recovery in box-office collections",
     "Footwear": "The Footwear industry is seeing significant structural tailwinds. The shift towards formalisation and",
@@ -36,7 +36,7 @@
     "Meat Products including Poultry": "The Meat Products including Poultry sector is seeing increased demand as protein consumption rises with growing incomes. Urbanization",
     "Media & Entertainment": "The Media & Entertainment sector is seeing strong demand driven by rising discretionary spending in India.",
     "Medical Equipment & Supplies": "The Medical Equipment & Supplies sector shows structural strength driven by increasing healthcare spending in India. Demand is",
-    "Microfinance Institutions": "Microfinance Institutions (MFIs) are currently relevant due to strong demand for credit in rural India.",
+    "Microfinance Institutions": "Here's why the Microfinance Institutions (MFI) sector looks attractive:\n\n*",
     "Non Banking Financial Company (NBFC)": "The Non-Banking Financial Company (NBFC) sector looks attractive due to its crucial role",
     "Offshore Support Solution Drilling": "The Offshore Support Solution Drilling industry stands out because it benefits from higher upstream capital expenditure and firm energy prices, which drive demand for its services. This industry provides essential support for offshore oil and gas drilling, and its demand is closely tied to the energy sector's activity levels. The sector's financial health can be volatile, but high day-rates and strong fleet utilization can lead to high operating leverage, meaning small increases in demand can lead to large increases in profitability. Government policies supporting national energy security and domestic production goals also provide a tailwind for this industry. The industry is currently in a lagging position relative to the overall market, indicating it has not been performing as well as other sectors. However, one risk to this industry is its cyclical nature, meaning its fortunes can quickly change if energy prices or upstream capital expenditure decline.",
     "Oil Equipment & Services": "The Oil Equipment & Services sector is seeing strong demand driven by rising domestic capital expenditure in exploration and production",
@@ -47,7 +47,7 @@
     "Other Consumer Services": "The \"Other Consumer Services\" sector benefits from several long-term trends. Rising incomes are increasing",
     "Other Industrial Products": "The \"Other Industrial Products\" sector is seeing improved demand due to rising industrial capital expenditure",
     "Passenger Cars & Utility Vehicles": "The Passenger Cars & Utility Vehicles sector shows attractive long-term potential.\n\n*",
-    "Plastic Products - Industrial": "Industrial Plastic Products benefit from consistent demand across vital sectors.\n\n*   This industry supplies critical materials for",
+    "Plastic Products - Industrial": "The Industrial Plastic Products sector benefits from strong underlying demand. It serves essential areas like piping, infrastructure",
     "Real Estate Investment Trusts (REITs)": "Real Estate Investment Trusts (REITs) offer a way to invest in rent-yielding, Grade",
     "Rubber": "The Rubber industry benefits from broad demand across key sectors. Its products are essential for autos, general",
     "Sponge Iron": "Here's why the Sponge Iron sector shows underlying strength:\n\n*   Sponge iron is crucial",
@@ -55,14 +55,13 @@
     "Telecom - Infrastructure": "The Telecom Infrastructure sector is strategically important due to surging data consumption and the ongoing 5G rollout."
   },
   "stocks": {
-    "BAJAJ-AUTO": "Here's why Bajaj Auto looks attractive right now:\n\n*   Bajaj Auto",
-    "TVSMOTOR": "TVS Motor Company shows strong current momentum, with quarterly profit growing by 46.3",
-    "EICHERMOT": "Here's why Eicher Motors looks attractive based on the provided facts:\n\n*",
-    "HEROMOTOCO": "Here's why Hero Motocorp looks attractive based on current facts:\n\n*   Hero",
-    "ATHERENERG": "Ather Energy shows strong market momentum, outperforming the broader market.** Its stock price is in",
-    "OLAELEC": "Ola Electric operates in the two- and three-wheeler segment, which is crucial for Indian mobility and",
+    "BAJAJ-AUTO": "Here's why Bajaj Auto looks attractive:\n\n*   Bajaj Auto shows strong financial efficiency with",
+    "TVSMOTOR": "TVS Motor Company looks attractive due to its strong market performance and robust financial health.\n\n*",
+    "EICHERMOT": "Eicher Motors, known for its Royal Enfield motorcycles, shows strong financial health and market positioning.",
+    "HEROMOTOCO": "Hero Motocorp, a major manufacturer of motorcycles and scooters, demonstrates strong profitability and",
+    "ATHERENERG": "Ather Energy, an electric vehicle company, designs and sells electric two-wheelers and their complete",
+    "OLAELEC": "Ola Electric operates in the growing electric two- and three-wheeler market, a key segment for Indian",
     "EBIX": "Here's why Ebix might look attractive right now:\n\n*   Ebix's",
-    "TUNWAL": "Tunwal E-Motors operates in the Indian two- and three-wheeler segment, which benefits",
     "WARDINMOBI": "Wardwizard Innovations & Mobility operates in the growing electric two- and three-wheeler segments",
     "DELTIC": "Here's why Delta Auto. looks attractive based on the available information:\n\n*"
   }
