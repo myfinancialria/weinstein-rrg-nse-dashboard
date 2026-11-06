@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05 21:34:54",
+  "generated_at": "2026-11-06 21:02:49",
   "models": {
     "gemini": "gemini-2.5-flash",
     "groq": "llama-3.3-70b-versatile",
@@ -9,12 +9,11 @@
   },
   "version": "v2",
   "industries": {
-    "2/3 Wheelers": "The 2/3 Wheelers sector currently demonstrates strong relative strength. It is outperforming the broader",
     "Abrasives & Bearings": "The Abrasives & Bearings sector sees strong demand from core industrial activities.\nIndustrial capital",
     "Advertising & Media Agencies": "The Advertising & Media Agencies industry stands out because ad spends typically track nominal GDP, and the shift to digital advertising is benefiting agencies as brands formalize their marketing efforts and move their budgets online. This industry is part of the broader Media, Entertainment & Publication sector. The demand for digital advertising services is driving growth, with potential areas of expansion including programmatic advertising, retail media, and data-led targeting. The industry's financial health is improving, as indicated by its \"improving\" quadrant status, and momentum is accelerating. The government's Digital India initiative and rising internet and smartphone penetration are also indirectly supporting the industry's growth. However, one risk to consider is that the industry's growth may be impacted if the overall economy slows down, affecting nominal GDP and subsequently ad spends.",
-    "Aerospace & Defense": "The Aerospace & Defense sector is currently attractive due to significant government support for domestic manufacturing. This support includes",
+    "Aerospace & Defense": "Here's why the Aerospace & Defense sector looks attractive:\n\n*   Government policy strongly supports this",
     "Aluminium": "The Aluminium sector is strategically important due to its diverse demand drivers. Aluminium is crucial for light-weight",
-    "Aluminium, Copper & Zinc Products": "The \"Aluminium, Copper & Zinc Products\" industry is currently seeing strong demand. This is primarily",
+    "Aluminium, Copper & Zinc Products": "This sector, producing Aluminium, Copper, and Zinc products, is currently benefiting from increasing demand",
     "Amusement Parks/ Other Recreation": "The Amusement Parks and Other Recreation sector shows underlying drivers for future strength.\n\n*   Rising",
     "Animal Feed": "The Animal Feed industry shows structural tailwinds, making it an area of interest.\n\n*",
     "Asset Management Company": "The Asset Management Company (AMC) sector benefits from the ongoing financialization of household savings in India",
@@ -25,16 +24,16 @@
     "Cigarettes & Tobacco Products": "The Cigarettes & Tobacco Products industry, part of the Fast Moving Consumer Goods (FMCG",
     "Consulting Services": "The Consulting Services sector shows consistent demand driven by enterprise digital transformation initiatives. Companies are also seeking advice on",
     "E-Learning": "The E-Learning industry stands out due to its structural relevance, driven by digital adoption, skilling needs, test-prep demand, and enterprise upskilling. \nIt operates in the Consumer Services sector, providing online education services. \nThe industry has momentum accelerating, indicating its growth is picking up speed. \nIts financial health and growth potential are supported by government policies, including the NEP 2020's digital-education push and initiatives like Digital India. \nThe industry has future possibilities for expansion, such as vernacular content and AI tutoring. \nHowever, one risk to consider is that the industry's growth may be impacted if digital adoption slows down or if alternative education models gain traction.",
-    "Film Production, Distribution & Exhibition": "The Film Production, Distribution & Exhibition industry is currently seeing a strong recovery in box-office collections",
+    "Film Production, Distribution & Exhibition": "The film production, distribution, and exhibition sector is seeing a notable recovery in box-",
     "Footwear": "The Footwear industry is seeing significant structural tailwinds. The shift towards formalisation and",
     "General Insurance": "The general insurance industry stands out due to its low non-life penetration, which means not many people have insurance to protect against events like accidents or natural disasters, leaving room for growth. \nThe industry is driven by rising demand for health and motor insurance, as well as the formalisation of assets, which increases the need for protection. \nThe sector's financial health and growth potential are supported by possibilities like health insurance growth and better underwriting practices, which can help companies earn more from the premiums they collect. \nGovernment policies, such as IRDAI reforms and the Ayushman Bharat health-cover push, also support the industry's growth by increasing awareness and mandates for insurance. \nThe industry is currently not outperforming the overall market, which may be a sign of near-term challenges. \nOne risk to the industry's growth is its reliance on government schemes and regulations, which can change and impact demand and profitability.",
     "Household Appliances": "The Household Appliances sector shows several attractive trends currently.\n\n*   Demand is strong due to rising incomes",
     "LPG/CNG/PNG/LNG Supplier": "The LPG/CNG/PNG/LNG supplier industry is a structural energy-transition play in India",
     "Life Insurance": "The life insurance industry stands out due to its under-penetrated protection market, combined with a young population and the financialisation of savings. This industry provides a essential service, offering protection and savings products to individuals. The demand for life insurance is driven by a growing middle class and an increasing awareness of the importance of financial planning. The industry's financial health is expected to improve, with possibilities for growth in areas such as bancassurance, digital distribution, and product innovation, which can lift Value of New Business (VNB) margins, a key measure of profitability. The industry is also supported by government policies, including IRDAI reforms and higher FDI limits, which can attract more investment. However, one risk to consider is the industry's reliance on a young population to drive growth, which may not materialize if demographic trends change unexpectedly.",
     "Logistics Solution Provider": "The Logistics Solution Provider sector benefits from significant structural tailwinds in India. Demand is strong",
-    "Lubricants": "The Lubricants sector offers steady, brand-led cash flows because demand tracks vehicle usage, industrial",
+    "Lubricants": "The Lubricants sector offers steady, brand-led cash flows, driven by consistent demand from vehicle usage",
     "Meat Products including Poultry": "The Meat Products including Poultry sector shows strong current momentum.\n\n*   Demand is rising due to increased",
-    "Media & Entertainment": "The Media & Entertainment sector looks attractive due to several underlying trends.\n\n*   Rising",
+    "Media & Entertainment": "The Media & Entertainment sector is seeing strong demand driven by rising discretionary spending among consumers. People are increasingly",
     "Medical Equipment & Supplies": "The Medical Equipment & Supplies sector shows structural strength driven by increasing healthcare spending in India. Demand is",
     "Microfinance Institutions": "Here's why the Microfinance Institutions (MFI) sector looks attractive:\n\n*",
     "Non Banking Financial Company (NBFC)": "The Non-Banking Financial Company (NBFC) sector looks attractive due to its crucial role",
@@ -50,13 +49,13 @@
     "Plastic Products - Industrial": "The Industrial Plastic Products sector benefits from strong underlying demand. It serves essential areas like piping, infrastructure",
     "Real Estate Investment Trusts (REITs)": "Real Estate Investment Trusts (REITs) offer a way to invest in rent-yielding, Grade",
     "Rubber": "Here's why the Rubber sector shows potential:\n\n*   The sector's momentum is",
-    "Sponge Iron": "Here's why the Sponge Iron sector shows underlying strength:\n\n*   Sponge iron is crucial",
+    "Sponge Iron": "The Sponge Iron sector is fundamentally attractive due to its critical role in India's steel",
     "Stationary": "The Stationary industry shows signs of increasing attractiveness.\n\n*   Demand for school and office products is",
     "Telecom - Infrastructure": "The Telecom Infrastructure sector is strategically important due to surging data consumption and the ongoing 5G rollout."
   },
   "stocks": {
-    "BAJAJ-AUTO": "Bajaj Auto shows several attractive qualities based on recent data:\n\n*   The company demonstrates strong",
-    "EBIX": "Here's why Ebix might look attractive right now:\n\n*   Ebix's",
-    "WARDINMOBI": "Wardwizard Innovations & Mobility operates in the growing electric two- and three-wheeler segments"
+    "VENKEYS": "Here's why Venky's (India) might look attractive:\n\n*",
+    "HMAAGRO": "HMA Agro Inds. (HMAAGRO) shows several attractive characteristics.",
+    "SKMEGGPROD": "Here's why SKM Egg Products appears attractive:\n\n*   The company demonstrates strong financial health"
   }
 }

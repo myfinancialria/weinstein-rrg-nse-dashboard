@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-11-06 03:04:56 IST",
-  "title": "Pre-market Technical Blog - 06 Nov 2026",
+  "generated_at": "2026-11-07 02:32:51 IST",
+  "title": "Pre-market Technical Blog - 07 Nov 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 49,
-    "down": 42,
+    "up": 64,
+    "down": 27,
     "sideways": 9
   },
   "nifty": {
-    "close": 23960.6,
-    "change_5d_pct": 5.56,
-    "change_20d_pct": 5.2,
-    "ma20": 22879.93,
-    "ma50": 23227.75,
-    "ma200": 24008.71,
-    "rsi14": 76.35
+    "close": 24536.6,
+    "change_5d_pct": 6.98,
+    "change_20d_pct": 8.55,
+    "ma20": 22976.61,
+    "ma50": 23234.1,
+    "ma200": 24002.44,
+    "rsi14": 78.09
   },
   "cpr": {
-    "pivot": 23872.45,
-    "bc": 23828.38,
-    "tc": 23916.52,
-    "r1": 24048.75,
-    "r2": 24136.9,
-    "s1": 23784.3,
-    "s2": 23608.0,
-    "width_pct": 0.368
+    "pivot": 24470.93,
+    "bc": 24438.1,
+    "tc": 24503.77,
+    "r1": 24645.57,
+    "r2": 24754.53,
+    "s1": 24361.97,
+    "s2": 24187.33,
+    "width_pct": 0.268
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7353.73,
-      "change_pct": -4.36
+      "level": 7376.86,
+      "change_pct": 0.31
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 51523.06,
-      "change_pct": -3.44
+      "level": 51285.73,
+      "change_pct": -0.46
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 24315.0,
-      "change_pct": -5.52
+      "level": 24579.42,
+      "change_pct": 1.09
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10782.66,
-      "change_pct": -0.43
+      "level": 10673.94,
+      "change_pct": -1.01
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 62188.63,
-      "change_pct": -1.42
+      "level": 61077.9,
+      "change_pct": -1.79
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 23919.5,
-      "change_pct": 1.67
+      "level": 24796.98,
+      "change_pct": 3.67
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3686.17,
-      "change_pct": 2.16
+      "level": 3689.91,
+      "change_pct": 0.1
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 94.46,
-      "change_pct": -0.3
+      "level": 93.89,
+      "change_pct": -0.66
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 98.55,
-      "change_pct": 4.15
+      "level": 98.12,
+      "change_pct": -0.17
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 4100.3,
-      "change_pct": 0.67
+      "level": 4074.8,
+      "change_pct": -0.94
     }
   ],
   "pattern_notes": [
-    "Nifty is above 20 DMA, above 50 DMA, and below 200 DMA.",
-    "Last 5-session return is 5.56%, while last 20-session return is 5.2%.",
-    "CPR width is 0.368%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 23916.52 and R1 24048.75; weakness increases below BC 23828.38 and S1 23784.3."
+    "Nifty is above 20 DMA, above 50 DMA, and above 200 DMA.",
+    "Last 5-session return is 6.98%, while last 20-session return is 8.55%.",
+    "CPR width is 0.268%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 24503.77 and R1 24645.57; weakness increases below BC 24438.1 and S1 24361.97."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 23916.52, buyers have better control and the first upside zones are 24048.75 and 24136.9. Below CPR bottom 23828.38, sellers gain control and downside zones are 23784.3 and 23608.0. A sustained move around pivot 23872.45 can mean a range day."
+      "body": "Above CPR top 24503.77, buyers have better control and the first upside zones are 24645.57 and 24754.53. Below CPR bottom 24438.1, sellers gain control and downside zones are 24361.97 and 24187.33. A sustained move around pivot 24470.93 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -120,47 +120,12 @@
   ],
   "leading_industries": [
     {
-      "name": "2/3 Wheelers",
-      "rs_ratio": 100.98,
-      "rs_momentum": 102.02
-    },
-    {
       "name": "Meat Products including Poultry",
-      "rs_ratio": 100.93,
-      "rs_momentum": 100.99
+      "rs_ratio": 100.14,
+      "rs_momentum": 100.87
     }
   ],
   "fundamental_picks": [
-    {
-      "name": "Hero Motocorp",
-      "symbol": "HEROMOTOCO",
-      "industry": "2/3 Wheelers",
-      "score": 94.47
-    },
-    {
-      "name": "Eicher Motors",
-      "symbol": "EICHERMOT",
-      "industry": "2/3 Wheelers",
-      "score": 93.27
-    },
-    {
-      "name": "Bajaj Auto",
-      "symbol": "BAJAJ-AUTO",
-      "industry": "2/3 Wheelers",
-      "score": 87.22
-    },
-    {
-      "name": "TVS Motor Co.",
-      "symbol": "TVSMOTOR",
-      "industry": "2/3 Wheelers",
-      "score": 53.23
-    },
-    {
-      "name": "Delta Auto.",
-      "symbol": "DELTIC",
-      "industry": "2/3 Wheelers",
-      "score": 50.12
-    },
     {
       "name": "SKM Egg Prod.",
       "symbol": "SKMEGGPROD",
@@ -181,13 +146,6 @@
     }
   ],
   "recent_nifty": [
-    {
-      "date": "2026-10-28",
-      "open": 22678.0,
-      "high": 22778.05,
-      "low": 22497.7,
-      "close": 22698.85
-    },
     {
       "date": "2026-10-29",
       "open": 22690.65,
@@ -222,6 +180,13 @@
       "high": 23960.6,
       "low": 23696.15,
       "close": 23960.6
+    },
+    {
+      "date": "2026-11-05",
+      "open": 24378.05,
+      "high": 24579.9,
+      "low": 24296.3,
+      "close": 24536.6
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
