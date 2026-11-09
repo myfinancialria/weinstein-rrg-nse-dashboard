@@ -299,17 +299,17 @@
     "roe_pct": 14.4
   },
   "ATHERENERG": {
-    "_scraped": "2026-11-02",
-    "debt_to_equity": 23.6,
+    "_scraped": "2026-11-09",
+    "debt_to_equity": 22.4,
     "dividend_yield_pct": 0.0,
     "eps": -13.51,
     "net_margin_pct": -14.1,
     "operating_margin_pct": -11.0,
-    "pb_ratio": 1643.52,
+    "pb_ratio": 17.22,
     "promoter_or_insider_holding_pct": 42.33,
     "qtr_profit_var_pct": 100.7,
     "qtr_sales_var_pct": 127.2,
-    "roe_pct": -1990.0
+    "roe_pct": -19.9
   },
   "AUBANK": {
     "_scraped": "2026-10-13",
@@ -1399,15 +1399,15 @@
     "roe_pct": 12.2
   },
   "GRCL": {
-    "_scraped": "2026-11-04",
+    "_scraped": "2026-11-09",
     "debt_to_equity": 45.7,
     "dividend_yield_pct": 0.0,
     "eps": 12.22,
     "free_cash_flow_cr": -3.5,
     "net_margin_pct": 13.5,
     "operating_margin_pct": 21.59,
-    "pb_ratio": 15.65,
-    "pe_ratio": 53.0,
+    "pb_ratio": 15.22,
+    "pe_ratio": 51.6,
     "promoter_or_insider_holding_pct": 74.03,
     "qtr_profit_var_pct": 219.7,
     "qtr_sales_var_pct": 101.2,
@@ -3833,15 +3833,15 @@
     "roe_pct": 10.7
   },
   "TVSMOTOR": {
-    "_scraped": "2026-11-02",
+    "_scraped": "2026-11-09",
     "debt_to_equity": 347.7,
-    "dividend_yield_pct": 0.28,
+    "dividend_yield_pct": 0.27,
     "eps": 80.55,
     "free_cash_flow_cr": -1280.0,
     "net_margin_pct": 6.1,
     "operating_margin_pct": 14.0,
-    "pb_ratio": 17.63,
-    "pe_ratio": 51.9,
+    "pb_ratio": 18.85,
+    "pe_ratio": 55.5,
     "promoter_or_insider_holding_pct": 50.27,
     "qtr_profit_var_pct": 46.3,
     "qtr_sales_var_pct": 38.6,
