@@ -1,30 +1,30 @@
 {
-  "generated_at": "2026-11-13 03:26:31 IST",
-  "title": "Pre-market Technical Blog - 13 Nov 2026",
+  "generated_at": "2026-11-14 03:03:02 IST",
+  "title": "Pre-market Technical Blog - 14 Nov 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
-    "up": 64,
-    "down": 27,
+    "up": 60,
+    "down": 31,
     "sideways": 9
   },
   "nifty": {
-    "close": 25255.05,
-    "change_5d_pct": 6.07,
-    "change_20d_pct": 12.93,
-    "ma20": 23387.33,
-    "ma50": 23288.04,
-    "ma200": 23993.63,
-    "rsi14": 91.07
+    "close": 25299.35,
+    "change_5d_pct": 5.59,
+    "change_20d_pct": 11.34,
+    "ma20": 23516.2,
+    "ma50": 23310.51,
+    "ma200": 23992.2,
+    "rsi14": 95.1
   },
   "cpr": {
-    "pivot": 25258.25,
-    "bc": 25256.65,
-    "tc": 25259.85,
-    "r1": 25421.15,
-    "r2": 25587.25,
-    "s1": 25092.15,
-    "s2": 24929.25,
-    "width_pct": 0.013
+    "pivot": 25275.7,
+    "bc": 25263.88,
+    "tc": 25287.52,
+    "r1": 25408.45,
+    "r2": 25517.55,
+    "s1": 25166.6,
+    "s2": 25033.85,
+    "width_pct": 0.093
   },
   "gift_nifty": {
     "level": null,
@@ -36,69 +36,69 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7592.4,
-      "change_pct": -0.35
+      "level": 7561.67,
+      "change_pct": -0.4
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 52297.09,
-      "change_pct": -0.36
+      "level": 52347.55,
+      "change_pct": 0.1
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 25366.09,
-      "change_pct": -0.39
+      "level": 25136.27,
+      "change_pct": -0.91
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10863.09,
-      "change_pct": 0.25
+      "level": 10902.56,
+      "change_pct": 0.36
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 61248.59,
-      "change_pct": 1.31
+      "level": 60819.36,
+      "change_pct": -0.7
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 24315.92,
-      "change_pct": -0.98
+      "level": 24008.55,
+      "change_pct": -1.26
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3680.64,
-      "change_pct": 0.46
+      "level": 3655.83,
+      "change_pct": -0.67
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 94.03,
-      "change_pct": 0.11
+      "level": 94.23,
+      "change_pct": 0.57
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 95.78,
-      "change_pct": 3.26
+      "level": 96.16,
+      "change_pct": 0.35
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 3881.5,
-      "change_pct": -2.97
+      "level": 3881.4,
+      "change_pct": -0.1
     }
   ],
   "pattern_notes": [
     "Nifty is above 20 DMA, above 50 DMA, and above 200 DMA.",
-    "Last 5-session return is 6.07%, while last 20-session return is 12.93%.",
-    "CPR width is 0.013%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
-    "Immediate bullish confirmation improves above TC 25259.85 and R1 25421.15; weakness increases below BC 25256.65 and S1 25092.15."
+    "Last 5-session return is 5.59%, while last 20-session return is 11.34%.",
+    "CPR width is 0.093%; a narrow CPR can support trend expansion, while a wide CPR can invite range-bound action.",
+    "Immediate bullish confirmation improves above TC 25287.52 and R1 25408.45; weakness increases below BC 25263.88 and S1 25166.6."
   ],
   "blog_sections": [
     {
@@ -107,7 +107,7 @@
     },
     {
       "heading": "Technical View For The Day",
-      "body": "Above CPR top 25259.85, buyers have better control and the first upside zones are 25421.15 and 25587.25. Below CPR bottom 25256.65, sellers gain control and downside zones are 25092.15 and 24929.25. A sustained move around pivot 25258.25 can mean a range day."
+      "body": "Above CPR top 25287.52, buyers have better control and the first upside zones are 25408.45 and 25517.55. Below CPR bottom 25263.88, sellers gain control and downside zones are 25166.6 and 25033.85. A sustained move around pivot 25275.7 can mean a range day."
     },
     {
       "heading": "What Can Make The Market Go Up",
@@ -121,13 +121,6 @@
   "leading_industries": [],
   "fundamental_picks": [],
   "recent_nifty": [
-    {
-      "date": "2026-11-03",
-      "open": 23582.25,
-      "high": 23810.85,
-      "low": 23482.8,
-      "close": 23810.85
-    },
     {
       "date": "2026-11-04",
       "open": 23742.25,
@@ -162,6 +155,13 @@
       "high": 25424.35,
       "low": 25095.35,
       "close": 25255.05
+    },
+    {
+      "date": "2026-11-12",
+      "open": 25213.5,
+      "high": 25384.8,
+      "low": 25142.95,
+      "close": 25299.35
     }
   ],
   "disclaimer": "Educational market note only; not investment advice. Confirm price action after market open and manage risk."
