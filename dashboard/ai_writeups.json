@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-17 23:07:01",
+  "generated_at": "2026-11-18 22:42:57",
   "models": {
     "gemini": "gemini-2.5-flash",
     "groq": "llama-3.3-70b-versatile",
@@ -14,8 +14,8 @@
     "Advertising & Media Agencies": "The Advertising & Media Agencies industry stands out because ad spends typically track nominal GDP, and the shift to digital advertising is benefiting agencies as brands formalize their marketing efforts and move their budgets online. This industry is part of the broader Media, Entertainment & Publication sector. The demand for digital advertising services is driving growth, with potential areas of expansion including programmatic advertising, retail media, and data-led targeting. The industry's financial health is improving, as indicated by its \"improving\" quadrant status, and momentum is accelerating. The government's Digital India initiative and rising internet and smartphone penetration are also indirectly supporting the industry's growth. However, one risk to consider is that the industry's growth may be impacted if the overall economy slows down, affecting nominal GDP and subsequently ad spends.",
     "Aerospace & Defense": "Here's why the Aerospace & Defense sector looks attractive:\n\n*   Government policy strongly supports this",
     "Aluminium": "The Aluminium sector is strategically important due to its diverse demand drivers. Aluminium is crucial for light-weight",
-    "Aluminium, Copper & Zinc Products": "The Aluminium, Copper & Zinc Products industry stands out due to increasing demand for conductive metals products driven by electrification, power equipment, EVs, construction, and industrial capex. This industry is part of the broader Capital Goods sector. The demand for its products is driven by growth in areas like power equipment and electric vehicles. The industry's financial health and growth are not currently outpacing the market, as indicated by its lagging quadrant position. Government policies supporting power infrastructure, renewables, and manufacturing localization indirectly benefit this industry. However, a key risk is that the industry's growth may be hindered if the overall market slowdown persists, given that it is currently not outperforming the market.",
-    "Amusement Parks/ Other Recreation": "The Amusement Parks and Other Recreation sector is currently supported by several factors.\n\n*   A key driver",
+    "Aluminium, Copper & Zinc Products": "This sector, producing Aluminium, Copper, and Zinc products, is currently benefiting from increasing demand",
+    "Amusement Parks/ Other Recreation": "The Amusement Parks/ Other Recreation sector appears attractive due to several factors.\n\n*   **Rising discretionary",
     "Animal Feed": "The Animal Feed industry shows structural tailwinds, making it an area of interest.\n\n*",
     "Asset Management Company": "The Asset Management Company (AMC) sector benefits from the ongoing financialization of household savings in India",
     "Auto Components & Equipments": "The Auto Components & Equipments sector is gaining focus due to strong underlying demand drivers. Domestic",
@@ -50,9 +50,9 @@
     "Plastic Products - Industrial": "The Industrial Plastic Products sector benefits from strong underlying demand. It serves essential areas like piping, infrastructure",
     "Real Estate Investment Trusts (REITs)": "Real Estate Investment Trusts (REITs) offer a way to invest in rent-yielding, Grade",
     "Rubber": "The Rubber industry benefits from broad demand across key sectors. Its products are essential for autos, general",
-    "Sponge Iron": "The Sponge Iron sector is fundamentally attractive due to its critical role in India's steel",
+    "Sponge Iron": "The Sponge Iron industry stands out because it feeds India's growing secondary steel capacity, driven by strong demand from construction and infrastructure projects. This industry is crucial as it supplies a key input to steel production, which is essential for building and development. The sector's momentum is accelerating, indicating a potential turnaround. With six companies operating in this space, there are opportunities for growth and expansion. The National Steel Policy and infrastructure investments also provide a supportive policy environment. However, one key risk is the industry's dependence on access to raw materials like iron ore and coal, as well as the need to manage emissions.",
     "Stationary": "The Stationary industry benefits from a strong underlying demand. Education needs, the return to offices, and a",
-    "Telecom - Infrastructure": "The Telecom Infrastructure sector is strategically important due to surging data consumption and the ongoing 5G rollout."
+    "Telecom - Infrastructure": "The Telecom Infrastructure sector is strategically important due to surging data consumption and rapid 5G network"
   },
   "stocks": {}
 }
