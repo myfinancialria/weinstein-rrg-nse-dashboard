@@ -1,6 +1,7 @@
 {
-  "date": "2026-11-18",
+  "date": "2026-11-19",
   "used": {
-    "gemini": 2
+    "gemini": 1400,
+    "deepseek": 50
   }
 }
