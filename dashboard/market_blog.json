@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-25 05:33:24 IST",
-  "title": "Pre-market Technical Blog - 25 Nov 2026",
+  "generated_at": "2026-11-26 05:17:21 IST",
+  "title": "Pre-market Technical Blog - 26 Nov 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
     "up": 64,
@@ -36,62 +36,62 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7201.09,
-      "change_pct": -0.5
+      "level": 7182.78,
+      "change_pct": -0.25
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 50018.7,
-      "change_pct": 0.85
+      "level": 50182.95,
+      "change_pct": 0.33
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 23733.54,
-      "change_pct": -1.48
+      "level": 23585.8,
+      "change_pct": -0.62
     },
     {
       "name": "FTSE 100",
       "symbol": "^FTSE",
-      "level": 10480.8,
-      "change_pct": 1.3
+      "level": 10426.94,
+      "change_pct": -0.38
     },
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 56436.65,
-      "change_pct": -5.06
+      "level": 58644.63,
+      "change_pct": 3.91
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 22383.74,
-      "change_pct": -0.12
+      "level": 22219.65,
+      "change_pct": -0.73
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3538.95,
-      "change_pct": 0.15
+      "level": 3548.37,
+      "change_pct": 0.27
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 92.92,
-      "change_pct": 0.26
+      "level": 92.22,
+      "change_pct": -0.75
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 88.41,
-      "change_pct": -1.07
+      "level": 90.67,
+      "change_pct": -0.8
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 3548.9,
-      "change_pct": -2.81
+      "level": 3606.1,
+      "change_pct": 1.24
     }
   ],
   "pattern_notes": [
