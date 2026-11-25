@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-24 08:02:22 IST",
-  "title": "Pre-market Technical Blog - 24 Nov 2026",
+  "generated_at": "2026-11-25 05:33:24 IST",
+  "title": "Pre-market Technical Blog - 25 Nov 2026",
   "headline": "Nifty pre-market bias is positive, with expected opening flat to mildly positive.",
   "probabilities": {
     "up": 64,
@@ -36,20 +36,20 @@
     {
       "name": "S&P 500",
       "symbol": "^GSPC",
-      "level": 7237.17,
-      "change_pct": 4.73
+      "level": 7201.09,
+      "change_pct": -0.5
     },
     {
       "name": "Dow Jones",
       "symbol": "^DJI",
-      "level": 49595.31,
-      "change_pct": 3.01
+      "level": 50018.7,
+      "change_pct": 0.85
     },
     {
       "name": "Nasdaq",
       "symbol": "^IXIC",
-      "level": 24089.56,
-      "change_pct": 6.51
+      "level": 23733.54,
+      "change_pct": -1.48
     },
     {
       "name": "FTSE 100",
@@ -60,38 +60,38 @@
     {
       "name": "Nikkei 225",
       "symbol": "^N225",
-      "level": 58590.27,
-      "change_pct": 3.82
+      "level": 56436.65,
+      "change_pct": -5.06
     },
     {
       "name": "Hang Seng",
       "symbol": "^HSI",
-      "level": 22455.98,
-      "change_pct": 0.32
+      "level": 22383.74,
+      "change_pct": -0.12
     },
     {
       "name": "Shanghai",
       "symbol": "000001.SS",
-      "level": 3566.1,
-      "change_pct": 0.77
+      "level": 3538.95,
+      "change_pct": 0.15
     },
     {
       "name": "USD/INR",
       "symbol": "INR=X",
-      "level": 92.9,
-      "change_pct": 0.24
+      "level": 92.92,
+      "change_pct": 0.26
     },
     {
       "name": "Brent Crude",
       "symbol": "BZ=F",
-      "level": 86.36,
-      "change_pct": -6.71
+      "level": 88.41,
+      "change_pct": -1.07
     },
     {
       "name": "Gold",
       "symbol": "GC=F",
-      "level": 3654.3,
-      "change_pct": 3.95
+      "level": 3548.9,
+      "change_pct": -2.81
     }
   ],
   "pattern_notes": [
@@ -121,13 +121,13 @@
   "leading_industries": [
     {
       "name": "2/3 Wheelers",
-      "rs_ratio": 100.38,
-      "rs_momentum": 101.94
+      "rs_ratio": 100.31,
+      "rs_momentum": 101.9
     },
     {
       "name": "Meat Products including Poultry",
-      "rs_ratio": 100.37,
-      "rs_momentum": 101.69
+      "rs_ratio": 100.38,
+      "rs_momentum": 101.7
     }
   ],
   "fundamental_picks": [

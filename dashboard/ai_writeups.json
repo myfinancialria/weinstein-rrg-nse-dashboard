@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-24 02:32:20",
+  "generated_at": "2026-11-25 00:03:23",
   "models": {
     "gemini": "gemini-2.5-flash",
     "groq": "llama-3.3-70b-versatile",
@@ -15,7 +15,7 @@
     "Aerospace & Defense": "The Aerospace & Defense sector is currently seeing strong government backing. This is primarily driven by",
     "Aluminium": "The Aluminium sector is strategically important due to its role in key growth areas.\n\n*   Aluminium",
     "Aluminium, Copper & Zinc Products": "The Aluminium, Copper & Zinc Products industry stands out due to increasing demand for conductive metals products driven by electrification, power equipment, EVs, construction, and industrial capex. This industry is part of the broader Capital Goods sector. The demand for its products is driven by growth in areas like power equipment and electric vehicles. The industry's financial health and growth are not currently outpacing the market, as indicated by its lagging quadrant position. Government policies supporting power infrastructure, renewables, and manufacturing localization indirectly benefit this industry. However, a key risk is that the industry's growth may be hindered if the overall market slowdown persists, given that it is currently not outperforming the market.",
-    "Amusement Parks/ Other Recreation": "The Amusement Parks and Other Recreation sector is currently benefiting from rising discretionary spending among consumers. People",
+    "Amusement Parks/ Other Recreation": "The Amusement Parks and Other Recreation sector shows underlying drivers for future strength.\n\n*   Rising",
     "Animal Feed": "The Animal Feed industry shows structural tailwinds, making it an area of interest.\n\n*",
     "Asset Management Company": "The Asset Management Company (AMC) sector benefits from the ongoing financialization of household savings in India",
     "Auto Components & Equipments": "The Auto Components & Equipments sector is gaining attention due to strong underlying demand drivers.",
@@ -46,11 +46,11 @@
     "Other Construction Materials": "Here's why the \"Other Construction Materials\" sector looks attractive right now:\n\n*   Demand",
     "Other Consumer Services": "Here's why the \"Other Consumer Services\" sector looks interesting right now:\n\n*   The",
     "Other Industrial Products": "The \"Other Industrial Products\" sector shows signs of increasing demand.\n\n*   Demand for specialized engineering",
-    "Passenger Cars & Utility Vehicles": "The Passenger Cars & Utility Vehicles sector shows attractive structural growth drivers. Rising incomes and low",
+    "Passenger Cars & Utility Vehicles": "The Passenger Cars & Utility Vehicles sector shows attractive long-term potential.\n\n*",
     "Plastic Products - Industrial": "The Plastic Products - Industrial sector stands out due to its essential role in serving critical industries such as piping, infrastructure, agriculture, and packaging. It provides vital products for water, sanitation, and construction, which helps keep demand firm. The sector's momentum is accelerating, indicating a pickup in growth. With a relatively large number of companies in the group (10), it offers diversification benefits. The government's initiatives, such as the Jal Jeevan Mission, are also supporting the sector through increased spending on water, housing, agriculture, and infrastructure. However, a key risk is that input prices, such as crude and PVC, can significantly impact the sector's profitability.",
     "Real Estate Investment Trusts (REITs)": "Real Estate Investment Trusts (REITs) offer a way to invest in rent-yielding commercial properties",
     "Rubber": "Here's why the Rubber sector shows potential:\n\n*   The sector's momentum is",
-    "Sponge Iron": "The Sponge Iron sector is fundamentally attractive due to its critical role in India's steel",
+    "Sponge Iron": "Here's why the Sponge Iron sector shows underlying strength:\n\n*   Sponge iron is crucial",
     "Stationary": "The Stationary industry shows signs of increasing attractiveness.\n\n*   Demand for school and office products is",
     "Telecom - Infrastructure": "The Telecom Infrastructure sector is strategically important due to surging data consumption and rapid 5G network"
   },
@@ -58,11 +58,15 @@
     "BAJAJ-AUTO": "Here's why Bajaj Auto looks attractive based on available facts:\n\n*   Bajaj Auto demonstrates",
     "EICHERMOT": "Eicher Motors stands out due to its strong market performance and robust profitability. Its stock is in",
     "TVSMOTOR": "Here's why TVS Motor Co. looks attractive right now:\n\n*   The company shows",
-    "HEROMOTOCO": "Hero Motocorp, a leading manufacturer of two-wheelers, is currently showing",
+    "HEROMOTOCO": "Here's why Hero Motocorp looks attractive:\n\n*   Hero Motocorp",
     "ATHERENERG": "Here's why Ather Energy looks notable right now:\n\n*   Ather Energy'",
     "OLAELEC": "Ola Electric operates in the growing electric two- and three-wheeler market, developing and manufacturing electric",
     "EBIX": "Ebix Limited, a software and e-commerce solutions provider, shows some interesting aspects",
-    "TUNWAL": "Here's why Tunwal E-Motors might look attractive:\n\n*   Tunwal",
-    "WARDINMOBI": "Wardwizard Innovations & Mobility operates in the electric two- and three-wheeler segment, a growing part"
+    "TUNWAL": "Here's why Tunwal E-Motors looks attractive based on available information:\n\n*   Tun",
+    "WARDINMOBI": "Wardwizard Innovations & Mobility operates in the electric two- and three-wheeler segment, a growing part",
+    "DELTIC": "Delta Auto. operates in the essential two- and three-wheeler segment, which benefits from",
+    "HMAAGRO": "Here's why HMA Agro Inds. looks notable right now:\n\n*",
+    "VENKEYS": "Here's why Venky's (India) looks attractive based on recent performance and fundamentals:",
+    "SKMEGGPROD": "SKM Egg Products stands out for its strong profitability metrics, indicating efficient operations."
   }
 }
